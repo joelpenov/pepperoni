@@ -1,10 +1,13 @@
 from django.db import models
+from products.models import Product
 
 # Create your models here.
-class Product(models.Model):
-	description = models.CharField(max_length=255)
-	cost = models.FloatField()
-	average_cost = models.FloatField()
-	sell_price = models.FloatField()
-	show_in_menu= models.BooleanField()
-	is_raw_material= models.BooleanField()
+class WhereHouse(models.Model):
+	name = models.CharField(max_length=50)
+
+class InventoryTransaction(models.Model):
+	wherehouse_id = models.ForeingField(WhereHouse, "fk_existence_wherehouse_id")
+	transaction_type = models.IntegerField()
+	quantity_type = models.FloatField()
+	price = models.FloatField()
+	
