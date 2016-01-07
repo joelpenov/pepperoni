@@ -1,7 +1,14 @@
-from django import forms
+from django.forms import ModelForm
 
-class ProductForm(forms.Form):
-    description = forms.CharField(max_length=255, label="Descripcion")
-    show_in_menu= forms.BooleanField(label="Mostrar en el menu")
-    is_raw_material= forms.BooleanField(label="Es materia prima")
-    sell_price = forms.FloatField("Precio de venta")
+from .models import Product
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ['description','sell_price','is_raw_material','show_in_menu']
+        labels = {
+            'description': 'Descripcion',
+            'sell_price': 'Precio de Venta',
+            'is_raw_material': 'Materia Prima',
+            'show_in_menu': 'Mostrar en el Menu',
+        }
