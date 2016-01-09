@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
+from rest_framework import generics, viewsets
 from .forms import ProductForm
+from .serializers import ProductSerializer
+from .models import Product
 
 
 # uncomment this to require login
@@ -19,3 +21,13 @@ def create(request):
 	if form.is_valid():
 		form.save()
 	return render(request,"products/index.html", {"form": form})
+
+
+class ProductList(viewsets.ModelViewSet):
+	queryset = Product.objects.all()
+	serializer_class = ProductSerializer
+
+
+class ProductDetail(generics.RetrieveUpdateAPIView):
+	queryset = Product.objects.all()
+	serializer_class = ProductSerializer
