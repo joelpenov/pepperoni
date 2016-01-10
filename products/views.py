@@ -9,8 +9,12 @@ from .models import Product
 # uncomment this to require login
 # @login_required()
 # Create your views here.
+# {% load rest_framework %}
+# <h1>Test serializer</h1>
+# {%  render_form serializer template_pack='rest_framework/horizontal' %}
 def index(request):
 	form = ProductForm()
+	# context = {"form": form, "serializer": ProductSerializer}
 	context = {"form": form}
 	return render(request,"products/index.html", context)
 
