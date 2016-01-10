@@ -35,7 +35,7 @@
                         {% endfor %}
                     </tr>
                     </thead>
-                   <tbody></tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -44,33 +44,11 @@
 {% endblock %}
 {% block javascript %}
     <script>
-        $(document).ready(function () {
-            $('.submit-button').click('submit', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url : '/api/products/?format=json',
-                    type: "post",
-                    data: $('form').serializeJSON(),
-                    success: function (data) {
-                        $("#form_output").html(data);
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
-            });
+        (function(){
 
+            var datatable = $('#dynamic-table').dataTable({data:[]});
 
-
-
-            var oTable1 =
-                    $('#dynamic-table')
-                            .dataTable();
-
-            //oTable1.fnAdjustColumnSizing();
-
-            //initiate TableTools extension
-            var tableTools_obj = new $.fn.dataTable.TableTools( oTable1, {
+            var tableTools_obj = new $.fn.dataTable.TableTools( datatable, {
                 "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
 
                 "sRowSelector": "td:not(:last-child)",
@@ -88,20 +66,55 @@
 
                 "sSelectedClass": "success"
             } );
+            var load_datatable = function(data){
+                datatable.fnClearTable();
+                datatable.fnAddData(data);
+            };
 
-             $.ajax({
+            var reload_datatable = function(){
+                $.ajax({
                     url : '/api/products/?format=json',
                     type: "get",
                     data: {},
-                    success: function (data) {
-                        $("#form_output").html(data);
+                    success: function (response) {
+                        var data_source = [];
+                        response.forEach(function(item){
+                            var row = [];
+                            {% for field in form %}
+                                row.push(item["{{ field.name }}"]);
+                            {% endfor %}
+                            data_source.push(row);
+                        });
+                        load_datatable(data_source);
                     },
                     error: function (jXHR, textStatus, errorThrown) {
                         alert(errorThrown);
                     }
                 });
 
-        });
+            };
 
+            $(document).ready(function () {
+                $('.submit-button').click('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url : '/api/products/?format=json',
+                        type: "post",
+                        data: $('form').serializeJSON(),
+                        success: function (data) {
+                            reload_datatable();
+                            $('form').get(0).reset()
+                        },
+                        error: function (jXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                });
+
+                reload_datatable();
+
+
+            });
+        })();
     </script>
 {% endblock javascript %}
