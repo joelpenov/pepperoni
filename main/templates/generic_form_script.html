@@ -1,0 +1,72 @@
+    <script>
+        (function(){
+
+            var datatable = $('#dynamic-table').dataTable({data:[]});
+
+            var tableTools_obj = new $.fn.dataTable.TableTools( datatable, {
+                "sRowSelector": "td:not(:last-child)",
+                "sRowSelect": "multi",
+                "fnRowSelected": function(row) {
+                    //check checkbox when row is selected
+                    try { $(row).find('input[type=checkbox]').get(0).checked = true }
+                    catch(e) {}
+                },
+                "fnRowDeselected": function(row) {
+                    //uncheck checkbox
+                    try { $(row).find('input[type=checkbox]').get(0).checked = false }
+                    catch(e) {}
+                },
+
+                "sSelectedClass": "success"
+            } );
+            var load_datatable = function(data){
+                datatable.fnClearTable();
+                datatable.fnAddData(data);
+            };
+
+            var reload_datatable = function(){
+                $.ajax({
+                    url : {{ link }},
+                    type: "get",
+                    data: {},
+                    success: function (response) {
+                        var data_source = [];
+                        response.forEach(function(item){
+                            var row = [];
+                            {% for field in form %}
+                                row.push(item["{{ field.name }}"]);
+                            {% endfor %}
+                            data_source.push(row);
+                        });
+                        load_datatable(data_source);
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+            };
+
+            $(document).ready(function () {
+                $('.submit-button').click('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url : {{ link }},
+                        type: "post",
+                        data: $('form').serializeJSON(),
+                        success: function (data) {
+                            reload_datatable();
+                            $('form').get(0).reset()
+                        },
+                        error: function (jXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                });
+
+                reload_datatable();
+
+
+            });
+        })();
+    </script>

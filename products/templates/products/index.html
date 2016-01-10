@@ -5,116 +5,18 @@
             Productos
         </h1>
     </div>
-    <form class="form-horizontal" action="/products/create" method="post">
+    <form class="form-horizontal">
         {% include "auto_form.html" %}
-        <div class="clearfix form-actions center">
-            <div class="col-md-offset-3 col-md-9">
-                <button type="button" class="btn btn-info submit-button" type="button">
-                    <i class="ace-icon fa fa-check bigger-110"></i>
-                    Submit
-                </button>
-
-                &nbsp; &nbsp; &nbsp;
-                <button class="btn" type="reset">
-                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                    Reset
-                </button>
-            </div>
-        </div>
+        {% include "form_buttons.html" %}
     </form>
 
     <div class="row">
         <div class="col-xs-12">
-            <!-- div.dataTables_borderWrap -->
-            <div>
-                <table id="dynamic-table" class="table table-striped table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        {% for field in form %}
-                            <th>{{ field.label }}</th>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+         {% include "auto_table.html" %}
         </div>
     </div>
 
 {% endblock %}
 {% block javascript %}
-    <script>
-        (function(){
-
-            var datatable = $('#dynamic-table').dataTable({data:[]});
-
-            var tableTools_obj = new $.fn.dataTable.TableTools( datatable, {
-                "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
-
-                "sRowSelector": "td:not(:last-child)",
-                "sRowSelect": "multi",
-                "fnRowSelected": function(row) {
-                    //check checkbox when row is selected
-                    try { $(row).find('input[type=checkbox]').get(0).checked = true }
-                    catch(e) {}
-                },
-                "fnRowDeselected": function(row) {
-                    //uncheck checkbox
-                    try { $(row).find('input[type=checkbox]').get(0).checked = false }
-                    catch(e) {}
-                },
-
-                "sSelectedClass": "success"
-            } );
-            var load_datatable = function(data){
-                datatable.fnClearTable();
-                datatable.fnAddData(data);
-            };
-
-            var reload_datatable = function(){
-                $.ajax({
-                    url : '/api/products/?format=json',
-                    type: "get",
-                    data: {},
-                    success: function (response) {
-                        var data_source = [];
-                        response.forEach(function(item){
-                            var row = [];
-                            {% for field in form %}
-                                row.push(item["{{ field.name }}"]);
-                            {% endfor %}
-                            data_source.push(row);
-                        });
-                        load_datatable(data_source);
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
-
-            };
-
-            $(document).ready(function () {
-                $('.submit-button').click('submit', function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url : '/api/products/?format=json',
-                        type: "post",
-                        data: $('form').serializeJSON(),
-                        success: function (data) {
-                            reload_datatable();
-                            $('form').get(0).reset()
-                        },
-                        error: function (jXHR, textStatus, errorThrown) {
-                            alert(errorThrown);
-                        }
-                    });
-                });
-
-                reload_datatable();
-
-
-            });
-        })();
-    </script>
+ {% include "generic_form_script.html" with link="'/api/products/?format=json'" %}
 {% endblock javascript %}
