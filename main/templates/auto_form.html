@@ -17,7 +17,7 @@
             {% if field|field_type == "booleanfield" %}
                 <div class="checkbox">
                     <label>
-                        {{ field|attr:"class:ace" }}
+                        {{ field|attr:"class:ace"|attr:"value:True"  }}
                         <span class="lbl"></span>
                     </label>
                 </div>
@@ -33,3 +33,4 @@
         </div>
     {% endif %}
 {% endfor %}
+

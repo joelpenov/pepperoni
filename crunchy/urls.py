@@ -27,6 +27,7 @@ router.register(r'products', views.ProductList)
 
 urlpatterns = [
 	url(r'^inventory/', include('inventory.urls')),
+	url(r'^products/', include('products.urls')),
 	url(r'^api/', include(router.urls)),
 	url(r'^$', include('main.urls')),
     url(r'^admin/', admin.site.urls),
