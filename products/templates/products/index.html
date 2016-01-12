@@ -1,4 +1,5 @@
 {% extends "menu-layout.html" %}
+{% load staticfiles %}
 {% block content %}
     <div class="page-header">
         <h1>
@@ -12,11 +13,55 @@
 
     <div class="row">
         <div class="col-xs-12">
-         {% include "auto_table.html" %}
+            {% include "auto_table.html" %}
         </div>
     </div>
+    <form class="form-horizontal">
+        <div id="form_view" data-bind="foreach: fields">
+            <!-- ko template: {name: fieldTemplate, data:$data} -->
+            <!-- /ko -->
+        </div>
+    </form>
 
 {% endblock %}
 {% block javascript %}
- {% include "generic_form_script.html" with link="'/api/products/'" %}
+    {% include "generic_form_script.html" with link="'/api/products/'" %}
+    <script src="{% static "app/generic_forms.js" %}"></script>
+
+    <script type="text/html" id="string-field-template">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" data-bind="text:label"></label>
+            <div class="col-sm-9">
+                <input type="text" data-bind="attr:{ id: fieldId}" class="form-control"/>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="numeric-field-template">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" data-bind="text:label"></label>
+            <div class="col-sm-9">
+                <input type="number" data-bind="attr:{ id: fieldId}, disable:read_only" class="form-control"/>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="boolean-field-template">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" data-bind="text:label"></label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="True"  data-bind="attr:{ id: fieldId}" class="ace"/>
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="float-field-template">
+        <!-- ko template: {name: "numeric-field-template", data:$data} -->
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="integer-field-template">
+        <!-- ko template: {name: "numeric-field-template", data:$data} -->
+        <!-- /ko -->
+    </script>
+
 {% endblock javascript %}
