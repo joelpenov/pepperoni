@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'inventory',
     'products',
-    'main',
+    'main'
 ]
 
 MIDDLEWARE_CLASSES = [
