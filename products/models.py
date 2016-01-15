@@ -10,3 +10,6 @@ class Product(models.Model):
 	stock = models.FloatField(default=0)
 	show_in_menu= models.BooleanField()
 	is_raw_material= models.BooleanField()
+
+	def __str__(self):
+		return "{0}".format(self.description)

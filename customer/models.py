@@ -6,3 +6,4 @@ class Customer(models.Model):
 	reference = models.CharField(max_length=180)
 	phone = models.CharField(max_length=15)
 
+	
