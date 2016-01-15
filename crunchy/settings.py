@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'inventory',
     'products',
     'main',
+    'customer'
 ]
 
 MIDDLEWARE_CLASSES = [
