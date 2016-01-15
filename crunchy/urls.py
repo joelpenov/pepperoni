@@ -20,16 +20,13 @@ from django.contrib import admin
 from rest_framework import routers
 
 
-#from products import views
-from customer import views
-
-#import products
-#import customer
+from products import views as products_views
+from customer import views as customer_views
 
 router = routers.DefaultRouter()
 
-#router.register(r'products', products.views.ProductList)
-router.register(r'customers', views.CustomerList)
+router.register(r'products', products_views.ProductList)
+router.register(r'customers', customer_views.CustomerList)
 
 urlpatterns = [
 	url(r'^inventory/', include('inventory.urls')),
