@@ -307,9 +307,13 @@
 			<script src="{% static "assets/js/ace.min.js" %}"></script>
 			<script src="{% static "assets/js/jquery.serializejson.min.js" %}"></script>
 
+            <script src="{% static "app/generic_views.js" %}"></script>
+
         {% block javascript %}
             <!-- custom script -->
 		{% endblock javascript %}
 		<!-- inline scripts related to this page -->
+
+        {% include "input_templates.html" %}
 	</body>
 </html>
