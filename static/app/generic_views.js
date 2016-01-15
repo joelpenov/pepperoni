@@ -1,4 +1,4 @@
-var GenericForm = GenericForm || {};
+var GenericViews = GenericViews || {};
 (function () {
 
     function FormView(settings) {
@@ -139,31 +139,7 @@ var GenericForm = GenericForm || {};
             });
         };
     }
+    GenericViews.DataTableView = DataTableView;
+    GenericViews.FormView = FormView;
 
-
-    $(document).ready(function () {
-
-
-        var table_settings = {
-            url: "/api/products/",
-            dataTable: $('#dynamic-table').dataTable({
-                //"aoColumns": columns,
-                data: []
-            })
-        };
-
-        var dataTableView = new DataTableView(table_settings);
-
-        var form_settings = {
-            url: "/api/products/",
-            formId: "form_view",
-            form: $('#form_view'),
-            dataTableView: dataTableView
-        };
-
-        var formView = new FormView(form_settings);
-        formView.init();
-        dataTableView.refreshDataTable();
-
-    });
 })();

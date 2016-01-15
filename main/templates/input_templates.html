@@ -1,0 +1,35 @@
+<script type="text/html" id="string-field-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label" data-bind="text:label"></label>
+        <div class="col-sm-9">
+            <input type="text" data-bind="attr:{ id: fieldId, name: name}" class="form-control" />
+        </div>
+    </div>
+</script>
+<script type="text/html" id="numeric-field-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label" data-bind="text:label"></label>
+        <div class="col-sm-9">
+            <input type="number" data-bind="attr:{ id: fieldId, name: name}, disable:read_only" class="form-control"/>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="boolean-field-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label" data-bind="text:label"></label>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="True"  data-bind="attr:{ id: fieldId, name: name}" class="ace"/>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="float-field-template">
+    <!-- ko template: {name: "numeric-field-template", data:$data} -->
+    <!-- /ko -->
+</script>
+<script type="text/html" id="integer-field-template">
+    <!-- ko template: {name: "numeric-field-template", data:$data} -->
+    <!-- /ko -->
+</script>
