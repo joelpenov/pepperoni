@@ -4,8 +4,8 @@ from rest_framework import generics, viewsets
 from .serializers import CashRegisterSerializer
 
 
-def index(request):
-	return render(request,"cash_register/index.html")
+def cashregisters(request):
+	return render(request,"sales/cashregisters.html")
 
 class CashRegisterList(viewsets.ModelViewSet):
 	queryset = CashRegister.objects.all()

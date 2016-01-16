@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'products',
     'main',
     'customer',
-    'cash_register'
+    'sales'
 ]
 
 MIDDLEWARE_CLASSES = [
