@@ -9,7 +9,7 @@ class Warehouse(models.Model):
 
 
 class InventoryMove(models.Model):
-	Warehouse = models.ForeignKey(Warehouse, related_name="fk_inventory_move_warehoure", null=True, default=None)
+	Warehouse = models.ForeignKey(Warehouse, related_name="fk_inventory_move_warehouse", null=True, default=None)
 	transaction_type = models.IntegerField()
 	quantity_type = models.FloatField()
 	price = models.FloatField()
