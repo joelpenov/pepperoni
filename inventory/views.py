@@ -1,7 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views import generic
-# Create your views here.
+from rest_framework import generics, viewsets
+from .serializers import WarehouseSerializer
+from .models import Warehouse
 
-def index(request):
-	return render(request,"inventory/index.html")
+
+# uncomment this to require login
+# @login_required()
+def warehouse(request):
+	return render(request,"inventory/warehouse.html")
+
+
+class WarehouseList(viewsets.ModelViewSet):
+	queryset = Warehouse.objects.all()
+	serializer_class = WarehouseSerializer

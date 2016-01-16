@@ -8,11 +8,6 @@ def index(request):
 	return render(request,"customer/index.html")
 
 
-class CustomerDetail(generics.RetrieveUpdateAPIView):
-	queryset = Customer.objects.all()
-	serializer_class = CustomerSerializer
-
-
 class CustomerList(viewsets.ModelViewSet):
 	queryset = Customer.objects.all()
 	serializer_class = CustomerSerializer

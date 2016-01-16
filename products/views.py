@@ -13,8 +13,3 @@ def index(request):
 class ProductList(viewsets.ModelViewSet):
 	queryset = Product.objects.all()
 	serializer_class = ProductSerializer
-
-
-class ProductDetail(generics.RetrieveUpdateAPIView):
-	queryset = Product.objects.all()
-	serializer_class = ProductSerializer

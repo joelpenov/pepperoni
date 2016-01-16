@@ -1,6 +1,11 @@
 from django.conf.urls import url
+
 from inventory import views
 
+
+def registerApiUrls(router):
+	router.register(r'warehouse', views.WarehouseList)
+
 urlpatterns=[
-		url(r'^test', views.index),
+		url(r'^warehouse/', views.warehouse)
 	]
