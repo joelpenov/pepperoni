@@ -31,6 +31,7 @@ router.register(r'customers', customer_views.CustomerList)
 urlpatterns = [
 	url(r'^inventory/', include('inventory.urls')),
     url(r'^products/', include('products.urls')),	
+    url(r'^customers/', include('customer.urls')),
 	url(r'^api/', include(router.urls)),
 	url(r'^$', include('main.urls')),
     url(r'^admin/', admin.site.urls),
