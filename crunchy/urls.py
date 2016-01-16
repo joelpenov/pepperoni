@@ -22,16 +22,19 @@ from rest_framework import routers
 
 from products import views as products_views
 from customer import views as customer_views
+from cash_register import views as cash_register_views
 
 router = routers.DefaultRouter()
 
 router.register(r'products', products_views.ProductList)
 router.register(r'customers', customer_views.CustomerList)
+router.register(r'cashregisters', cash_register_views.CashRegisterList)
 
 urlpatterns = [
 	url(r'^inventory/', include('inventory.urls')),
     url(r'^products/', include('products.urls')),	
     url(r'^customers/', include('customer.urls')),
+    url(r'^cashregister/', include('cash_register.urls')),
 	url(r'^api/', include(router.urls)),
 	url(r'^$', include('main.urls')),
     url(r'^admin/', admin.site.urls),
