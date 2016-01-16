@@ -20,19 +20,22 @@ from django.contrib import admin
 from rest_framework import routers
 
 
-from products import views as products_views
-from customer import views as customer_views
-from cash_register import views as cash_register_views
+from cash_register import urls as cash_register_urls
+from products import urls as products_urls
+from customer import urls as customer_urls
+from inventory import urls as inventory_urls
 
 router = routers.DefaultRouter()
 
-router.register(r'products', products_views.ProductList)
-router.register(r'customers', customer_views.CustomerList)
-router.register(r'cashregisters', cash_register_views.CashRegisterList)
+
+inventory_urls.registerApiUrls(router)
+products_urls.registerApiUrls(router)
+customer_urls.registerApiUrls(router)
+cash_register_urls.registerApiUrls(router)
 
 urlpatterns = [
-	url(r'^inventory/', include('inventory.urls')),
-    url(r'^products/', include('products.urls')),	
+    url(r'^inventory/', include('inventory.urls')),
+    url(r'^products/', include('products.urls')),
     url(r'^customers/', include('customer.urls')),
     url(r'^cashregister/', include('cash_register.urls')),
 	url(r'^api/', include(router.urls)),
