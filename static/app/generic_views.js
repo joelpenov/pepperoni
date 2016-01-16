@@ -6,6 +6,8 @@ var GenericViews = GenericViews || {};
         self.fields = ko.observableArray();
         var isEditMode = false;
         var currentItemId = 0;
+        settings.includeFields =settings.includeFields|| [];
+
         self.save = function () {
             var method = "post";
             var link = settings.url;
@@ -80,7 +82,7 @@ var GenericViews = GenericViews || {};
                     var formObject = response.actions.POST;
                     var fields = [];
                     for (var property in formObject) {
-                        if (formObject.hasOwnProperty(property)) {
+                        if (formObject.hasOwnProperty(property) && (settings.includeFields.length==0 || settings.includeFields.indexOf(property) > -1 )) {
                             var field = formObject[property];
                             field.name = property;
                             field.fieldTemplate = field.type + "-field-template";

@@ -14,7 +14,8 @@
             url: "/api/customers/",
             formId: "form_view",
             form: $('#form_view'),
-            dataTableView: dataTableView
+            dataTableView: dataTableView,
+            includeFields: ['phone','name','address','reference']
         };
 
         var formView = new GenericViews.FormView(form_settings);
