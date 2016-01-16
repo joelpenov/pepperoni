@@ -13,6 +13,7 @@ var GenericViews = GenericViews || {};
                 method = "put";
                 link += currentItemId + "/";
             }
+            self.resetErrors();
             $.ajax({
                 url: link + '?format=json',
                 type: method,
@@ -24,15 +25,38 @@ var GenericViews = GenericViews || {};
                     self.cancel();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
-                    alert(errorThrown);
+                    var response = jXHR.responseJSON;
+                    if(response){
+                        for(var property in response){
+                            if(response.hasOwnProperty(property)){
+                                var field = ko.utils.arrayFirst(self.fields(), function(item){
+                                    return item.name === property;
+                                });
+                                if(field){
+                                    field.errors(response[property]);
+                                    field.hasError(true);
+                                }
+                            }
+                        }
+                    }else{
+                        console.error(errorThrown);
+                    }
                 }
             });
+        };
+
+        self.resetErrors = function(){
+          self.fields().forEach(function(field){
+              field.errors([]);
+              field.hasError(false);
+          });
         };
 
         self.cancel = function () {
             settings.form.get(0).reset();
             isEditMode = false;
             currentItemId = 0;
+            self.resetErrors();
         };
 
         self.init = function () {
@@ -48,7 +72,7 @@ var GenericViews = GenericViews || {};
         };
 
         self.loadForm = function () {
-            $.ajax({
+            var request= $.ajax({
                 url: settings.url + '?format=json',
                 type: "options",
                 data: {},
@@ -61,6 +85,8 @@ var GenericViews = GenericViews || {};
                             field.name = property;
                             field.fieldTemplate = field.type + "-field-template";
                             field.fieldId = "input_" + field.name;
+                            field.errors = ko.observableArray();
+                            field.hasError = ko.observable(false);
                             fields.push(field);
                         }
                     }
