@@ -157,9 +157,10 @@ var GenericViews = GenericViews || {};
 
                         });
                         data_source.push(row);
+                        settings.dataTable.fnClearTable();
+                        settings.dataTable.fnAddData(data_source);
                     });
-                    settings.dataTable.fnClearTable();
-                    settings.dataTable.fnAddData(data_source);
+
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.error(errorThrown);
