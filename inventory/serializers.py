@@ -11,9 +11,9 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
 class InventoryMoveSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
-    warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all())
+    Warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all())
     transaction_type = serializers.IntegerField(label='Tipo de transacción')
 
     class Meta:
         model = InventoryMove
-        fields = ('id','warehouse', 'transaction_type')
+        fields = ('id','Warehouse', 'transaction_type')
