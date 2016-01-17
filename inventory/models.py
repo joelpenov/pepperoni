@@ -3,6 +3,11 @@ from django.db import models
 from enum import Enum
 from products.models import Product
 
+class TransactionType(Enum):
+	Input = 1
+	Output = 2
+	Transfer = 3
+
 class Warehouse(models.Model):
 	id = models.IntegerField(primary_key=True)
 	name = models.CharField(max_length=50)
