@@ -1,6 +1,81 @@
 var GenericViews = GenericViews || {};
 (function () {
 
+    GenericViews.errorHandler=function(fields, jXHR, status, errorThrown){
+        var response = jXHR.responseJSON;
+        if(response){
+            for(var property in response){
+                if(response.hasOwnProperty(property)){
+                    var field = ko.utils.arrayFirst(fields, function(item){
+                        return item.name === property;
+                    });
+                    if(field){
+                        field.errors(response[property]);
+                        field.hasError(true);
+                    }
+                }
+            }
+        }else{
+            console.error(errorThrown);
+        }
+    };
+    GenericViews.resetFieldErrors=function(fields){
+        fields.forEach(function(field){
+            field.errors([]);
+            field.hasError(false);
+        });
+    };
+    GenericViews.loadEditFormData=function(form, response){
+        for (var property in response) {
+            if (response.hasOwnProperty(property)) {
+                var element = form.find('#input_' + property);
+                if (element) {
+
+                    if (element.attr("type") === "checkbox") {
+                        element.prop('checked', response[property] === true);
+                    } else {
+                        element.val(response[property]);
+                    }
+
+                }
+            }
+        }
+    };
+    GenericViews.mapActionToFields=function(includeFields,actionFields){
+        var fields = [];
+        for (var property in actionFields) {
+            if (actionFields.hasOwnProperty(property) && (includeFields.length==0 || includeFields.indexOf(property) > -1 )) {
+                var tempfield = actionFields[property];
+                var field = {};
+                field.label=tempfield.label;
+                field.read_only= tempfield.read_only;
+                field.require= tempfield.required;
+                field.description= tempfield.description;
+                field.type = tempfield.type;
+                field.choices = tempfield.choices;
+                field.value = ko.observable();
+
+                if(field.type==="field"){
+                    field.fieldTemplate = "choice-field-template";
+                }
+                else{
+                    field.fieldTemplate = field.type + "-field-template";
+                }
+
+                if(field.type==="date"){
+                    field.value(new Date().toISOString().split('T')[0]);
+                }
+
+                field.name = property;
+                field.fieldId = "input_" + field.name;
+                field.errors = ko.observableArray();
+                field.hasError = ko.observable(false);
+                fields.push(field);
+            }
+        }
+        return fields;
+    };
+
     function FormView(settings) {
         var self = this;
         self.fields = ko.observableArray();
@@ -27,31 +102,13 @@ var GenericViews = GenericViews || {};
                     self.cancel();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
-                    var response = jXHR.responseJSON;
-                    if(response){
-                        for(var property in response){
-                            if(response.hasOwnProperty(property)){
-                                var field = ko.utils.arrayFirst(self.fields(), function(item){
-                                    return item.name === property;
-                                });
-                                if(field){
-                                    field.errors(response[property]);
-                                    field.hasError(true);
-                                }
-                            }
-                        }
-                    }else{
-                        console.error(errorThrown);
-                    }
+                    GenericViews.errorHandler(self.fields(),jXHR,textStatus, errorThrown);
                 }
             });
         };
 
         self.resetErrors = function(){
-          self.fields().forEach(function(field){
-              field.errors([]);
-              field.hasError(false);
-          });
+            GenericViews.resetFieldErrors(self.fields());
         };
 
         self.cancel = function () {
@@ -73,55 +130,13 @@ var GenericViews = GenericViews || {};
             self.loadForm();
         };
 
-//        warehouse: {type: "field", required: true, read_only: false, label: "Warehouse",…}
-//choices: [{display_name: "Almacen 1", value: "1"}, {display_name: "Almacen 2", value: "2"}]
-//0: {display_name: "Almacen 1", value: "1"}
-//1: {display_name: "Almacen 2", value: "2"}
-//label: "Warehouse"
-//read_only: false
-//required: true
-//type: "field"
-//description: ""
-
         self.loadForm = function () {
             var request= $.ajax({
                 url: settings.url + '?format=json',
                 type: "options",
                 data: {},
                 success: function (response) {
-                    var formObject = response.actions.POST;
-                    var fields = [];
-                    for (var property in formObject) {
-                        if (formObject.hasOwnProperty(property) && (settings.includeFields.length==0 || settings.includeFields.indexOf(property) > -1 )) {
-                            var tempfield = formObject[property];
-                            var field = {};
-                            field.label=tempfield.label;
-                            field.read_only= tempfield.read_only;
-                            field.require= tempfield.required;
-                            field.description= tempfield.description;
-                            field.type = tempfield.type;
-                            field.choices = tempfield.choices;
-                            field.value = ko.observable();
-
-                            if(field.type==="field"){
-                                field.fieldTemplate = "choice-field-template";
-                            }
-                            else{
-                                field.fieldTemplate = field.type + "-field-template";
-                            }
-
-                            if(field.type==="date"){
-                                field.value(new Date().toISOString().split('T')[0]);
-                            }
-
-                            field.name = property;
-                            field.fieldId = "input_" + field.name;
-                            field.errors = ko.observableArray();
-                            field.hasError = ko.observable(false);
-                            fields.push(field);
-                        }
-                    }
-                    self.fields(fields);
+                    self.fields(GenericViews.mapActionToFields(settings.includeFields,response.actions.POST ));
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.error(errorThrown);
@@ -135,20 +150,7 @@ var GenericViews = GenericViews || {};
                 type: "get",
                 data: {},
                 success: function (response) {
-                    for (property in response) {
-                        if (response.hasOwnProperty(property)) {
-                            var element = settings.form.find('#input_' + property);
-                            if (element) {
-
-                                if (element.attr("type") === "checkbox") {
-                                    element.prop('checked', response[property] === true);
-                                } else {
-                                    element.val(response[property]);
-                                }
-
-                            }
-                        }
-                    }
+                    GenericViews.loadEditFormData(settings.form, response);
                     isEditMode = true;
                     currentItemId = id;
                 },
