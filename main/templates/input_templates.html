@@ -20,6 +20,36 @@
         </div>
     </div>
 </script>
+<script type="text/html" id="date-field-template">
+    <div class="form-group"  data-bind="css:{'has-error':hasError}">
+        <label class="col-sm-3 control-label" data-bind="text:label"></label>
+        <div class="col-sm-9">
+            <input type="date" data-bind="attr:{ id: fieldId, name: name}, disable:read_only, value: value" class="form-control"/>
+              <span class="help-block" data-bind="foreach:errors">
+                     <span data-bind="text: $data"></span>
+            </span>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="choice-field-template">
+    <div class="form-group"  data-bind="css:{'has-error':hasError}">
+        <label class="col-sm-3 control-label" data-bind="text:label"></label>
+        <div class="col-sm-9">
+             <select data-bind="attr:{ id: fieldId, name: name},
+                        options: choices,
+                        optionsCaption: 'Choose one...',
+                        optionsText: 'display_name',
+                        optionsValue: 'value',
+                        "></select>
+
+            <span class="help-block" data-bind="foreach:errors">
+                     <span data-bind="text: $data"></span>
+            </span>
+        </div>
+    </div>
+</script>
+
+
 <script type="text/html" id="boolean-field-template">
     <div class="form-group"  data-bind="css:{'has-error':hasError}">
         <label class="col-sm-3 control-label" data-bind="text:label"></label>

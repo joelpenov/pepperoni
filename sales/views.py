@@ -7,8 +7,10 @@ from .serializers import CashRegisterSerializer
 def cashRegisters(request):
 	return render(request,"sales/cashRegisters.html")
 
+
 def pointOfSales(request):
 	return render(request,"sales/pointOfSales.html")
+
 
 class CashRegisterList(viewsets.ModelViewSet):
 	queryset = CashRegister.objects.all()

@@ -73,6 +73,16 @@ var GenericViews = GenericViews || {};
             self.loadForm();
         };
 
+//        warehouse: {type: "field", required: true, read_only: false, label: "Warehouse",…}
+//choices: [{display_name: "Almacen 1", value: "1"}, {display_name: "Almacen 2", value: "2"}]
+//0: {display_name: "Almacen 1", value: "1"}
+//1: {display_name: "Almacen 2", value: "2"}
+//label: "Warehouse"
+//read_only: false
+//required: true
+//type: "field"
+//description: ""
+
         self.loadForm = function () {
             var request= $.ajax({
                 url: settings.url + '?format=json',
@@ -83,9 +93,28 @@ var GenericViews = GenericViews || {};
                     var fields = [];
                     for (var property in formObject) {
                         if (formObject.hasOwnProperty(property) && (settings.includeFields.length==0 || settings.includeFields.indexOf(property) > -1 )) {
-                            var field = formObject[property];
+                            var tempfield = formObject[property];
+                            var field = {};
+                            field.label=tempfield.label;
+                            field.read_only= tempfield.read_only;
+                            field.require= tempfield.required;
+                            field.description= tempfield.description;
+                            field.type = tempfield.type;
+                            field.choices = tempfield.choices;
+                            field.value = ko.observable();
+
+                            if(field.type==="field"){
+                                field.fieldTemplate = "choice-field-template";
+                            }
+                            else{
+                                field.fieldTemplate = field.type + "-field-template";
+                            }
+
+                            if(field.type==="date"){
+                                field.value(new Date());
+                            }
+
                             field.name = property;
-                            field.fieldTemplate = field.type + "-field-template";
                             field.fieldId = "input_" + field.name;
                             field.errors = ko.observableArray();
                             field.hasError = ko.observable(false);

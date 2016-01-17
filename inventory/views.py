@@ -9,10 +9,16 @@ from .models import Warehouse, InventoryMove
 def warehouse(request):
 	return render(request,"inventory/warehouse.html")
 
+
+def inventoryInput(request):
+	return render(request,"inventory/InventoryInput.html")
+
+
 class WarehouseList(viewsets.ModelViewSet):
 	queryset = Warehouse.objects.all()
 	serializer_class = WarehouseSerializer
 
-class InventoryMoveList(viewsets.ModelViewSet):
+
+class InventoryInputList(viewsets.ModelViewSet):
 	queryset = InventoryMove.objects.all()
 	serializer_class = InventoryMoveSerializer
