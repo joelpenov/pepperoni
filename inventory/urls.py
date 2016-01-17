@@ -4,7 +4,8 @@ from inventory import views
 
 
 def registerApiUrls(router):
-	router.register(r'warehouse', views.WarehouseList)
+	router.register(r'warehouses', views.WarehouseList)
+	router.register(r'inventorymoves', views.InventoryMoveList)
 
 urlpatterns=[
 		url(r'^warehouse/', views.warehouse)
