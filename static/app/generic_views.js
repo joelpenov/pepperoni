@@ -111,7 +111,7 @@ var GenericViews = GenericViews || {};
                             }
 
                             if(field.type==="date"){
-                                field.value(new Date());
+                                field.value(new Date().toISOString().split('T')[0]);
                             }
 
                             field.name = property;
