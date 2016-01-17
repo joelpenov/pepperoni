@@ -1,12 +1,6 @@
-
 from django.db import models
-from enum import Enum
 from products.models import Product
 
-class TransactionType(Enum):
-	Input = 1
-	Output = 2
-	Transfer = 3
 
 class Warehouse(models.Model):
 	id = models.IntegerField(primary_key=True)
@@ -16,31 +10,28 @@ class Warehouse(models.Model):
 		return self.name
 
 
-class TransactionType(Enum):
-	Input = 1
-	Output = 2
-	Transfer = 3
-
-
 class InventoryMove(models.Model):
-	TRANSACTION_TYPES = (
-        (TransactionType.Input.value, 'Entradas'),
-        (TransactionType.Output.value, 'Salidas'),
-        (TransactionType.Transfer.value, 'Transferencias'),
+	INPUT = 'INPUT'
+	OUTPUT = 'OUTPUT'
+	TRANSFER = 'TRANSFER'
+	MOVE_TYPE_CHOICES = (
+        (INPUT, 'Entrada'),
+        (OUTPUT, 'Salida'),
+        (TRANSFER, 'Transferencia'),
     )
 
 	id = models.IntegerField(primary_key=True)
-	warehouse = models.ForeignKey(Warehouse, related_name="fk_inventory_move_warehouse", default=None)
-	transaction_type = models.IntegerField(choices=TRANSACTION_TYPES)
+	warehouse = models.ForeignKey(Warehouse, related_name="inventory_moves", default=None)
+	transaction_type = models.CharField(max_length=20, choices=MOVE_TYPE_CHOICES)
 	transaction_date = models.DateField()
 	#transaction_id = models.UUIDField()
 
 
 class InventoryMoveDetail(models.Model):
 	id = models.IntegerField(primary_key=True)
-	InventoryMove = models.ForeignKey(InventoryMove, related_name="fk_inventory_move_detail_inventory_move", default=None)
-	Product = models.ForeignKey(Product, related_name="fk_inventory_move_detail_product", default=None)
+	inventory_move = models.ForeignKey(InventoryMove, related_name="details", default=None)
+	product = models.ForeignKey(Product, related_name="inventory_move_details", default=None)
 	quantity = models.FloatField()
-	cost = models.FloatField()
 	price = models.FloatField()
+
 
