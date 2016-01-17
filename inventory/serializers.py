@@ -9,7 +9,7 @@ class WarehouseSerializer(serializers.ModelSerializer):
         model = Warehouse
         fields = ('id','name')
 
-
+#class InventoryMoveDetailSerializer(serializers.ModelSerializer):
 
 class InventoryMoveSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')

@@ -14,7 +14,8 @@
             url: "/api/products/",
             formId: "form_view",
             form: $('#form_view'),
-            dataTableView: dataTableView
+            dataTableView: dataTableView,
+            includeFields: ['id','description','sell_price','show_in_menu', 'is_raw_material']
         };
 
         var formView = new GenericViews.FormView(form_settings);
