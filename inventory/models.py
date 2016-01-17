@@ -1,5 +1,6 @@
 
 from django.db import models
+from enum import Enum
 from products.models import Product
 
 class Warehouse(models.Model):
@@ -18,3 +19,8 @@ class InventoryMoveDetail(models.Model):
 	quantity = models.FloatField()
 	cost = models.FloatField()
 	price = models.FloatField()
+
+class TransactionType(Enum):
+	Input = 1
+	Output = 2
+	Transfer = 3
