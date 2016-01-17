@@ -15,10 +15,26 @@ class Warehouse(models.Model):
 	def __str__(self):
 		return self.name
 
+
+class TransactionType(Enum):
+	Input = 1
+	Output = 2
+	Transfer = 3
+
+
 class InventoryMove(models.Model):
+	TRANSACTION_TYPES = (
+        (TransactionType.Input.value, 'Entradas'),
+        (TransactionType.Output.value, 'Salidas'),
+        (TransactionType.Transfer.value, 'Transferencias'),
+    )
+
 	id = models.IntegerField(primary_key=True)
-	Warehouse = models.ForeignKey(Warehouse, related_name="fk_inventory_move_warehouse", default=None)
-	transaction_type = models.IntegerField()
+	warehouse = models.ForeignKey(Warehouse, related_name="fk_inventory_move_warehouse", default=None)
+	transaction_type = models.IntegerField(choices=TRANSACTION_TYPES)
+	transaction_date = models.DateField()
+	#transaction_id = models.UUIDField()
+
 
 class InventoryMoveDetail(models.Model):
 	id = models.IntegerField(primary_key=True)

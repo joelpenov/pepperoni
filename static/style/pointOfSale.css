@@ -1,0 +1,24 @@
+.order-form input {
+    width: 100%
+}
+
+.order-input {
+    padding: 4px;
+}
+
+.order-input-buttom {
+    padding-left: 8px;
+}
+
+.client-history .widget-main {
+    height: 190px;
+    overflow-y: auto;
+}
+.pay-container input, .pay-container .form-group input[disabled], .pay-container .form-group input:disabled{
+    text-align: right;
+    color:black!important;
+}
+
+
+
+@media(min-width:700px) {}

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Warehouse, InventoryMove, InventoryMoveDetail
+from .models import Warehouse, InventoryMove
 
 class WarehouseSerializer(serializers.ModelSerializer):
     id=serializers.IntegerField(read_only=True, label='Código')
@@ -9,11 +9,14 @@ class WarehouseSerializer(serializers.ModelSerializer):
         model = Warehouse
         fields = ('id','name')
 
+
+
 class InventoryMoveSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
-    Warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all())
+    warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all())
+    transaction_date = serializers.DateField(label='Fecha')
     transaction_type = serializers.IntegerField(label='Tipo de transacción')
 
     class Meta:
         model = InventoryMove
-        fields = ('id','Warehouse', 'transaction_type')
+        fields = ('id','warehouse', 'transaction_date', 'transaction_type')
