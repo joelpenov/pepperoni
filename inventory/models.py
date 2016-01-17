@@ -7,6 +7,9 @@ class Warehouse(models.Model):
 	id = models.IntegerField(primary_key=True)
 	name = models.CharField(max_length=50)
 
+	def __str__(self):
+		return self.name
+
 class InventoryMove(models.Model):
 	id = models.IntegerField(primary_key=True)
 	Warehouse = models.ForeignKey(Warehouse, related_name="fk_inventory_move_warehouse", default=None)
