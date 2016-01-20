@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
 
@@ -40,4 +41,15 @@ urlpatterns = [
 	url(r'^$', include('main.urls')),
     url(r'^admin/', admin.site.urls),
 	#url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
+
+urlpatterns += [
+    url(r'^login/', auth_views.login,
+        {'template_name': 'login.html'},
+        name="boardgames_login"
+       ),
+    url(r'^logout/', auth_views.logout,
+        {'next_page': 'boardgames_home'},
+        name="boardgames_logout"
+       )
 ]
