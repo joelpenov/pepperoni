@@ -84,18 +84,24 @@
 
 											<div class="space-6"></div>
 
-											<form>
+											<form method="post" action="{% url 'crunchy_login'%}">
+												{% if form.errors %}
+													<span class="help-block">
+	    												<span style="color:#f2a696;">Su usuario o clave son incorrectos.</span>
+													</span>
+												{% endif %}
 												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="Username" />
-															<i class="ace-icon fa fa-user"></i>
-														</span>
-													</label>
+													{% csrf_token %}	
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Password" />
+															<input type="text" class="form-control" placeholder="Username" name="username" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="password" type="password" class="form-control" placeholder="Password" />
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
@@ -103,10 +109,11 @@
 													<div class="space"></div>
 
 													<div class="clearfix">
-														<button type="button" class="width-35 pull-right btn btn-sm btn-primary">
+														<button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">Login</span>
 														</button>
+														<input value="{{ next }}"  type="hidden" name="next">
 													</div>
 
 													<div class="space-4"></div>

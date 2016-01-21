@@ -80,8 +80,10 @@
 						<li class="light-blue">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<span class="user-info">
-									<small>Juan Carlos</small>
-									Estrella
+									{% if user.is_authenticated %}				
+										<small>{{ user.first_name }}</small>
+											   {{ user.last_name}}
+									{% endif %}	
 								</span>
 
 								<i class="ace-icon fa fa-caret-down"></i>
@@ -105,7 +107,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="#">
+									<a href="{% url 'crunchy_logout'%}">
 										<i class="ace-icon fa fa-power-off"></i>
 										Salir
 									</a>

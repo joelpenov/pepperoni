@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^customers/', include('customer.urls')),
     url(r'^sales/', include('sales.urls')),
 	url(r'^api/', include(router.urls)),
-	url(r'^$', include('main.urls')),
+	url(r'^$', include('main.urls'), name="crunchy_home"),
     url(r'^admin/', admin.site.urls),
 	#url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
@@ -46,10 +46,10 @@ urlpatterns = [
 urlpatterns += [
     url(r'^login/', auth_views.login,
         {'template_name': 'login.html'},
-        name="boardgames_login"
+        name="crunchy_login"
        ),
     url(r'^logout/', auth_views.logout,
-        {'next_page': 'boardgames_home'},
-        name="boardgames_logout"
+        {'next_page': 'crunchy_login'},
+        name="crunchy_logout"
        )
 ]
