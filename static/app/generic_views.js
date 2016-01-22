@@ -76,90 +76,60 @@ var GenericViews = GenericViews || {};
         return fields;
     };
 
-    function FormView(settings) {
-        var self = this;
-        self.fields = ko.observableArray();
-        var isEditMode = false;
-        var currentItemId = 0;
-        settings.includeFields =settings.includeFields|| [];
-
-        self.save = function () {
-            var method = "post";
-            var link = settings.url;
-            if (isEditMode) {
-                method = "put";
-                link += currentItemId + "/";
+    GenericViews.loadFormFields = function(settings,callback){
+        return $.ajax({
+            url: settings.url + '?format=json',
+            type: "options",
+            data: {},
+            success: function (response) {
+                //console.log(response);
+                callback(GenericViews.mapActionToFields(settings.includeFields,response.actions.POST ));
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
             }
-            self.resetErrors();
-            $.ajax({
-                url: link + '?format=json',
-                type: method,
-                data: settings.form.serializeJSON(),
-                success: function (data) {
-                    if (settings.dataTableView) {
-                        settings.dataTableView.refreshDataTable();
-                    }
-                    self.cancel();
-                },
-                error: function (jXHR, textStatus, errorThrown) {
-                    GenericViews.errorHandler(self.fields(),jXHR,textStatus, errorThrown);
+        });
+
+    };
+    GenericViews.saveData=function(formView,data){
+        var method = "post";
+        var link = formView.settings.url;
+        formView.resetErrors();
+
+        if (formView.isEditMode) {
+            method = "put";
+            link += formView.currentItemId + "/";
+        }
+
+        return $.ajax({
+            url: link + '?format=json',
+            type: method,
+            data: data,
+            success: function (response) {
+                if (formView.settings.dataTableView) {
+                    formView.settings.dataTableView.refreshDataTable();
                 }
-            });
-        };
-
-        self.resetErrors = function(){
-            GenericViews.resetFieldErrors(self.fields());
-        };
-
-        self.cancel = function () {
-            settings.form.get(0).reset();
-            isEditMode = false;
-            currentItemId = 0;
-            self.resetErrors();
-        };
-
-        self.init = function () {
-            if(settings.dataTableView){
-                settings.dataTableView.dataTable.on('click', '.action-buttons .edit', function(){
-                    var id = $(this).data("item-id");
-                    self.editForm(id);
-                });
+                formView.cancel();
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                GenericViews.errorHandler(formView.fields(),jXHR,textStatus, errorThrown);
             }
+        });
+    };
 
-            ko.applyBindings(self, settings.form.get(0));
-            self.loadForm();
-        };
-
-        self.loadForm = function () {
-            var request= $.ajax({
-                url: settings.url + '?format=json',
-                type: "options",
-                data: {},
-                success: function (response) {
-                    self.fields(GenericViews.mapActionToFields(settings.includeFields,response.actions.POST ));
-                },
-                error: function (jXHR, textStatus, errorThrown) {
-                    console.error(errorThrown);
-                }
-            });
-        };
-
-        self.editForm = function (id) {
-            $.ajax({
-                url: settings.url + id + '/?format=json',
-                type: "get",
-                data: {},
-                success: function (response) {
-                    GenericViews.loadEditFormData(settings.form, response);
-                    isEditMode = true;
-                    currentItemId = id;
-                },
-                error: function (jXHR, textStatus, errorThrown) {
-                    console.error(errorThrown);
-                }
-            });
-        };
-    }
+    GenericViews.getData = function(url,id,callback){
+        $.ajax({
+            url: url + id + '/?format=json',
+            type: "get",
+            data: {},
+            success: function (response) {
+                callback(response);
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
+            }
+        });
+    };
 
     function DataTableView(settings) {
         self = this;
@@ -199,6 +169,60 @@ var GenericViews = GenericViews || {};
             });
         };
     }
+
+    function FormView(settings) {
+        var self = this;
+        self.settings = settings;
+        self.fields = ko.observableArray();
+        self.isEditMode = false;
+        self.currentItemId = 0;
+        settings.includeFields =settings.includeFields|| [];
+
+        self.save = function () {
+            var request = GenericViews.saveData(self,settings.form.serializeJSON());
+            request.success( function (response) {
+
+            });
+        };
+
+        self.resetErrors = function(){
+            GenericViews.resetFieldErrors(self.fields());
+        };
+
+        self.cancel = function () {
+            settings.form.get(0).reset();
+            self.isEditMode = false;
+            self.currentItemId = 0;
+            self.resetErrors();
+        };
+
+        self.loadForm = function () {
+            GenericViews.loadFormFields(settings,function(fields){
+                self.fields(fields);
+            });
+        };
+
+        self.editForm = function (id) {
+            GenericViews.getData(settings.url,id,function(response){
+                GenericViews.loadEditFormData(settings.form, response);
+                self.isEditMode = true;
+                self.currentItemId = id;
+            });
+        };
+
+        self.init = function () {
+            if(settings.dataTableView){
+                settings.dataTableView.dataTable.on('click', '.action-buttons .edit', function(){
+                    var id = $(this).data("item-id");
+                    self.editForm(id);
+                });
+            }
+            ko.applyBindings(self, settings.form.get(0));
+            self.loadForm();
+        };
+    }
+
+
     GenericViews.DataTableView = DataTableView;
     GenericViews.FormView = FormView;
 
