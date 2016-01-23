@@ -25,21 +25,23 @@ var GenericViews = GenericViews || {};
             field.hasError(false);
         });
     };
-    GenericViews.loadEditFormData=function(form, response){
-        for (var property in response) {
-            if (response.hasOwnProperty(property)) {
-                var element = form.find('#input_' + property);
-                if (element) {
-
-                    if (element.attr("type") === "checkbox") {
-                        element.prop('checked', response[property] === true);
-                    } else {
-                        element.val(response[property]);
-                    }
-
-                }
+    GenericViews.resetFieldDefaultValue=function(fields){
+        fields.forEach(function(field){
+            if(field.type==="date"){
+                field.value(new Date().toISOString().split('T')[0]);
+            }else if(field.type==="boolean"){
+                field.value(false);
             }
-        }
+            else{
+                field.value(null);
+            }
+        });
+    };
+
+    GenericViews.loadEditFormData=function(fields, response){
+         fields.forEach(function(field){
+             field.value(response[field.name]);
+        });
     };
     GenericViews.mapActionToFields=function(includeFields,actionFields){
         var fields = [];
@@ -53,24 +55,30 @@ var GenericViews = GenericViews || {};
                 field.description= tempfield.description;
                 field.type = tempfield.type;
                 field.choices = tempfield.choices;
+                field.child = tempfield.child;
                 field.value = ko.observable();
 
-                if(field.type==="field"){
-                    field.fieldTemplate = "choice-field-template";
-                }
-                else{
-                    field.fieldTemplate = field.type + "-field-template";
-                }
-
-                if(field.type==="date"){
-                    field.value(new Date().toISOString().split('T')[0]);
-                }
 
                 field.name = property;
                 field.fieldId = "input_" + field.name;
                 field.errors = ko.observableArray();
                 field.hasError = ko.observable(false);
-                fields.push(field);
+
+                if(field.type==="field" && field.choices){
+                    field.fieldTemplate = "choice-field-template";
+                    fields.push(field);
+                }
+                else if(field.type==="field" && field.child && field.child.type==="nested object"){
+                    //do nothing
+                }
+                else{
+                    field.fieldTemplate = field.type + "-field-template";
+                    fields.push(field);
+                }
+
+                if(field.type==="date"){
+                    field.value(new Date().toISOString().split('T')[0]);
+                }
             }
         }
         return fields;
@@ -82,8 +90,8 @@ var GenericViews = GenericViews || {};
             type: "options",
             data: {},
             success: function (response) {
-                //console.log(response);
-                callback(GenericViews.mapActionToFields(settings.includeFields,response.actions.POST ));
+                console.log(response);
+                callback(GenericViews.mapActionToFields(settings.includeFields,response.actions.POST ), response);
             },
             error: function (jXHR, textStatus, errorThrown) {
                 console.error(errorThrown);
@@ -179,10 +187,7 @@ var GenericViews = GenericViews || {};
         settings.includeFields =settings.includeFields|| [];
 
         self.save = function () {
-            var request = GenericViews.saveData(self,settings.form.serializeJSON());
-            request.success( function (response) {
-
-            });
+            GenericViews.saveData(self,settings.form.serializeJSON());
         };
 
         self.resetErrors = function(){
@@ -190,7 +195,7 @@ var GenericViews = GenericViews || {};
         };
 
         self.cancel = function () {
-            settings.form.get(0).reset();
+            GenericViews.resetFieldDefaultValue(self.fields());
             self.isEditMode = false;
             self.currentItemId = 0;
             self.resetErrors();
@@ -204,7 +209,7 @@ var GenericViews = GenericViews || {};
 
         self.editForm = function (id) {
             GenericViews.getData(settings.url,id,function(response){
-                GenericViews.loadEditFormData(settings.form, response);
+                GenericViews.loadEditFormData(self.fields(), response);
                 self.isEditMode = true;
                 self.currentItemId = id;
             });

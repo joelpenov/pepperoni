@@ -11,7 +11,7 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
 class InventoryMoveDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
-    product = serializers.PrimaryKeyRelatedField(queryset = Product.objects.all(), label='Producto')
+    product = serializers.IntegerField(label='Producto')
     class Meta:
         model = InventoryMoveDetail
         fields = ('id','product', 'quantity', 'price')

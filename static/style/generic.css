@@ -1,1 +1,13 @@
 /*Generics css here*/
+
+#inventory-input-view .order-form input {
+    width: 100%
+}
+#inventory-input-view .order-form .form-group {
+    padding-right: 8px;
+}
+.order-input {
+}
+
+.order-input-buttom {
+}
