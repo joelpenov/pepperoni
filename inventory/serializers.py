@@ -29,10 +29,15 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
     transaction_type = serializers.CharField(label='Tipo de transacción', read_only=True)
     details = InventoryMoveDetailSerializer(many=True)
 
+    warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
+
+    def get_warehousedescription(self, obj):
+        return obj.warehouse.name
+
 
     class Meta:
         model = InventoryMove
-        fields = ('id','warehouse', 'transaction_date','transaction_type', 'details')
+        fields = ('id','warehouse', 'transaction_date','warehouse_description','transaction_type', 'details')
 
     def create(self, validated_data):
         details_data = validated_data.pop('details')

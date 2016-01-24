@@ -31,11 +31,18 @@
                 });
             });
 
+            function isNumber(value) {
+
+                var er = /^[0-9]|[0-9](.([0-9]))+$/;
+
+                return er.test(value);
+            }
+
             self.addNewProduct = function () {
 
-                self.productIdHasError(typeof (self.productId())==="undefined" || self.productId()===null || self.productId()===0 );
-                self.quantityHasError(typeof (self.quantity())==="undefined" || self.quantity()===null || self.quantity()===0 );
-                self.priceHasError(typeof (self.price())==="undefined" || self.price()===null || self.price()===0 );
+                self.productIdHasError(!isNumber(self.productId()) || !self.productDescription());
+                self.quantityHasError(!isNumber(self.quantity()));
+                self.priceHasError(!isNumber(self.price()));
 
                 if(self.productIdHasError() || self.quantityHasError() || self.priceHasError()) return;
 

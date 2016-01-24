@@ -50,13 +50,13 @@
                     <div class="order-input col-sm-2">
                         <label> Cantidad </label>
                         <div class="form-group"  data-bind="css:{'has-error':quantityHasError}">
-                            <input type="text"  data-bind="value: quantity" >
+                            <input type="number"  data-bind="value: quantity" >
                         </div>
                     </div>
                     <div class="order-input col-sm-2" >
                         <label> Precio </label>
                         <div class="form-group" data-bind="css:{'has-error':priceHasError}">
-                            <input type="text"  data-bind="value: price">
+                            <input type="number"  data-bind="value: price">
                         </div>
                     </div>
                     <div class="order-input col-sm-2">
@@ -108,7 +108,7 @@
                     <thead>
                     <tr>
                         <th name="id">Codigo</th>
-                        <th name="warehouse">Almacen</th>
+                        <th name="warehouse_description">Almacen</th>
                         <th name="transaction_date">Fecha</th>
                         <th name="actions"></th>
                     </tr>
