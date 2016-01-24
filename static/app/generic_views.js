@@ -112,7 +112,8 @@ var GenericViews = GenericViews || {};
         return $.ajax({
             url: link + '?format=json',
             type: method,
-            data: data,
+            contentType: "application/json",
+               data: JSON.stringify(data),
             success: function (response) {
                 if (formView.settings.dataTableView) {
                     formView.settings.dataTableView.refreshDataTable();

@@ -50,7 +50,9 @@
             };
 
             self.save = function () {
-                GenericViews.saveData(self, settings.form.serializeJSON());
+                var data = settings.form.serializeJSON();
+                data.details = self.orderDetails();
+                GenericViews.saveData(self,data );
             };
 
             self.resetErrors = function () {
@@ -118,7 +120,8 @@
                 url: "/api/inventoryinputs/",
                 viewId: "inventory-input-view",
                 form: $('#form_view'),
-                dataTableView: dataTableView
+                dataTableView: dataTableView,
+                includeFields:['id','warehouse', 'transaction_date']
             };
 
             var formView = new InventoryFormView(form_settings);
