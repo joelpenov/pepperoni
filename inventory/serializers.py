@@ -34,8 +34,18 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
         move.transaction_type=InventoryMove.INPUT
         move.save()
         for detail in details_data:
-            detailEntity= InventoryMoveDetail.objects.create(inventory_move=move, **detail)
-            #detailEntity.inventory_move=move
-            #detailEntity.save()
+            InventoryMoveDetail.objects.create(inventory_move=move, **detail)
+
+        return move
+
+    def update(self,instance, validated_data):
+        details_data = validated_data.pop('details')
+
+        move = super(InventoryMoveSerializer, self).update(instance, validated_data)
+        for detail in move.details.all():
+            detail.delete()
+
+        for detail in details_data:
+            InventoryMoveDetail.objects.create(inventory_move=move, **detail)
 
         return move

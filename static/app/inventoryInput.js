@@ -85,7 +85,9 @@
 
             self.editForm = function (id) {
                 GenericViews.getData(settings.url, id, function (response) {
+                    console.log(response);
                     GenericViews.loadEditFormData(self.fields(), response);
+                    self.orderDetails(response.details);
                     self.isEditMode = true;
                     self.currentItemId = id;
                     self.showForm(true);
