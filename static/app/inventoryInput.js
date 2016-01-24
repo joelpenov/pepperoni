@@ -10,6 +10,9 @@
             self.currentItemId = 0;
             self.showForm = ko.observable(false);
             self.showList = ko.observable(true);
+            self.productIdHasError = ko.observable(false);
+            self.quantityHasError = ko.observable(false);
+            self.priceHasError = ko.observable(false);
             self.productId = ko.observable();
             self.productDescription = ko.observable();
             self.quantity = ko.observable();
@@ -29,6 +32,13 @@
             });
 
             self.addNewProduct = function () {
+
+                self.productIdHasError(typeof (self.productId())==="undefined" || self.productId()===null || self.productId()===0 );
+                self.quantityHasError(typeof (self.quantity())==="undefined" || self.quantity()===null || self.quantity()===0 );
+                self.priceHasError(typeof (self.price())==="undefined" || self.price()===null || self.price()===0 );
+
+                if(self.productIdHasError() || self.quantityHasError() || self.priceHasError()) return;
+
                 self.orderDetails.push({
                     product_id:self.productId(),
                     product_description: self.productDescription(),
@@ -36,6 +46,7 @@
                     price: self.price(),
                     total: (self.quantity() * self.price())
                 });
+
                 self.cleanDetails();
             };
 
@@ -62,6 +73,10 @@
                 self.productDescription(null);
                 self.quantity(null);
                 self.price(null);
+
+                self.productIdHasError(false);
+                self.quantityHasError(false);
+                self.priceHasError(false);
             };
 
             self.cancel = function () {

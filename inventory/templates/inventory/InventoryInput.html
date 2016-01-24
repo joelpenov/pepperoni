@@ -32,7 +32,7 @@
 
                     <div class="order-input col-sm-2">
                         <label> Código </label>
-                        <div class="input-group">
+                        <div class="input-group" data-bind="css:{'has-error':productIdHasError}">
                             <input type="text" class="form-control search-query" data-bind="value: productId">
                             <span class="input-group-btn">
                                 <button data-toggle="modal" data-target="#searchProductsModal" id="searchProducts" type="button" class="btn btn-purple btn-sm">
@@ -41,7 +41,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="order-input col-sm-4">
+                    <div class="order-input col-sm-4" >
                         <label> Descripción </label>
                         <div class="form-group">
                             <input type="text" disabled="disabled"  data-bind="value: productDescription">
@@ -49,13 +49,13 @@
                     </div>
                     <div class="order-input col-sm-2">
                         <label> Cantidad </label>
-                        <div class="form-group">
+                        <div class="form-group"  data-bind="css:{'has-error':quantityHasError}">
                             <input type="text"  data-bind="value: quantity" >
                         </div>
                     </div>
-                    <div class="order-input col-sm-2">
+                    <div class="order-input col-sm-2" >
                         <label> Precio </label>
-                        <div class="form-group">
+                        <div class="form-group" data-bind="css:{'has-error':priceHasError}">
                             <input type="text"  data-bind="value: price">
                         </div>
                     </div>
