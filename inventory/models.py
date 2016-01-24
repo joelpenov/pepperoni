@@ -30,5 +30,6 @@ class InventoryMoveDetail(models.Model):
 	product = models.ForeignKey(Product, related_name="inventory_move_details", default=None)
 	quantity = models.FloatField()
 	price = models.FloatField()
+	total = models.FloatField()
 
 

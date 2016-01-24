@@ -29,10 +29,9 @@
             });
 
             self.addNewProduct = function () {
-                console.log("Add new product test");
                 self.orderDetails.push({
-                    product:self.productId(),
-                    productDescription: self.productDescription(),
+                    product_id:self.productId(),
+                    product_description: self.productDescription(),
                     quantity: self.quantity(),
                     price: self.price(),
                     total: (self.quantity() * self.price())
@@ -79,13 +78,11 @@
             self.loadForm = function () {
                 GenericViews.loadFormFields(settings, function (fields, response) {
                     self.fields(fields);
-                    console.log(response.actions.POST.details.child.children)
                 });
             };
 
             self.editForm = function (id) {
                 GenericViews.getData(settings.url, id, function (response) {
-                    console.log(response);
                     GenericViews.loadEditFormData(self.fields(), response);
                     self.orderDetails(response.details);
                     self.isEditMode = true;

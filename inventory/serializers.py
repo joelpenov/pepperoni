@@ -11,10 +11,15 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
 class InventoryMoveDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
-    product= serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), label='Producto')
+    product_id= serializers.IntegerField(label='Producto')
+    product_description = serializers.SerializerMethodField('get_productdescription')
+
+    def get_productdescription(self, obj):
+        return obj.product.description
+
     class Meta:
         model = InventoryMoveDetail
-        fields = ('id','product', 'quantity', 'price')
+        fields = ('id','product_id', 'quantity', 'price','product_description', 'total')
 
 
 class InventoryMoveSerializer(serializers.ModelSerializer):
@@ -23,6 +28,7 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
     transaction_date = serializers.DateField(label='Fecha')
     transaction_type = serializers.CharField(label='Tipo de transacción', read_only=True)
     details = InventoryMoveDetailSerializer(many=True)
+
 
     class Meta:
         model = InventoryMove
