@@ -42,7 +42,7 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         details_data = validated_data.pop('details')
         move = InventoryMove.objects.create(**validated_data)
-        move.transaction_type=InventoryMove.INPUT
+        move.transaction_type=self.context.get('transaction_type')
         move.save()
         for detail in details_data:
             InventoryMoveDetail.objects.create(inventory_move=move, **detail)
