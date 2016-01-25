@@ -15,7 +15,10 @@
             formId: "form_view",
             form: $('#form_view'),
             dataTableView: dataTableView,
-            includeFields: ['phone','name','address','reference']
+            includeFields: ['phone','name','address','reference'],
+            afterRender:function(){
+                $('#input_phone').mask('999-999-9999');
+            }
         };
 
         var formView = new GenericViews.FormView(form_settings);

@@ -1,7 +1,7 @@
 <form id="form_view" class="form-horizontal">
     {% csrf_token %}
     <div  data-bind="foreach: fields">
-        <!-- ko template: {name: fieldTemplate, data:$data} -->
+        <!-- ko template: {name: fieldTemplate, data:$data, afterRender: $root.afterRender} -->
         <!-- /ko -->
     </div>
     {% include "form_buttons.html" %}

@@ -217,6 +217,8 @@ var GenericViews = GenericViews || {};
         self.isEditMode = false;
         self.currentItemId = 0;
         settings.includeFields =settings.includeFields|| [];
+        settings.afterRender = settings.afterRender || function(){};
+        self.afterRender = settings.afterRender;
 
         self.save = function () {
             GenericViews.saveData(self,settings.form.serializeJSON());
