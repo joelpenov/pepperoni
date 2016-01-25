@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions
-from .serializers import WarehouseSerializer, InventoryMoveSerializer
-from .models import Warehouse, InventoryMove
+from .serializers import WarehouseSerializer, InventoryMoveSerializer, ProductSerializer
+from .models import Warehouse, InventoryMove, Product
 
 
 @login_required()
@@ -17,6 +17,16 @@ def inventoryInput(request):
 def inventoryOutput(request):
 	return render(request,"inventory/InventoryOutput.html")
 
+
+@login_required()
+def product(request):
+	return render(request,"inventory/product.html")
+
+
+class ProductList(viewsets.ModelViewSet):
+	permission_classes =((permissions.IsAuthenticated),)
+	queryset = Product.objects.all()
+	serializer_class = ProductSerializer
 
 class WarehouseList(viewsets.ModelViewSet):
 	permission_classes =((permissions.IsAuthenticated),)

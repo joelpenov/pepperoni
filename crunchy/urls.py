@@ -21,18 +21,15 @@ from django.contrib.auth import views as auth_views
 from rest_framework import routers
 
 from sales import urls as sales_url
-from products import urls as products_urls
 from inventory import urls as inventory_urls
 
 router = routers.DefaultRouter()
 
 inventory_urls.registerApiUrls(router)
-products_urls.registerApiUrls(router)
 sales_url.registerApiUrls(router)
 
 urlpatterns = [
     url(r'^inventory/', include('inventory.urls')),
-    url(r'^products/', include('products.urls')),
     url(r'^sales/', include('sales.urls')),
 	url(r'^api/', include(router.urls)),
 	url(r'^$', include('main.urls'), name="crunchy_home"),

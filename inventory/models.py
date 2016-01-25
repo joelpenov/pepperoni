@@ -1,6 +1,4 @@
 from django.db import models
-from products.models import Product
-
 
 class Warehouse(models.Model):
 	name = models.CharField(max_length=50)
@@ -8,6 +6,14 @@ class Warehouse(models.Model):
 	def __str__(self):
 		return self.name
 
+class Product(models.Model):
+	description = models.CharField(max_length=255)
+	sell_price = models.FloatField(default=0)
+	show_in_menu= models.BooleanField()
+	is_raw_material= models.BooleanField()
+
+	def __str__(self):
+		return
 
 class Stock(models.Model):
 	product = models.ForeignKey(Product, related_name="product_stock")
