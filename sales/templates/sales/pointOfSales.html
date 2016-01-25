@@ -4,367 +4,332 @@
     <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
 {% endblock styling %}
 {% block maincontent %}
-        <div id="point-of-sales-page" class="main-content">
-            <div class="main-content-inner">
-                <div class="page-content">
+    <div id="point-of-sales-page" class="main-content">
+        <div class="main-content-inner">
+            <div class="page-content">
 
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <!-- PAGE CONTENT BEGINS -->
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <div class="widget-box">
-                                        <div class="widget-header">
-                                            <h4 class="widget-title">Cliente</h4>
-                                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">Orden</h4>
+                                    </div>
 
-                                        <div class="widget-body">
-                                            <div class="widget-main">
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h3 class="header smaller lighter blue">Cliente</h3>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
                                                 <form class="order-form">
-                                                    <div class="row">
-                                                        <div class="order-input col-sm-3">
-                                                            <label> Telefono </label>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control search-query">
+                                                    <div class="order-input col-sm-2">
+                                                        <label> Telefono </label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control search-query">
                                                                 <span class="input-group-btn">
                                                                     <button type="button"  class="btn btn-purple btn-sm" data-toggle="modal" data-target="#searchClientsModal">
                                                                         <span class="ace-icon fa fa-search icon-on-right"></span>
-                                                                </button>
+                                                                    </button>
                                                                 </span>
-                                                            </div>
                                                         </div>
-                                                        <div class="order-input col-sm-5">
-                                                            <label> Cliente </label>
-                                                            <div class="form-group">
-                                                                <input type="text" class="" disabled="disabled" value="Juan Perez" />
-                                                            </div>
+                                                    </div>
+                                                    <div class="order-input col-sm-3">
+                                                        <label> Cliente </label>
+                                                        <div class="form-group">
+                                                            <input type="text" class="" disabled="disabled" value="Juan Perez" />
                                                         </div>
-                                                        <div class="order-input col-sm-5">
-                                                            <label> Direccion </label>
-                                                            <div class="form-group">
-                                                                <input type="text" class="" value="" />
-                                                            </div>
+                                                    </div>
+                                                    <div class="order-input col-sm-4">
+                                                        <label> Direccion </label>
+                                                        <div class="form-group">
+                                                            <input type="text" class="" value="" />
                                                         </div>
-                                                        <div class="order-input col-sm-5">
-                                                            <label> Referencia </label>
-                                                            <div class="form-group">
-                                                                <input type="text" class="" value="" />
-                                                            </div>
+                                                    </div>
+                                                    <div class="order-input col-sm-3">
+                                                        <label> Referencia </label>
+                                                        <div class="form-group">
+                                                            <input type="text" class="" value="" />
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="widget-box client-history">
-                                        <div class="widget-header">
-                                            <h4 class="widget-title">Historial Cliente</h4>
-                                        </div>
 
-                                        <div class="widget-body">
-                                            <div class="widget-main">
-                                                <div id="accordion" class="accordion-style1 panel-group">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <h4 class="panel-title">
-                                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                                                    <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                                    01/12/2015
-                                                                </a>
-                                                            </h4>
-                                                        </div>
 
-                                                        <div class="panel-collapse collapse in" id="collapseOne">
-                                                            <div class="panel-body">
-                                                                <ul>
-                                                                    <li>1. Pizza Grande</li>
-                                                                    <li>1. 20 onza Cococola</li>
-                                                                </ul>
-                                                                <span>Delivery: Pedro Martinez</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <h4 class="panel-title">
-                                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                                                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                                    01/11/2015
-                                                                </a>
-                                                            </h4>
-                                                        </div>
-
-                                                        <div class="panel-collapse collapse" id="collapseTwo">
-                                                            <div class="panel-body">
-                                                                <ul>
-                                                                    <li>1. Pizza Grande</li>
-                                                                    <li>1. 20 onza Cococola</li>
-                                                                </ul>
-                                                                <span>Delivery: Pedro Martinez</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <h4 class="panel-title">
-                                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                                                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                                    01/10/2015
-                                                                </a>
-                                                            </h4>
-                                                        </div>
-
-                                                        <div class="panel-collapse collapse" id="collapseThree">
-                                                            <div class="panel-body">
-                                                                <ul>
-                                                                    <li>1. Pizza Grande</li>
-                                                                    <li>1. 20 onza Cococola</li>
-                                                                </ul>
-                                                                <span>Delivery: Pedro Martinez</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h3 class="header smaller lighter blue">Detalle</h3>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-8">
-                                    <div class="widget-box">
-                                        <div class="widget-header">
-                                            <h4 class="widget-title">Órden</h4>
-                                        </div>
-
-                                        <div class="widget-body">
-                                            <div class="widget-main">
-                                                <form class="order-form">
-                                                    <div class="row">
-
-                                                        <div class="order-input col-sm-2">
-                                                            <label> Código </label>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control search-query">
-                                                                <span class="input-group-btn">
-                                                                    <button data-toggle="modal" data-target="#searchProductsModal" id="searchProducts" type="button" class="btn btn-purple btn-sm">
-                                                                        <span class="ace-icon fa fa-search icon-on-right"></span>
-                                                                </button>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="order-input col-sm-4">
-                                                            <label> Descripción </label>
-                                                            <div class="form-group">
-                                                                <input type="text" class="" disabled="disabled" value="Pizza" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="order-input col-sm-2">
-                                                            <label> Cantidad </label>
-                                                            <div class="form-group">
-                                                                <input type="text" class="" value="1" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="order-input col-sm-2">
-                                                            <label> Precio </label>
-                                                            <div class="form-group">
-                                                                <input type="text" class="" value="1" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="order-input col-sm-2">
-                                                            <label> </label>
-                                                            <div class="form-group">
-                                                                <input type="button" value="Agregar" class="btn btn-info order-input-buttom" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <div class="clearfix">
-                                                                <div class="pull-right tableTools-container"></div>
-                                                            </div>
-                                                            <h3 class="header smaller lighter blue">Detalle</h3>
-
-                                                            <!-- div.table-responsive -->
-
-                                                            <!-- div.dataTables_borderWrap -->
-                                                            <div>
-                                                                <table class="table table-striped table-bordered table-hover">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th class="center">Codigo</th>
-                                                                            <th>Descripcion</th>
-                                                                            <th>Cantidad</th>
-                                                                            <th>Precio</th>
-                                                                            <th>Total</th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                    </thead>
-
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>0001</td>
-                                                                            <td>Pizza Grande Peperoni</td>
-                                                                            <td>0.5</td>
-                                                                            <td>400</td>
-                                                                            <td>200</td>
-                                                                            <td>
-                                                                                <div class="action-buttons">
-                                                                                    <a class="red" href="#">
-                                                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>0002</td>
-                                                                            <td>Pizza Grande Vegetales</td>
-                                                                            <td>0.5</td>
-                                                                            <td>400</td>
-                                                                            <td>200</td>
-                                                                            <td>
-                                                                                <div class="action-buttons">
-                                                                                    <a class="red" href="#">
-                                                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>0003</td>
-                                                                            <td>Double Litro</td>
-                                                                            <td>2</td>
-                                                                            <td>80</td>
-                                                                            <td>160</td>
-                                                                            <td>
-                                                                                <div class="action-buttons">
-                                                                                    <a class="red" href="#">
-                                                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="widget-box">
-                                        <div class="widget-header">
-                                            <h4 class="widget-title">Menu</h4>
-                                        </div>
-
-                                        <div class="widget-body">
-                                            <div class="widget-main">
-                                                <div>
-                                                    <table class="table table-striped table-bordered table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="center">Codigo</th>
-                                                                <th>Descripcion</th>
-                                                                <th>Precio</th>
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody data-bind="foreach: menuItems">
-                                                            <tr>
-                                                                <td data-bind="text:id"></td>
-                                                                <td data-bind="text:description"></td>
-                                                                <td data-bind="text:sell_price"></td>
-
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <div class="widget-box pay-container">
-                                        <div class="widget-header">
-                                            <h4 class="widget-title">Pago</h4>
-                                        </div>
-
-                                        <div class="widget-body">
-                                            <div class="widget-main">
+                                              <form class="order-form">
                                                 <div class="row">
-                                                    <div class="col-sm-6">
-
-                                                        <form class="form-horizontal" role="form">
-
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Total </label>
-
-                                                                <div class="col-sm-9">
-                                                                    <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="560.00" />
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Efectivo </label>
-
-                                                                <div class="col-sm-9">
-                                                                    <input type="text" id="form-field-1" placeholder="" class="col-sm-12" value="1000.00" />
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Devuelta </label>
-
-                                                                <div class="col-sm-9">
-                                                                    <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="440.00" />
-                                                                </div>
-                                                            </div>
-                                                        </form>
+                                                    <div class="order-input col-sm-2">
+                                                        <label> Código </label>
+                                                        <div class="input-group" data-bind="css:{'has-error':productIdHasError}">
+                                                            <input type="text" class="form-control search-query" data-bind="value: productId">
+                                                            <span class="input-group-btn">
+                                                                <button data-toggle="modal" data-target="#searchProductsModal" id="searchProducts" type="button" class="btn btn-purple btn-sm">
+                                                                    <span class="ace-icon fa fa-search icon-on-right"></span>
+                                                                </button>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-6" style="text-align:center">
-                                                        <a href="#" class="btn btn-app btn-info">
-                                                            <i class="ace-icon fa fa-trash-o bigger-230"></i>
-                                                            Cancelar
-										                  </a>
-                                                        <a href="#" class="btn btn-app btn-success">
-                                                            <i class="ace-icon fa fa-floppy-o bigger-230"></i>
-                                                            Processar
-										                  </a>
+                                                    <div class="order-input col-sm-4" >
+                                                        <label> Descripción </label>
+                                                        <div class="form-group">
+                                                            <input type="text" disabled="disabled"  data-bind="value: productDescription">
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-input col-sm-2">
+                                                        <label> Cantidad </label>
+                                                        <div class="form-group"  data-bind="css:{'has-error':quantityHasError}">
+                                                            <input type="number"  data-bind="value: quantity" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-input col-sm-2" >
+                                                        <label> Precio </label>
+                                                        <div class="form-group" data-bind="css:{'has-error':priceHasError}">
+                                                            <input type="number"  data-bind="value: price">
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-input col-sm-2">
+                                                        <label> </label>
+                                                        <div class="form-group">
+                                                            <input type="button" value="Agregar" class="btn btn-info order-input-buttom"  data-bind="click: addNewProduct">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div class="clearfix">
+                                                            <div class="pull-right tableTools-container"></div>
+                                                        </div>
+                                                        <!-- div.table-responsive -->
+
+                                                        <!-- div.dataTables_borderWrap -->
+                                                        <div>
+                                                            <table class="table table-striped table-bordered table-hover">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="center">Codigo</th>
+                                                                    <th>Descripcion</th>
+                                                                    <th>Cantidad</th>
+                                                                    <th>Precio</th>
+                                                                    <th>Total</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                </thead>
+
+                                                                <tbody data-bind="foreach: orderDetails">
+                                                                <tr >
+                                                                    <td data-bind="text: product_id"></td>
+                                                                    <td data-bind="text: product_description"></td>
+                                                                    <td data-bind="text: quantity"></td>
+                                                                    <td data-bind="text: price"></td>
+                                                                    <td data-bind="text: total"></td>
+                                                                    <td>
+                                                                        <div class="action-buttons">
+                                                                            <a class="red" data-bind="click: $root.deleteProduct">
+                                                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="widget-box client-history">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">Historial Cliente</h4>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div id="accordion" class="accordion-style1 panel-group">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                                                01/12/2015
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div class="panel-collapse collapse in" id="collapseOne">
+                                                        <div class="panel-body">
+                                                            <ul>
+                                                                <li>1. Pizza Grande</li>
+                                                                <li>1. 20 onza Cococola</li>
+                                                            </ul>
+                                                            <span>Delivery: Pedro Martinez</span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                                                <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                                                01/11/2015
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div class="panel-collapse collapse" id="collapseTwo">
+                                                        <div class="panel-body">
+                                                            <ul>
+                                                                <li>1. Pizza Grande</li>
+                                                                <li>1. 20 onza Cococola</li>
+                                                            </ul>
+                                                            <span>Delivery: Pedro Martinez</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                                                <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                                                01/10/2015
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div class="panel-collapse collapse" id="collapseThree">
+                                                        <div class="panel-body">
+                                                            <ul>
+                                                                <li>1. Pizza Grande</li>
+                                                                <li>1. 20 onza Cococola</li>
+                                                            </ul>
+                                                            <span>Delivery: Pedro Martinez</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                 <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">Menu</h4>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div>
+                                                <table class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="center">Codigo</th>
+                                                        <th>Descripcion</th>
+                                                        <th>Precio</th>
+                                                    </tr>
+                                                    </thead>
+
+                                                    <tbody data-bind="foreach: menuItems">
+                                                    <tr>
+                                                        <td data-bind="text:id"></td>
+                                                        <td data-bind="text:description"></td>
+                                                        <td data-bind="text:sell_price"></td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="center">
-                            </div>
 
-                            <!-- PAGE CONTENT ENDS -->
+
+                            <div class="col-sm-8">
+                                <div class="widget-box pay-container">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">Pago</h4>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+
+                                                    <form class="form-horizontal" role="form">
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Total </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="560.00" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Efectivo </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" value="1000.00" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Devuelta </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="440.00" />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-sm-6" style="text-align:center">
+                                                    <a href="#" class="btn btn-app btn-info">
+                                                        <i class="ace-icon fa fa-trash-o bigger-230"></i>
+                                                        Cancelar
+                                                    </a>
+                                                    <a href="#" class="btn btn-app btn-success">
+                                                        <i class="ace-icon fa fa-floppy-o bigger-230"></i>
+                                                        Processar
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!-- /.col -->
+
+                        <div class="center">
+                        </div>
+
+                        <!-- PAGE CONTENT ENDS -->
                     </div>
-                    <!-- /.row -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.page-content -->
+                <!-- /.row -->
             </div>
+            <!-- /.page-content -->
         </div>
-        <!-- /.main-content -->
+    </div>
+    <!-- /.main-content -->
 {% endblock %}
 
 {% block javascript %}
