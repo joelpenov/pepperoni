@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
 {% endblock styling %}
 {% block maincontent %}
-        <div class="main-content">
+        <div id="point-of-sales-page" class="main-content">
             <div class="main-content-inner">
                 <div class="page-content">
 
@@ -280,44 +280,14 @@
                                                             </tr>
                                                         </thead>
 
-                                                        <tbody>
+                                                        <tbody data-bind="foreach: menuItems">
                                                             <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>0001</td>
-                                                                <td>Pizza Grande Peperoni</td>
-                                                                <td>400</td>
+                                                                <td data-bind="text:id"></td>
+                                                                <td data-bind="text:description"></td>
+                                                                <td data-bind="text:sell_price"></td>
+
                                                             </tr>
                                                         </tbody>
-
                                                     </table>
                                                 </div>
 

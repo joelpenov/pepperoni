@@ -156,10 +156,9 @@ var GenericViews = GenericViews || {};
             }
         });
     };
-
-    GenericViews.getData = function(url,id,callback){
-        $.ajax({
-            url: url + id + '/?format=json',
+    GenericViews.getData = function(url,callback){
+        return $.ajax({
+            url: url,
             type: "get",
             data: {},
             success: function (response) {
@@ -169,6 +168,11 @@ var GenericViews = GenericViews || {};
                 console.error(errorThrown);
             }
         });
+    };
+
+    GenericViews.getDataById = function(url,id,callback){
+        var link  = url + id + '/?format=json';
+        return GenericViews.getData(link,callback);
     };
 
     function DataTableView(settings) {
@@ -242,7 +246,7 @@ var GenericViews = GenericViews || {};
         };
 
         self.editForm = function (id) {
-            GenericViews.getData(settings.url,id,function(response){
+            GenericViews.getDataById(settings.url,id,function(response){
                 GenericViews.loadEditFormData(self.fields(), response);
                 self.isEditMode = true;
                 self.currentItemId = id;

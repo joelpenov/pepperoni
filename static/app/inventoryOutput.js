@@ -26,7 +26,7 @@
                     return;
                 }
 
-                GenericViews.getData("/api/products/", self.productId(),function (response) {
+                GenericViews.getDataById("/api/products/", self.productId(),function (response) {
                     self.productDescription(response.description)
                 });
             });
@@ -104,7 +104,7 @@
             };
 
             self.editForm = function (id) {
-                GenericViews.getData(settings.url, id, function (response) {
+                GenericViews.getDataById(settings.url, id, function (response) {
                     GenericViews.loadEditFormData(self.fields(), response);
                     self.orderDetails(response.details);
                     self.isEditMode = true;
