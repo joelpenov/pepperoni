@@ -40,7 +40,7 @@ urlpatterns = [
 	url(r'^api/', include(router.urls)),
 	url(r'^$', include('main.urls'), name="crunchy_home"),
     url(r'^admin/', admin.site.urls),
-	#url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+	#url(r'^api-auth/', include('rest_framework.authto', namespace='rest_framework'))
 ]
 
 urlpatterns += [

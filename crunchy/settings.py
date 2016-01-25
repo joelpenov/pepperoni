@@ -61,7 +61,7 @@ ROOT_URLCONF = 'crunchy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,3 +139,10 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,"static"),)
 LOGIN_URL = 'crunchy_login'
 LOGOUT_URL = 'crunchy_logout'
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
