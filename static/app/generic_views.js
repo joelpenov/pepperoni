@@ -39,6 +39,7 @@ var GenericViews = GenericViews || {};
     };
 
     GenericViews.loadEditFormData=function(fields, response){
+        GenericViews.resetFieldErrors(fields);
         fields.forEach(function(field){
             field.value(response[field.name]);
         });
