@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions
 
-from .models import CashRegister
-from .serializers import CashRegisterSerializer
+from .models import CashRegister, Customer
+from .serializers import CashRegisterSerializer, CustomerSerializer
 
 
 @login_required()
@@ -16,7 +16,18 @@ def pointOfSales(request):
 	return render(request,"sales/pointOfSales.html")
 
 
+@login_required()
+def customers(request):
+	return render(request,"sales/customer.html")
+
+
 class CashRegisterList(viewsets.ModelViewSet):
 	permission_classes =((permissions.IsAuthenticated),)
 	queryset = CashRegister.objects.all()
 	serializer_class = CashRegisterSerializer
+
+
+class CustomerList(viewsets.ModelViewSet):
+	permission_classes =((permissions.IsAuthenticated),)
+	queryset = Customer.objects.all()
+	serializer_class = CustomerSerializer
