@@ -39,8 +39,8 @@ var GenericViews = GenericViews || {};
     };
 
     GenericViews.loadEditFormData=function(fields, response){
-         fields.forEach(function(field){
-             field.value(response[field.name]);
+        fields.forEach(function(field){
+            field.value(response[field.name]);
         });
     };
     GenericViews.mapActionToFields=function(includeFields,actionFields){
@@ -99,6 +99,34 @@ var GenericViews = GenericViews || {};
         });
 
     };
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+    });
+
     GenericViews.saveData=function(formView,data){
         var method = "post";
         var link = formView.settings.url;
@@ -109,11 +137,13 @@ var GenericViews = GenericViews || {};
             link += formView.currentItemId + "/";
         }
 
+
+
         return $.ajax({
             url: link + '?format=json',
             type: method,
             contentType: "application/json",
-               data: JSON.stringify(data),
+            data: JSON.stringify(data),
             success: function (response) {
                 if (formView.settings.dataTableView) {
                     formView.settings.dataTableView.refreshDataTable();

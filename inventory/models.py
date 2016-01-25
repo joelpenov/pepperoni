@@ -31,5 +31,3 @@ class InventoryMoveDetail(models.Model):
 	quantity = models.FloatField()
 	price = models.FloatField()
 	total = models.FloatField()
-
-
