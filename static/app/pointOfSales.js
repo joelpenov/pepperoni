@@ -24,18 +24,27 @@
             return self.paymentAmount() - self.orderTotal();
         });
 
+        self.newClient=ko.computed(function(){
+            return !(self.dataBaseClient() && self.dataBaseClient().id > 0);
+        });
+
         self.orderDetails.subscribe(function () {
             var total = 0;
             self.orderDetails().forEach(function(item){
-               total+=item.total;
+                total+=item.total;
             });
             self.orderTotal(total);
         });
-
         self.clientPhoneNumber.subscribe(function (value) {
             if(!value || (value && self.dataBaseClient() && value === self.dataBaseClient().phone)){
                 return;
             }
+
+            self.dataBaseClient(null);
+            self.clientName(null);
+            self.clientAddress(null);
+            self.clientReference(null);
+
             GenericViews.getData("/api/customers/?format=json&phone="+value, function(response){
                 if(response && response.length>0){
                     var client = response[0];
@@ -45,7 +54,6 @@
                     self.clientReference(client.reference);
                 }
             });
-
         });
 
         self.productId.subscribe(function () {
