@@ -66,7 +66,7 @@
                                                     <h3 class="header smaller lighter blue">Detalle</h3>
                                                 </div>
                                             </div>
-                                              <form class="order-form">
+                                            <form class="order-form">
                                                 <div class="row">
                                                     <div class="order-input col-sm-2">
                                                         <label> Código </label>
@@ -146,48 +146,10 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="widget-box pay-container">
-                                    <div class="widget-header">
-                                        <h4 class="widget-title">Pago</h4>
-                                    </div>
-
-                                    <div class="widget-body">
-                                        <div class="widget-main">
                                             <div class="row">
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-8">
 
-                                                    <form class="form-horizontal" role="form">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Total </label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="560.00" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Efectivo </label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" value="1000.00" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Devuelta </label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="440.00" />
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="col-sm-6" style="text-align:center">
                                                     <a href="#" class="btn btn-app btn-info">
                                                         <i class="ace-icon fa fa-trash-o bigger-230"></i>
                                                         Cancelar
@@ -197,11 +159,41 @@
                                                         Processar
                                                     </a>
                                                 </div>
-                                            </div>
+                                                <div class="col-sm-4 pay-container" style="text-align:center">
+                                                    <form class="form-horizontal" role="form">
 
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Total </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" data-bind="value:orderTotal" class="col-sm-12" disabled="disabled" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Efectivo </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" data-bind="value:paymentAmount" class="col-sm-12" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Devuelta </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" data-bind="value:changeAmount" class="col-sm-12" disabled="disabled"  />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+
                             </div>
                             <div class="col-sm-4">
                                 <div class="widget-box client-history">
@@ -279,7 +271,7 @@
                                     </div>
                                 </div>
 
-                                 <div class="widget-box">
+                                <div class="widget-box">
                                     <div class="widget-header">
                                         <h4 class="widget-title">Menu</h4>
                                     </div>

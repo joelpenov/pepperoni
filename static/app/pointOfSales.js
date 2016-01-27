@@ -10,12 +10,27 @@
         self.quantity = ko.observable();
         self.price = ko.observable();
         self.orderDetails= ko.observableArray();
+        self.orderTotal=ko.observable(0);
+        self.paymentAmount=ko.observable(0);
+
 
         self.clientPhoneNumber=ko.observable();
         self.clientName=ko.observable();
         self.clientAddress=ko.observable();
         self.clientReference=ko.observable();
         self.dataBaseClient = ko.observable();
+
+        self.changeAmount=ko.computed(function(){
+            return self.paymentAmount() - self.orderTotal();
+        });
+
+        self.orderDetails.subscribe(function () {
+            var total = 0;
+            self.orderDetails().forEach(function(item){
+               total+=item.total;
+            });
+            self.orderTotal(total);
+        });
 
         self.clientPhoneNumber.subscribe(function (value) {
             if(!value || (value && self.dataBaseClient() && value === self.dataBaseClient().phone)){
