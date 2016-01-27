@@ -11,6 +11,28 @@
         self.price = ko.observable();
         self.orderDetails= ko.observableArray();
 
+        self.clientPhoneNumber=ko.observable();
+        self.clientName=ko.observable();
+        self.clientAddress=ko.observable();
+        self.clientReference=ko.observable();
+        self.dataBaseClient = ko.observable();
+
+        self.clientPhoneNumber.subscribe(function (value) {
+            if(!value || (value && self.dataBaseClient() && value === self.dataBaseClient().phone)){
+                return;
+            }
+            GenericViews.getData("/api/customers/?format=json&phone="+value, function(response){
+                if(response && response.length>0){
+                    var client = response[0];
+                    self.dataBaseClient(client);
+                    self.clientName(client.name);
+                    self.clientAddress(client.address);
+                    self.clientReference(client.reference);
+                }
+            });
+
+        });
+
         self.productId.subscribe(function () {
             if(!self.productId()){
                 self.productDescription("")
@@ -73,6 +95,8 @@
         GenericViews.getData("/api/products/?format=json&show_in_menu=True", function(response){
             pointOfSaleView.menuItems(response);
         });
+
+        $('#input_phone').mask('999-999-9999');
 
     });
 })();
