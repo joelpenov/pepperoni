@@ -10,15 +10,15 @@ class CashRegister(models.Model):
 	status = models.CharField(max_length=15)
 
 	def __str__(self):
-		return self.name
+		return self.name+' - '+self.warehouse.name
 
 
 class CashierShift(models.Model):
 	user = models.ForeignKey(User, related_name='cashier_users')
 	cash_register = models.ForeignKey(CashRegister,related_name='cashier_shifts')
 	start_date= models.DateTimeField(auto_now_add=True)
-	end_date= models.DateTimeField(blank=True)
-	close_balance = models.FloatField(blank=True)
+	end_date= models.DateTimeField(null=True, default=None)
+	close_balance = models.FloatField(null=True)
 
 
 class Customer(models.Model):
