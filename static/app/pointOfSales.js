@@ -58,12 +58,14 @@
 
         self.productId.subscribe(function () {
             if(!self.productId()){
-                self.productDescription("")
+                self.productDescription("");
+                self.price(null);
                 return;
             }
 
             GenericViews.getDataById("/api/products/", self.productId(),function (response) {
-                self.productDescription(response.description)
+                self.productDescription(response.description);
+                self.price(response.sell_price);
             });
         });
 

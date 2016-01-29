@@ -16,7 +16,7 @@ class CashRegister(models.Model):
 class CashierShift(models.Model):
 	user = models.ForeignKey(User, related_name='cashier_users')
 	cash_register = models.ForeignKey(CashRegister,related_name='cashier_shifts')
-	start_date= models.DateTimeField()
+	start_date= models.DateTimeField(auto_now_add=True)
 	end_date= models.DateTimeField(blank=True)
 	close_balance = models.FloatField(blank=True)
 
