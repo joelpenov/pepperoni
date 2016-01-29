@@ -5,7 +5,7 @@ from inventory.models import Product, Warehouse
 
 class CashRegister(models.Model):
 	name = models.CharField(max_length=70)
-	warehouse= models.ForeignKey(Warehouse,related_name="cash_registers")
+	warehouse= models.ForeignKey(Warehouse,related_name='cash_registers')
 	#Open, Close
 	status = models.CharField(max_length=15)
 
@@ -14,10 +14,11 @@ class CashRegister(models.Model):
 
 
 class CashierShift(models.Model):
-	user = models.ForeignKey(User, related_name="cashier_users")
-	cash_register = models.ForeignKey(CashRegister,related_name="cashier_shifts")
+	user = models.ForeignKey(User, related_name='cashier_users')
+	cash_register = models.ForeignKey(CashRegister,related_name='cashier_shifts')
 	start_date= models.DateTimeField()
-	end_date= models.DateTimeField()
+	end_date= models.DateTimeField(blank=True)
+	close_balance = models.FloatField(blank=True)
 
 
 class Customer(models.Model):
@@ -39,9 +40,9 @@ class Order(models.Model):
 
 	order_number = models.IntegerField()
 	order_date= models.DateTimeField()
-	#Active, Finished, Canceled
+	#Active, Finished, Canceled, clear?
 	status = models.CharField(max_length=15)
-	cashier_shift = models.ForeignKey(CashierShift,related_name="orders")
+	cashier_shift = models.ForeignKey(CashierShift,related_name='orders')
 
 	total = models.FloatField()
 	cash = models.FloatField()
@@ -52,8 +53,8 @@ class Order(models.Model):
 
 
 class OrderDetail(models.Model):
-	order = models.ForeignKey(Order, related_name="details")
-	product = models.ForeignKey(Product, related_name="sale_order_details")
+	order = models.ForeignKey(Order, related_name='details')
+	product = models.ForeignKey(Product, related_name='sale_order_details')
 	quantity = models.FloatField()
 	price = models.FloatField()
 	total = models.FloatField()

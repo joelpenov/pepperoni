@@ -15,6 +15,7 @@
             formId: "form_view",
             form: $('#form_view'),
             dataTableView: dataTableView,
+            includeFields: ['id','name','warehouse']
         };
 
         var formView = new GenericViews.FormView(form_settings);
