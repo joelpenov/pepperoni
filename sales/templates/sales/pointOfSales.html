@@ -4,7 +4,24 @@
     <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
 {% endblock styling %}
 {% block maincontent %}
-    <div id="point-of-sales-page" class="main-content">
+
+    <div id="cashier-shift-view" data-bind="visible: theShiftIsNotActive">
+        <div class="page-header">
+            <div class="clearfix">
+                <div class="col-md-6">
+                    <h1>
+                        Empezar turno de caja
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {%  include "generic_form.html" %}
+        </div>
+    </div>
+
+
+    <div id="point-of-sales-page" class="main-content" data-bind="visible: theShiftIsActive">
         <div class="main-content-inner">
             <div class="page-content">
 

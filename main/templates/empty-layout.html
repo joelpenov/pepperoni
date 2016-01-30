@@ -81,6 +81,7 @@
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<span class="user-info">
 									{% if user.is_authenticated  %}
+                                        <input type="hidden" id="current_user_id" value="{{ user.id  }}">
 										<small>{{ user.first_name }}</small>
 											   {{ user.last_name}}
 									{% endif %}	

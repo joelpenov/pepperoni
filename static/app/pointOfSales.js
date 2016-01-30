@@ -1,6 +1,50 @@
 (function(){
+
+    function CashierShiftFormView(settings) {
+        var self = this;
+        self.settings = settings;
+        self.fields = ko.observableArray();
+        settings.includeFields =settings.includeFields|| [];
+        settings.afterRender = settings.afterRender || function(){};
+        self.afterRender = settings.afterRender;
+
+
+        self.theShiftIsNotActive = ko.observable(false);
+
+        self.save = function () {
+            var request = GenericViews.saveData(self,settings.form.serializeJSON());
+
+            request.success(function(){
+                continueOrCreateShift(self,settings.pointOfSaleView)
+            });
+        };
+
+        self.resetErrors = function(){
+            GenericViews.resetFieldErrors(self.fields());
+        };
+
+        self.cancel = function () {
+            GenericViews.resetFieldDefaultValue(self.fields());
+            self.resetErrors();
+            self.theShiftIsNotActive(false);
+        };
+
+        self.loadForm = function () {
+            GenericViews.loadFormFields(settings,function(fields){
+                self.fields(fields);
+            });
+        };
+
+        self.init = function () {
+            ko.applyBindings(self, document.getElementById('cashier-shift-view'));
+            self.loadForm();
+        };
+    }
+
     function PointOfSalesView(){
         var self = this;
+        self.theShiftIsActive = ko.observable(false);
+
         self.menuItems = ko.observableArray();
         self.productIdHasError = ko.observable(false);
         self.quantityHasError = ko.observable(false);
@@ -112,16 +156,43 @@
 
     }
 
+    function continueOrCreateShift(cashierShiftFormView, pointOfSaleView){
+        var current_user_id = $('#current_user_id').val();
+
+        GenericViews.getData("/api/cashiershifts/?format=json&status=ACTIVE&user="+current_user_id, function(response){
+            console.log(response);
+            if(response.length>0){
+                cashierShiftFormView.theShiftIsNotActive(false);
+                pointOfSaleView.theShiftIsActive(true);
+            }else{
+                cashierShiftFormView.theShiftIsNotActive(true);
+                pointOfSaleView.theShiftIsActive(false);
+            }
+        });
+    }
+
     $(document).ready(function(){
         var pointOfSaleView = new PointOfSalesView();
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
 
+        var form_settings = {
+            url: "/api/cashiershifts/",
+            formId: "form_view",
+            form: $('#form_view'),
+            includeFields: ['cash_register'],
+            pointOfSaleView: pointOfSaleView
+        };
+
+        var cashierShiftFormView = new CashierShiftFormView(form_settings);
+        cashierShiftFormView.init();
 
         GenericViews.getData("/api/products/?format=json&show_in_menu=True", function(response){
             pointOfSaleView.menuItems(response);
         });
 
         $('#input_phone').mask('999-999-9999');
+
+        continueOrCreateShift(cashierShiftFormView, pointOfSaleView)
 
     });
 })();

@@ -6,19 +6,25 @@ from inventory.models import Product, Warehouse
 class CashRegister(models.Model):
 	name = models.CharField(max_length=70)
 	warehouse= models.ForeignKey(Warehouse,related_name='cash_registers')
-	#Open, Close
-	status = models.CharField(max_length=15)
 
 	def __str__(self):
 		return self.name+' - '+self.warehouse.name
 
 
 class CashierShift(models.Model):
+	ACTIVE = 'ACTIVE'
+	CLOSE = 'CLOSE'
+	SHIFT_STATUS = (
+		(ACTIVE, 'Activo'),
+		(CLOSE, 'Cerrado'),
+	)
+
 	user = models.ForeignKey(User, related_name='cashier_users')
 	cash_register = models.ForeignKey(CashRegister,related_name='cashier_shifts')
 	start_date= models.DateTimeField(auto_now_add=True)
 	end_date= models.DateTimeField(null=True, default=None)
 	close_balance = models.FloatField(null=True)
+	status = models.CharField(max_length=15, choices=SHIFT_STATUS)
 
 
 class Customer(models.Model):

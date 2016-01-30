@@ -178,6 +178,9 @@ var GenericViews = GenericViews || {};
     function DataTableView(settings) {
         self = this;
         self.dataTable= settings.dataTable;
+        settings.actionRender = settings.actionRender || function(item){
+                return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
+            };
         self.refreshDataTable = function () {
             $.ajax({
                 url: settings.url + '?format=json',
@@ -194,7 +197,7 @@ var GenericViews = GenericViews || {};
                                 row.push(item[column_name]);
                             }
                             else if (column_name == "actions") {
-                                row.push('<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>');
+                                row.push(settings.actionRender(item));
                             }
                             else {
                                 row.push("");

@@ -30,10 +30,13 @@ class CashRegisterList(viewsets.ModelViewSet):
     queryset = CashRegister.objects.all()
     serializer_class = CashRegisterSerializer
 
+
 class CashierShiftList(viewsets.ModelViewSet):
     permission_classes =((permissions.IsAuthenticated),)
     queryset = CashierShift.objects.all()
     serializer_class = CashierShiftSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('user','status',)
 
 
 class CustomerList(viewsets.ModelViewSet):
