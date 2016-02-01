@@ -4,7 +4,24 @@
     <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
 {% endblock styling %}
 {% block maincontent %}
-    <div id="point-of-sales-page" class="main-content">
+
+    <div id="cashier-shift-view" data-bind="visible: theShiftIsNotActive">
+        <div class="page-header">
+            <div class="clearfix">
+                <div class="col-md-6">
+                    <h1>
+                        Empezar turno de caja
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {%  include "generic_form.html" %}
+        </div>
+    </div>
+
+
+    <div id="point-of-sales-page" class="main-content" data-bind="visible: theShiftIsActive">
         <div class="main-content-inner">
             <div class="page-content">
 
@@ -31,7 +48,7 @@
                                                     <div class="order-input col-sm-2">
                                                         <label> Telefono </label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control search-query">
+                                                            <input id="input_phone" data-bind="value:clientPhoneNumber"  type="text" class="form-control search-query">
                                                                 <span class="input-group-btn">
                                                                     <button type="button"  class="btn btn-purple btn-sm" data-toggle="modal" data-target="#searchClientsModal">
                                                                         <span class="ace-icon fa fa-search icon-on-right"></span>
@@ -42,19 +59,19 @@
                                                     <div class="order-input col-sm-3">
                                                         <label> Cliente </label>
                                                         <div class="form-group">
-                                                            <input type="text" class="" disabled="disabled" value="Juan Perez" />
+                                                            <input type="text" data-bind="value:clientName, enable: newClient" />
                                                         </div>
                                                     </div>
                                                     <div class="order-input col-sm-4">
                                                         <label> Direccion </label>
                                                         <div class="form-group">
-                                                            <input type="text" class="" value="" />
+                                                            <input type="text" data-bind="value:clientAddress" />
                                                         </div>
                                                     </div>
                                                     <div class="order-input col-sm-3">
                                                         <label> Referencia </label>
                                                         <div class="form-group">
-                                                            <input type="text" class="" value="" />
+                                                            <input type="text" data-bind="value:clientReference" />
                                                         </div>
                                                     </div>
                                                 </form>
@@ -66,7 +83,7 @@
                                                     <h3 class="header smaller lighter blue">Detalle</h3>
                                                 </div>
                                             </div>
-                                              <form class="order-form">
+                                            <form class="order-form">
                                                 <div class="row">
                                                     <div class="order-input col-sm-2">
                                                         <label> Código </label>
@@ -94,7 +111,7 @@
                                                     <div class="order-input col-sm-2" >
                                                         <label> Precio </label>
                                                         <div class="form-group" data-bind="css:{'has-error':priceHasError}">
-                                                            <input type="number"  data-bind="value: price">
+                                                            <input type="number"  data-bind="value: price" disabled="disabled">
                                                         </div>
                                                     </div>
                                                     <div class="order-input col-sm-2">
@@ -146,9 +163,54 @@
                                                     </div>
                                                 </div>
                                             </form>
+
+                                            <div class="row">
+                                                <div class="col-sm-8">
+
+                                                    <a href="#" class="btn btn-app btn-info">
+                                                        <i class="ace-icon fa fa-trash-o bigger-230"></i>
+                                                        Cancelar
+                                                    </a>
+                                                    <a href="#" class="btn btn-app btn-success">
+                                                        <i class="ace-icon fa fa-floppy-o bigger-230"></i>
+                                                        Processar
+                                                    </a>
+                                                </div>
+                                                <div class="col-sm-4 pay-container" style="text-align:center">
+                                                    <form class="form-horizontal" role="form">
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Total </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" data-bind="value:orderTotal" class="col-sm-12" disabled="disabled" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Efectivo </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" data-bind="value:paymentAmount" class="col-sm-12" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Devuelta </label>
+
+                                                            <div class="col-sm-9">
+                                                                <input type="text" data-bind="value:changeAmount" class="col-sm-12" disabled="disabled"  />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+
                             </div>
                             <div class="col-sm-4">
                                 <div class="widget-box client-history">
@@ -226,7 +288,7 @@
                                     </div>
                                 </div>
 
-                                 <div class="widget-box">
+                                <div class="widget-box">
                                     <div class="widget-header">
                                         <h4 class="widget-title">Menu</h4>
                                     </div>
@@ -252,63 +314,6 @@
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="col-sm-8">
-                                <div class="widget-box pay-container">
-                                    <div class="widget-header">
-                                        <h4 class="widget-title">Pago</h4>
-                                    </div>
-
-                                    <div class="widget-body">
-                                        <div class="widget-main">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-
-                                                    <form class="form-horizontal" role="form">
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Total </label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="560.00" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Efectivo </label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" value="1000.00" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Devuelta </label>
-
-                                                            <div class="col-sm-9">
-                                                                <input type="text" id="form-field-1" placeholder="" class="col-sm-12" disabled="disabled" value="440.00" />
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="col-sm-6" style="text-align:center">
-                                                    <a href="#" class="btn btn-app btn-info">
-                                                        <i class="ace-icon fa fa-trash-o bigger-230"></i>
-                                                        Cancelar
-                                                    </a>
-                                                    <a href="#" class="btn btn-app btn-success">
-                                                        <i class="ace-icon fa fa-floppy-o bigger-230"></i>
-                                                        Processar
-                                                    </a>
-                                                </div>
                                             </div>
 
                                         </div>

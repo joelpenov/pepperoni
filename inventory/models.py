@@ -1,10 +1,12 @@
 from django.db import models
 
+
 class Warehouse(models.Model):
 	name = models.CharField(max_length=50)
 
 	def __str__(self):
 		return self.name
+
 
 class Product(models.Model):
 	description = models.CharField(max_length=255)
@@ -13,7 +15,8 @@ class Product(models.Model):
 	is_raw_material= models.BooleanField()
 
 	def __str__(self):
-		return
+		return self.description
+
 
 class Stock(models.Model):
 	product = models.ForeignKey(Product, related_name="product_stock")

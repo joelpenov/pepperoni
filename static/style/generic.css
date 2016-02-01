@@ -11,3 +11,8 @@
 
 .order-input-buttom {
 }
+
+.action-buttons{
+    width: 60px;
+    text-align: center;
+}
