@@ -6,9 +6,7 @@
             self.settings = settings;
             self.fields = ko.observableArray();
             self.orderDetails= ko.observableArray();
-            self.isEditMode = false;
-            self.currentItemId = 0;
-            self.showForm = ko.observable(false);
+            self.creationMode = ko.observable(false);
             self.showList = ko.observable(true);
             self.productIdHasError = ko.observable(false);
             self.quantityHasError = ko.observable(false);
@@ -17,6 +15,7 @@
             self.productDescription = ko.observable();
             self.quantity = ko.observable();
             self.price = ko.observable();
+            self.showDetailMode = ko.observable(false);
 
             settings.includeFields = settings.includeFields || [];
 
@@ -62,8 +61,9 @@
             };
 
             self.addNew = function () {
-                self.showForm(true);
+                self.creationMode(true);
                 self.showList(false);
+                self.showDetailMode(false);
             };
 
             self.save = function () {
@@ -88,12 +88,11 @@
 
             self.cancel = function () {
                 GenericViews.resetFieldDefaultValue(self.fields());
-                self.isEditMode = false;
-                self.currentItemId = 0;
                 self.resetErrors();
-                self.showForm(false);
+                self.creationMode(false);
                 self.showList(true);
                 self.cleanDetails();
+                self.showDetailMode(false);
                 self.orderDetails([]);
             };
 
@@ -103,22 +102,21 @@
                 });
             };
 
-            self.editForm = function (id) {
+            self.viewDetails = function (id) {
                 GenericViews.getDataById(settings.url, id, function (response) {
                     GenericViews.loadEditFormData(self.fields(), response);
                     self.orderDetails(response.details);
-                    self.isEditMode = true;
-                    self.currentItemId = id;
-                    self.showForm(true);
+                    self.creationMode(false);
                     self.showList(false);
+                    self.showDetailMode(true);
                 });
             };
 
             self.init = function () {
                 if (settings.dataTableView) {
-                    settings.dataTableView.dataTable.on('click', '.action-buttons .edit', function () {
-                        var id = $(this).data("item-id");
-                        self.editForm(id);
+                    settings.dataTableView.dataTable.on('click', '.action-buttons .fa-eye', function () {
+                        var id = $(this).data("item-id"); 
+                        self.viewDetails(id);
                     });
                 }
                 ko.applyBindings(self, document.getElementById(settings.viewId));
@@ -132,7 +130,11 @@
                 dataTable: $('#dynamic-table').dataTable({
                     //"aoColumns": columns,
                     data: []
-                })
+                }),
+                actionRender: function(item){
+                return '<div class="action-buttons"> <a class="view blue"><i '+
+                'class="ace-icon fa fa-eye bigger-130" data-item-id="' + item.id + '"></i></a> </div>';
+                }
             };
 
             var dataTableView = new GenericViews.DataTableView(table_settings);

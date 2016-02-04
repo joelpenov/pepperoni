@@ -7,15 +7,15 @@
             <div class="clearfix">
                 <div class="col-md-6">
                     <h1>
-                        Salidas de Almacen
+                        Salida de Almacen
                     </h1>
                 </div>
                 <div class="col-md-6 align-right">
-                    <button class="btn" data-bind="click:addNew">Nuevo</button>
+                    <button class="btn" data-bind="click:addNew">Nueva salida</button>
                 </div>
             </div>
         </div>
-        <div class="row" data-bind="visible: showForm">
+        <div class="row" data-bind="visible: creationMode">
             <form id="form_view" class="form-horizontal">
                 {% csrf_token %}
                 <div data-bind="foreach: fields">
@@ -65,18 +65,20 @@
                             <input type="button" value="Agregar" class="btn btn-info order-input-buttom"  data-bind="click: addNewProduct">
                         </div>
                     </div>
-                </div>
-                <div class="row">
+                </div>               
+            </form>
+        </div>
+        <div data-bind="visible: showDetailMode() || creationMode()">
+             <div class="row">
                     <div class="col-xs-12">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th class="center">Codigo</th>
-                                <th>Descripcion</th>
+                                <th class="center">Código</th>
+                                <th>Descripción</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
                                 <th>Total</th>
-                                <th></th>
                             </tr>
                             </thead>
 
@@ -87,30 +89,32 @@
                                 <td data-bind="text: quantity"></td>
                                 <td data-bind="text: price"></td>
                                 <td data-bind="text: total"></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <a class="red" data-bind="click: $root.deleteProduct">
-                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                {% include "form_buttons.html" %}
-            </form>
+                <div class="clearfix form-actions center">
+                    <div class="col-md-offset-2 col-md-8">
+                        <button type="button" class="btn btn-info submit-button" type="button"  data-bind="click: save, visible: !showDetailMode() || creationMode() ">
+                        <i class="ace-icon fa fa-check bigger-110"></i> Guardar</button>
+                            &nbsp; &nbsp; &nbsp;
+                        <button class="btn cancel-button" type="button"  
+                        data-bind="click: cancel, text: showDetailMode() ? 'Atrás' : 'Cancelar' ">
+                            <i class="ace-icon fa fa-undo bigger-110"></i></button>
+                    </div>
+                </div>
         </div>
         <div class="row" data-bind="visible: showList">
             <div id="table-container" class="col-xs-12">
                 <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th name="id">Codigo</th>
+                        <th name="id">Código</th>
                         <th name="warehouse_description">Almacen</th>
                         <th name="transaction_date">Fecha</th>
-                        <th name="actions"></th>
+                        <th name="actions">Acción</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
