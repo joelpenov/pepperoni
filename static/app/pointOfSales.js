@@ -3,6 +3,7 @@
     function CashierShiftFormView(settings) {
         var self = this;
         self.settings = settings;
+        self.cashierShift = ko.observable();
         self.fields = ko.observableArray();
         settings.includeFields =settings.includeFields|| [];
         settings.afterRender = settings.afterRender || function(){};
@@ -10,6 +11,10 @@
 
 
         self.theShiftIsNotActive = ko.observable(false);
+
+        self.cashierShift.subscribe(function(cashierShift){
+            settings.pointOfSaleView.getLastActiveOrder(cashierShift);
+        });
 
         self.save = function () {
             var request = GenericViews.saveData(self,settings.form.serializeJSON());
@@ -43,6 +48,10 @@
 
     function PointOfSalesView(){
         var self = this;
+        self.settings = {
+            url: "/api/orders/"
+        };
+
         self.theShiftIsActive = ko.observable(false);
 
         self.menuItems = ko.observableArray();
@@ -64,6 +73,57 @@
         self.clientReference=ko.observable();
         self.dataBaseClient = ko.observable();
 
+        var saveOrder=function(data){
+            var method = "post";
+            var link = self.settings.url;
+            //formView.resetErrors();
+            //
+            //if (formView.isEditMode) {
+            //    method = "put";
+            //    link += formView.currentItemId + "/";
+            //}
+
+
+
+            return $.ajax({
+                url: link + '?format=json',
+                type: method,
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                   console.log('created order', response)
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    console.log('errors',textStatus, errorThrown);
+                    //GenericViews.errorHandler(formView.fields(),jXHR,textStatus, errorThrown);
+                }
+            });
+        };
+
+        self.generateNewOrder = function(){
+            saveOrder({
+                cash: 0,
+                customer_change: 0,
+                total: 0,
+                update_customer_entry: false
+            })
+        };
+
+        self.loadOrder = function(){
+
+        };
+
+        self.getLastActiveOrder=function(cashierShift){
+            GenericViews.getData("/api/orders/?format=json&status='ACTIVE'&cashier_shift="+cashierShift.id, function(response){
+                if(response.length>0){
+                    self.loadOrder(response[0])
+                }else{
+                    self.generateNewOrder()
+                }
+                console.log('active orders', response);
+            });
+        };
+
         self.changeAmount=ko.computed(function(){
             return self.paymentAmount() - self.orderTotal();
         });
@@ -79,6 +139,7 @@
             });
             self.orderTotal(total);
         });
+
         self.clientPhoneNumber.subscribe(function (value) {
             if(!value || (value && self.dataBaseClient() && value === self.dataBaseClient().phone)){
                 return;
@@ -156,6 +217,8 @@
 
     }
 
+
+
     function continueOrCreateShift(cashierShiftFormView, pointOfSaleView){
         var current_user_id = $('#current_user_id').val();
 
@@ -164,6 +227,8 @@
             if(response.length>0){
                 cashierShiftFormView.theShiftIsNotActive(false);
                 pointOfSaleView.theShiftIsActive(true);
+                cashierShiftFormView.cashierShift(response[0]);
+
             }else{
                 cashierShiftFormView.theShiftIsNotActive(true);
                 pointOfSaleView.theShiftIsActive(false);

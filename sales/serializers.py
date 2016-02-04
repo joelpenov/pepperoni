@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from datetime import date
 from inventory.models import Warehouse
-from .models import CashRegister, Customer, CashierShift
+from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, OrderNumber
 
 
 class CashRegisterSerializer(serializers.ModelSerializer):
@@ -54,3 +55,44 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('id','phone','name','address','reference')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True, label='Código')
+
+    date= serializers.DateTimeField(read_only=True, label='Fecha')
+    number = serializers.IntegerField(read_only=True, label='Orden')
+    clear= serializers.BooleanField(read_only=True)
+    status = serializers.CharField(read_only=True, label='Estado')
+    cashier_shift_id = serializers.IntegerField(read_only=True)
+
+    customer_id = serializers.IntegerField(read_only=True)
+    customer_name = serializers.CharField(label='Nombre', required=False, allow_blank=True)
+    customer_address = serializers.CharField(label='Dirección', required=False, allow_blank=True)
+    customer_reference = serializers.CharField(label='Referencia', required=False, allow_blank=True)
+    customer_phone = serializers.CharField(label='Teléfono', required=False, allow_blank=True)
+    update_customer_entry= serializers.BooleanField(label='Afectar cliente en futuras ordenes')
+
+    total = serializers.FloatField(label='Total')
+    cash = serializers.FloatField(label='Efectivo')
+    customer_change = serializers.FloatField(label='Cambio')
+
+    class Meta:
+        model = Order
+        fields = ('id','date','number','clear','status','cashier_shift_id','customer_id','customer_name','customer_address',
+                  'customer_reference','customer_phone','update_customer_entry','total','cash','customer_change')
+
+    def create(self, validated_data):
+        user_id = self.context.get('request').user.id
+        shift = CashierShift.objects.filter(user_id=user_id, status=CashierShift.ACTIVE).first()
+
+        today = date.today()
+        orderNumber = OrderNumber.objects.filter(cashier_shift_id=shift.id, date__year=today.year, date__month=today.month, date__day=today.day).first()
+        if orderNumber==None:
+            orderNumber= OrderNumber.objects.create(cashier_shift_id=shift.id, number=0)
+        orderNumber.number = orderNumber.number + 1
+        orderNumber.save()
+
+        order = Order.objects.create(cashier_shift_id=shift.id,number=orderNumber.number, status=Order.ACTIVE,**validated_data)
+
+        return order

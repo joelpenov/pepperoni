@@ -36,19 +36,35 @@ class Customer(models.Model):
 	def __str__(self):
 		return self.name
 
+class OrderNumber(models.Model):
+	date = models.DateField(auto_now_add=True)
+	number = models.IntegerField()
+	cashier_shift = models.ForeignKey(CashierShift,related_name='numbers')
 
 class Order(models.Model):
-	customer = models.ForeignKey(Customer)
+	ACTIVE = 'ACTIVE'
+	FINISHED = 'FINISHED'
+	VOID = 'VOID'
+	ORDER_STATUS = (
+		(ACTIVE, 'Activo'),
+		(FINISHED, 'Terminada'),
+		(VOID, 'Nulo'),
+	)
+
+	date= models.DateTimeField(auto_now_add=True)
+	number = models.IntegerField()
+	clear= models.BooleanField(default=False)
+	status = models.CharField(max_length=15, choices=ORDER_STATUS)
+	cashier_shift = models.ForeignKey(CashierShift,related_name='orders')
+
+
+	customer = models.ForeignKey(Customer, null=True)
 	customer_name = models.CharField(max_length=70, blank=True)
 	customer_address = models.CharField(max_length=180, blank=True)
 	customer_reference = models.CharField(max_length=180, blank=True)
 	customer_phone = models.CharField(max_length=15, blank=True)
+	update_customer_entry= models.BooleanField(default=False)
 
-	order_number = models.IntegerField()
-	order_date= models.DateTimeField()
-	#Active, Finished, Canceled, clear?
-	status = models.CharField(max_length=15)
-	cashier_shift = models.ForeignKey(CashierShift,related_name='orders')
 
 	total = models.FloatField()
 	cash = models.FloatField()
