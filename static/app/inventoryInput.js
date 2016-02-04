@@ -102,15 +102,6 @@
                 });
             };
 
-            self.editForm = function (id) {
-                GenericViews.getDataById(settings.url, id, function (response) {
-                    GenericViews.loadEditFormData(self.fields(), response);
-                    self.orderDetails(response.details);
-                    self.showList(false);
-                });
-            };
-
-
             self.viewDetails = function (id) {
                 GenericViews.getDataById(settings.url, id, function (response) {
                     GenericViews.loadEditFormData(self.fields(), response);
