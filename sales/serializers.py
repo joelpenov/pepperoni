@@ -93,7 +93,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id','date','number','clear','status','sales_area','sales_area_name','cashier_shift_id','customer_id','customer_name','customer_address',
+        fields = ('id','created_date','number','clear','status','sales_area','sales_area_name','cashier_shift_id','customer_id','customer_name','customer_address',
                   'customer_reference','customer_phone','update_customer_entry','total','cash','customer_change')
 
     def create(self, validated_data):

@@ -116,6 +116,11 @@
         self.customerReference=ko.observable();
         self.DBcustomer = ko.observable();
 
+        self.id = ko.observable();
+        self.created_date = ko.observable();
+        self.number = ko.observable();
+        self.username = ko.observable();
+
         self.total=ko.observable(0);
         self.paymentAmount=ko.observable(0);
 
@@ -184,6 +189,8 @@
         self.menuItems = ko.observableArray();
         self.order = new OrderModel();
 
+        self.activeOrders = new ko.observableArray();
+
         var saveOrder=function(data){
             var method = "post";
             var link = self.settings.url;
@@ -223,8 +230,9 @@
 
         self.refreshActiveOrders=function(cashierShift){
             GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+cashierShift.id, function(response){
+                self.activeOrders(response);
                 if(response.length>0){
-                    self.loadOrder(response[0])
+                    self.loadOrder(response[response.length-1])
                 }else{
                     self.generateNewOrder()
                 }

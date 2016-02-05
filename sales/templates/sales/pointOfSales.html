@@ -34,6 +34,41 @@
                                     <h3 class="header smaller lighter blue">Orden</h3>
                                 </div>
                             </div>
+                             <div class="row">
+
+                                <form class="order-form">
+                                    <div class="order-input col-sm-3">
+                                        <label> Codigo </label>
+                                        <div class="form-group">
+                                            <input  type="text" data-bind="value:order.id" disabled="disabled" />
+                                        </div>
+                                    </div>
+
+                                     <div class="order-input col-sm-3">
+                                        <label> Fecha </label>
+                                        <div class="form-group">
+                                            <input  type="text" data-bind="value:order.created_date" disabled="disabled" />
+                                        </div>
+                                    </div>
+
+                                     <div class="order-input col-sm-3">
+                                        <label> Turno </label>
+                                        <div class="form-group">
+                                            <input  type="text" data-bind="value:order.number" disabled="disabled" />
+                                        </div>
+                                    </div>
+
+                                    <div class="order-input col-sm-3">
+                                        <label> Cajero </label>
+                                        <div class="form-group">
+                                            <input  type="text" data-bind="value:order.username" disabled="disabled" />
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+
                             <div class="row">
                                 <div class="col-sm-12">
                                     <h3 class="header smaller lighter blue">Cliente</h3>
@@ -170,7 +205,8 @@
                                         Processar
                                     </a>
                                 </div>
-                                <div class="col-sm-4 pay-container" style="text-align:center">
+                                <div class="col-sm-4 pay-container">
+
                                     <form class="form-horizontal" role="form">
 
                                         <div class="form-group">
@@ -319,18 +355,18 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Codigo</th>
-                                                    <th>Orden</th>
+                                                    <th>Turno</th>
                                                     <th>Total</th>
                                                     <th>Mesa</th>
                                                 </tr>
                                                 </thead>
 
-                                                <tbody data-bind="foreach: menuItems">
+                                                <tbody data-bind="foreach: activeOrders">
                                                 <tr>
                                                     <td data-bind="text:id"></td>
-                                                    <td data-bind="text:description"></td>
-                                                    <td data-bind="text:sell_price"></td>
-                                                    <td data-bind=""></td>
+                                                    <td data-bind="text:number"></td>
+                                                    <td data-bind="text:total"></td>
+                                                    <td data-bind="text:sales_area_name"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
