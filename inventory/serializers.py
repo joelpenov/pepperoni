@@ -64,14 +64,3 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
         self.saveDetails(move, details_data)
 
         return move
-
-    def update(self,instance, validated_data):
-        details_data = validated_data.pop('details')
-
-        move = super(InventoryMoveSerializer, self).update(instance, validated_data)
-        for detail in move.details.all():
-            detail.delete()
-
-        self.saveDetails(move,details_data)
-
-        return move

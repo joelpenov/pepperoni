@@ -1,0 +1,1 @@
+crunchyenv\Scripts\activate
