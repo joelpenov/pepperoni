@@ -65,6 +65,9 @@ class Order(models.Model):
 
 	number = models.IntegerField()
 	clear= models.BooleanField(default=False)
+	to_go= models.BooleanField(default=False)
+	to_pickup= models.BooleanField(default=False)
+	delivered= models.BooleanField(default=False)
 	status = models.CharField(max_length=15, choices=ORDER_STATUS)
 	cashier_shift = models.ForeignKey(CashierShift,related_name='orders')
 

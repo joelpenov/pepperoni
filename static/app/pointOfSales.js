@@ -114,12 +114,17 @@
         self.customerName=ko.observable();
         self.customerAddress=ko.observable();
         self.customerReference=ko.observable();
+        self.update_customer_entry=ko.observable();
         self.DBcustomer = ko.observable();
 
         self.id = ko.observable();
         self.created_date = ko.observable();
         self.number = ko.observable();
         self.username = ko.observable();
+        self.to_go = ko.observable();
+        self.to_pickup = ko.observable();
+        self.delivered = ko.observable();
+        self.salesarea = ko.observable();
 
         self.total=ko.observable(0);
         self.paymentAmount=ko.observable(0);
@@ -188,7 +193,7 @@
         self.theShiftIsActive = ko.observable(false);
         self.menuItems = ko.observableArray();
         self.order = new OrderModel();
-
+        self.salesAreaList= ko.observableArray();
         self.activeOrders = new ko.observableArray();
 
         var saveOrder=function(data){
@@ -278,6 +283,10 @@
 
         GenericViews.getData("/api/products/?format=json&show_in_menu=True", function(response){
             pointOfSaleView.menuItems(response);
+        });
+
+        GenericViews.getData("/api/salesarea/?format=json", function(response){
+            pointOfSaleView.salesAreaList(response);
         });
 
         $('#input_phone').mask('999-999-9999');

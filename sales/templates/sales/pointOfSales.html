@@ -30,38 +30,80 @@
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="col-sm-8">
                             <div class="row">
-                                <div class="col-sm-12">
-                                    <h3 class="header smaller lighter blue">Orden</h3>
+                                <div class="widget-header widget-header-large">
+                                    <h3 class="inline smaller lighter blue">Orden</h3>
+
+                                    <div class="widget-toolbar no-border invoice-info">
+                                        <span class="invoice-info-label">Turno:</span>
+                                        <span class="red"  data-bind="text:order.number" >1</span>
+
+                                        <br />
+                                        <span class="invoice-info-label">Cajero:</span>
+                                        <span class="blue"  data-bind="text:order.username">Jennipher</span>
+                                    </div>
+
+                                    <div class="widget-toolbar no-border invoice-info">
+                                        <span class="invoice-info-label">Codigo:</span>
+                                        <span class="red"  data-bind="text:order.id">121212</span>
+
+                                        <br />
+                                        <span class="invoice-info-label">Fecha:</span>
+                                        <span class="blue"  data-bind="text:order.created_date">04/04/2014</span>
+                                    </div>
+
+
+                                    <div class="widget-toolbar hidden-480">
+                                        <a href="#">
+                                            <i class="ace-icon fa"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                             <div class="row">
+                            <div class="row">
 
                                 <form class="order-form">
-                                    <div class="order-input col-sm-3">
-                                        <label> Codigo </label>
-                                        <div class="form-group">
-                                            <input  type="text" data-bind="value:order.id" disabled="disabled" />
-                                        </div>
-                                    </div>
 
-                                     <div class="order-input col-sm-3">
-                                        <label> Fecha </label>
-                                        <div class="form-group">
-                                            <input  type="text" data-bind="value:order.created_date" disabled="disabled" />
-                                        </div>
-                                    </div>
-
-                                     <div class="order-input col-sm-3">
-                                        <label> Turno </label>
-                                        <div class="form-group">
-                                            <input  type="text" data-bind="value:order.number" disabled="disabled" />
-                                        </div>
-                                    </div>
 
                                     <div class="order-input col-sm-3">
-                                        <label> Cajero </label>
+                                        <label for="input_salesarea">Mesa</label>
                                         <div class="form-group">
-                                            <input  type="text" data-bind="value:order.username" disabled="disabled" />
+                                            <select id="input_salesarea" class="form-control" data-bind="
+                                                options: salesAreaList,
+                                                optionsCaption: '...',
+                                                optionsText: 'name',
+                                                optionsValue: 'id',
+                                                value: order.salesarea
+                                                "></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-input col-sm-3 center">
+                                        <label> Llevar </label>
+                                        <div class="form-group">
+                                            <label>
+                                                <input data-bind="value:order.to_go" class="ace ace-switch" type="checkbox">
+                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-input col-sm-3 center">
+                                        <label> Recoger </label>
+                                         <div class="form-group">
+                                            <label>
+                                                <input data-bind="value:order.to_pick" class="ace ace-switch" type="checkbox">
+                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-input col-sm-3 center">
+                                        <label> Entregada </label>
+                                        <div class="form-group">
+                                            <label>
+                                                <input data-bind="value:order.delivered" class="ace ace-switch" type="checkbox">
+                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+                                            </label>
                                         </div>
                                     </div>
 
@@ -105,6 +147,12 @@
                                         <div class="form-group">
                                             <input id="input_customer_referene" type="text" data-bind="value:order.customerReference" />
                                         </div>
+                                    </div>
+                                    <div class="order-input col-sm-12">
+                                        <label class="middle">
+                                            <input class="ace" type="checkbox" id="input_update_customer_entry" data-bind="value:order.update_customer_entry">
+                                            <span class="lbl"> Afectar direccion para futuras ordenes</span>
+                                        </label>
                                     </div>
                                 </form>
                             </div>
