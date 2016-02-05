@@ -1,8 +1,15 @@
 from rest_framework import serializers
 from datetime import date
 from inventory.models import Warehouse
-from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, OrderNumber
+from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, OrderNumber, SalesArea
 
+class SalesAreaSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True, label='Código')
+    name = serializers.CharField(label='Nombre')
+
+    class Meta:
+        model = SalesArea
+        fields = ('id','name')
 
 class CashRegisterSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
@@ -64,6 +71,8 @@ class OrderSerializer(serializers.ModelSerializer):
     number = serializers.IntegerField(read_only=True, label='Orden')
     clear= serializers.BooleanField(read_only=True)
     status = serializers.CharField(read_only=True, label='Estado')
+    sales_area=serializers.PrimaryKeyRelatedField(queryset=SalesArea.objects.all(),label='Mesa', required=False, allow_null=True)
+    sales_area_name = serializers.SerializerMethodField('get_salesareaname')
     cashier_shift_id = serializers.IntegerField(read_only=True)
 
     customer_id = serializers.IntegerField(read_only=True)
@@ -77,9 +86,14 @@ class OrderSerializer(serializers.ModelSerializer):
     cash = serializers.FloatField(label='Efectivo')
     customer_change = serializers.FloatField(label='Cambio')
 
+    def get_salesareaname(self, obj):
+        if obj.sales_area==None:
+            return None
+        return obj.sales_area.name
+
     class Meta:
         model = Order
-        fields = ('id','date','number','clear','status','cashier_shift_id','customer_id','customer_name','customer_address',
+        fields = ('id','date','number','clear','status','sales_area','sales_area_name','cashier_shift_id','customer_id','customer_name','customer_address',
                   'customer_reference','customer_phone','update_customer_entry','total','cash','customer_change')
 
     def create(self, validated_data):

@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from inventory.models import Product, Warehouse
 
 
+class SalesArea(models.Model):
+	name = models.CharField(max_length=70)
+
+	def __str__(self):
+		return self.name
+
+
 class CashRegister(models.Model):
 	name = models.CharField(max_length=70)
 	warehouse= models.ForeignKey(Warehouse,related_name='cash_registers')
@@ -52,7 +59,12 @@ class Order(models.Model):
 		(VOID, 'Nulo'),
 	)
 
-	date= models.DateTimeField(auto_now_add=True)
+	created_date= models.DateTimeField(auto_now_add=True)
+	finished_date= models.DateTimeField(blank=True, null=True)
+	cancel_date= models.DateTimeField(blank=True, null=True)
+	sales_area = models.ForeignKey(SalesArea,related_name='orders', null=True)
+
+
 	number = models.IntegerField()
 	clear= models.BooleanField(default=False)
 	status = models.CharField(max_length=15, choices=ORDER_STATUS)
