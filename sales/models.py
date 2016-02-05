@@ -60,8 +60,6 @@ class Order(models.Model):
 	)
 
 	created_date= models.DateTimeField(auto_now_add=True)
-	finished_date= models.DateTimeField(blank=True, null=True)
-	cancel_date= models.DateTimeField(blank=True, null=True)
 	sales_area = models.ForeignKey(SalesArea,related_name='orders', null=True)
 
 

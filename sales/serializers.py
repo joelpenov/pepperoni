@@ -1,7 +1,7 @@
-from rest_framework import serializers
-from datetime import date
 from inventory.models import Warehouse
-from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, OrderNumber, SalesArea
+from rest_framework import serializers
+from .models import CashRegister, Customer, CashierShift, Order, OrderNumber, SalesArea
+
 
 class SalesAreaSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
@@ -67,7 +67,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
 
-    date= serializers.DateTimeField(read_only=True, label='Fecha')
+    created_date= serializers.DateTimeField(read_only=True, label='Fecha de Creación')
     number = serializers.IntegerField(read_only=True, label='Orden')
     clear= serializers.BooleanField(read_only=True)
     status = serializers.CharField(read_only=True, label='Estado')
