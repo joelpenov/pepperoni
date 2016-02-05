@@ -86,8 +86,9 @@ class OrderSerializer(serializers.ModelSerializer):
         user_id = self.context.get('request').user.id
         shift = CashierShift.objects.filter(user_id=user_id, status=CashierShift.ACTIVE).first()
 
-        today = date.today()
-        orderNumber = OrderNumber.objects.filter(cashier_shift_id=shift.id, date__year=today.year, date__month=today.month, date__day=today.day).first()
+        # today = date.today()
+        # date__year=today.year, date__month=today.month, date__day=today.day
+        orderNumber = OrderNumber.objects.filter(cashier_shift_id=shift.id).first()
         if orderNumber==None:
             orderNumber= OrderNumber.objects.create(cashier_shift_id=shift.id, number=0)
         orderNumber.number = orderNumber.number + 1

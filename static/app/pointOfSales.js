@@ -13,7 +13,7 @@
         self.theShiftIsNotActive = ko.observable(false);
 
         self.cashierShift.subscribe(function(cashierShift){
-            settings.pointOfSaleView.getLastActiveOrder(cashierShift);
+            settings.pointOfSaleView.refreshActiveOrders(cashierShift);
         });
 
         self.save = function () {
@@ -46,15 +46,8 @@
         };
     }
 
-    function PointOfSalesView(){
+    function OrderDetailModel (){
         var self = this;
-        self.settings = {
-            url: "/api/orders/"
-        };
-
-        self.theShiftIsActive = ko.observable(false);
-
-        self.menuItems = ko.observableArray();
         self.productIdHasError = ko.observable(false);
         self.quantityHasError = ko.observable(false);
         self.priceHasError = ko.observable(false);
@@ -62,16 +55,134 @@
         self.productDescription = ko.observable();
         self.quantity = ko.observable();
         self.price = ko.observable();
-        self.orderDetails= ko.observableArray();
-        self.orderTotal=ko.observable(0);
+
+        self.productId.subscribe(function () {
+            if(!self.productId()){
+                self.productDescription("");
+                self.price(null);
+                return;
+            }
+
+            GenericViews.getDataById("/api/products/", self.productId(),function (response) {
+                self.productDescription(response.description);
+                self.price(response.sell_price);
+            });
+        });
+
+        self.reset = function(){
+            self.productId(null);
+            self.productDescription(null);
+            self.quantity(null);
+            self.price(null);
+
+            self.productIdHasError(false);
+            self.quantityHasError(false);
+            self.priceHasError(false);
+        };
+
+        function isNumber(value) {
+
+            var er = /^[0-9]|[0-9](.([0-9]))+$/;
+
+            return er.test(value);
+        }
+
+
+        self.isValid = function(){
+            self.productIdHasError(!isNumber(self.productId()) || !self.productDescription());
+            self.quantityHasError(!isNumber(self.quantity()));
+            self.priceHasError(!isNumber(self.price()));
+
+            return !(self.productIdHasError() || self.quantityHasError() || self.priceHasError());
+        };
+
+        self.getData = function(){
+            return {
+                product_id:self.productId(),
+                product_description: self.productDescription(),
+                quantity: self.quantity(),
+                price: self.price(),
+                total: (self.quantity() * self.price())
+            };
+        }
+
+    }
+
+    function OrderModel(){
+        var self = this;
+        self.customerPhone=ko.observable();
+        self.customerName=ko.observable();
+        self.customerAddress=ko.observable();
+        self.customerReference=ko.observable();
+        self.DBcustomer = ko.observable();
+
+        self.total=ko.observable(0);
         self.paymentAmount=ko.observable(0);
 
+        self.details= ko.observableArray();
 
-        self.clientPhoneNumber=ko.observable();
-        self.clientName=ko.observable();
-        self.clientAddress=ko.observable();
-        self.clientReference=ko.observable();
-        self.dataBaseClient = ko.observable();
+        self.detailModel = new OrderDetailModel();
+
+
+        self.changeAmount=ko.computed(function(){
+            return self.paymentAmount() - self.total();
+        });
+
+        self.customerIsNew=ko.computed(function(){
+            return !(self.DBcustomer() && self.DBcustomer().id > 0);
+        });
+
+        self.customerPhone.subscribe(function (value) {
+            if(!value || (value && self.DBcustomer() && value === self.DBcustomer().phone)){
+                return;
+            }
+
+            self.DBcustomer(null);
+            self.customerName(null);
+            self.customerAddress(null);
+            self.customerReference(null);
+
+            GenericViews.getData("/api/customers/?format=json&phone="+value, function(response){
+                if(response && response.length>0){
+                    var customer = response[0];
+                    self.DBcustomer(customer);
+                    self.customerName(customer.name);
+                    self.customerAddress(customer.address);
+                    self.customerReference(customer.reference);
+                }
+            });
+        });
+
+        self.details.subscribe(function () {
+            var total = 0;
+            self.details().forEach(function(item){
+                total+=item.total;
+            });
+            self.total(total);
+        });
+
+        self.addNewProduct = function () {
+            if(self.detailModel.isValid()){
+                self.details.push(self.detailModel.getData());
+                self.detailModel.reset();
+            }
+        };
+
+        self.deleteProduct = function(product){
+            self.details.remove(product);
+        };
+    }
+
+
+    function PointOfSalesView(){
+        var self = this;
+        self.settings = {
+            url: "/api/orders/"
+        };
+
+        self.theShiftIsActive = ko.observable(false);
+        self.menuItems = ko.observableArray();
+        self.order = new OrderModel();
 
         var saveOrder=function(data){
             var method = "post";
@@ -82,16 +193,13 @@
             //    method = "put";
             //    link += formView.currentItemId + "/";
             //}
-
-
-
             return $.ajax({
                 url: link + '?format=json',
                 type: method,
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
-                   console.log('created order', response)
+                    console.log('created order', response)
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.log('errors',textStatus, errorThrown);
@@ -113,8 +221,8 @@
 
         };
 
-        self.getLastActiveOrder=function(cashierShift){
-            GenericViews.getData("/api/orders/?format=json&status='ACTIVE'&cashier_shift="+cashierShift.id, function(response){
+        self.refreshActiveOrders=function(cashierShift){
+            GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+cashierShift.id, function(response){
                 if(response.length>0){
                     self.loadOrder(response[0])
                 }else{
@@ -122,97 +230,6 @@
                 }
                 console.log('active orders', response);
             });
-        };
-
-        self.changeAmount=ko.computed(function(){
-            return self.paymentAmount() - self.orderTotal();
-        });
-
-        self.newClient=ko.computed(function(){
-            return !(self.dataBaseClient() && self.dataBaseClient().id > 0);
-        });
-
-        self.orderDetails.subscribe(function () {
-            var total = 0;
-            self.orderDetails().forEach(function(item){
-                total+=item.total;
-            });
-            self.orderTotal(total);
-        });
-
-        self.clientPhoneNumber.subscribe(function (value) {
-            if(!value || (value && self.dataBaseClient() && value === self.dataBaseClient().phone)){
-                return;
-            }
-
-            self.dataBaseClient(null);
-            self.clientName(null);
-            self.clientAddress(null);
-            self.clientReference(null);
-
-            GenericViews.getData("/api/customers/?format=json&phone="+value, function(response){
-                if(response && response.length>0){
-                    var client = response[0];
-                    self.dataBaseClient(client);
-                    self.clientName(client.name);
-                    self.clientAddress(client.address);
-                    self.clientReference(client.reference);
-                }
-            });
-        });
-
-        self.productId.subscribe(function () {
-            if(!self.productId()){
-                self.productDescription("");
-                self.price(null);
-                return;
-            }
-
-            GenericViews.getDataById("/api/products/", self.productId(),function (response) {
-                self.productDescription(response.description);
-                self.price(response.sell_price);
-            });
-        });
-
-        function isNumber(value) {
-
-            var er = /^[0-9]|[0-9](.([0-9]))+$/;
-
-            return er.test(value);
-        }
-
-        self.cleanDetails = function(){
-            self.productId(null);
-            self.productDescription(null);
-            self.quantity(null);
-            self.price(null);
-
-            self.productIdHasError(false);
-            self.quantityHasError(false);
-            self.priceHasError(false);
-        };
-
-        self.addNewProduct = function () {
-
-            self.productIdHasError(!isNumber(self.productId()) || !self.productDescription());
-            self.quantityHasError(!isNumber(self.quantity()));
-            self.priceHasError(!isNumber(self.price()));
-
-            if(self.productIdHasError() || self.quantityHasError() || self.priceHasError()) return;
-
-            self.orderDetails.push({
-                product_id:self.productId(),
-                product_description: self.productDescription(),
-                quantity: self.quantity(),
-                price: self.price(),
-                total: (self.quantity() * self.price())
-            });
-
-            self.cleanDetails();
-        };
-
-        self.deleteProduct = function(product){
-            self.orderDetails.remove(product);
         };
 
     }

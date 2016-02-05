@@ -36,10 +36,11 @@ class Customer(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class OrderNumber(models.Model):
-	date = models.DateField(auto_now_add=True)
-	number = models.IntegerField()
 	cashier_shift = models.ForeignKey(CashierShift,related_name='numbers')
+	number = models.IntegerField()
+
 
 class Order(models.Model):
 	ACTIVE = 'ACTIVE'
