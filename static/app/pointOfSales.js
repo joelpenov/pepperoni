@@ -109,6 +109,7 @@
     }
 
     function OrderModel(){
+        var loading = false;
         var self = this;
         self.customerPhone=ko.observable();
         self.customerName=ko.observable();
@@ -132,6 +133,7 @@
         self.details= ko.observableArray();
 
         self.detailModel = new OrderDetailModel();
+        self.cashierShift=ko.observable();
 
 
         self.changeAmount=ko.computed(function(){
@@ -143,7 +145,7 @@
         });
 
         self.customerPhone.subscribe(function (value) {
-            if(!value || (value && self.DBcustomer() && value === self.DBcustomer().phone)){
+            if(loading || !value || (value && self.DBcustomer() && value === self.DBcustomer().phone)){
                 return;
             }
 
@@ -180,6 +182,40 @@
 
         self.deleteProduct = function(product){
             self.details.remove(product);
+        };
+        self.reset=function(){
+
+        };
+        self.setData=function(data){
+            self.customerPhone(data.customer_phone);
+            self.customerName(data.customer_name);
+            self.customerAddress(data.customer_address);
+            self.customerReference(data.customer_reference);
+            self.update_customer_entry(data.update_customer_entry);
+            self.DBcustomer(data.customer_phone);
+
+            self.id(data.id);
+            self.created_date(data.created_date);
+            self.number(data.number);
+            self.username(self.cashierShift().user_name);
+            self.to_go(data.to_go);
+            self.to_pickup(data.to_pick);
+            self.delivered(data.delivered);
+            self.salesarea(data.salesarea);
+
+            self.total(data.total);
+            self.paymentAmount(data.cash);
+
+            self.details([]);
+            self.detailModel.reset();
+        };
+        self.getData=function(){
+            return {
+                cash: self.id(),
+                customer_change: self.changeAmount(),
+                total: self.total(),
+                update_customer_entry: self.update_customer_entry()
+            };
         };
     }
 
@@ -221,23 +257,15 @@
         };
 
         self.generateNewOrder = function(){
-            saveOrder({
-                cash: 0,
-                customer_change: 0,
-                total: 0,
-                update_customer_entry: false
-            })
-        };
-
-        self.loadOrder = function(){
-
+            saveOrder(order.getData())
         };
 
         self.refreshActiveOrders=function(cashierShift){
             GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+cashierShift.id, function(response){
                 self.activeOrders(response);
                 if(response.length>0){
-                    self.loadOrder(response[response.length-1])
+                    self.order.cashierShift(cashierShift);
+                    self.order.setData(response[response.length-1])
                 }else{
                     self.generateNewOrder()
                 }
