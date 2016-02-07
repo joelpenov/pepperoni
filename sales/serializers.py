@@ -70,6 +70,11 @@ class OrderSerializer(serializers.ModelSerializer):
     created_date= serializers.DateTimeField(read_only=True, label='Fecha de Creación')
     number = serializers.IntegerField(read_only=True, label='Orden')
     clear= serializers.BooleanField(read_only=True)
+
+    to_go= serializers.NullBooleanField(required=False, label="Llevar")
+    to_pickup= serializers.NullBooleanField(required=False, label="Recoger")
+    delivered= serializers.NullBooleanField(required=False, label="Entregado")
+
     status = serializers.CharField(read_only=True, label='Estado')
     sales_area=serializers.PrimaryKeyRelatedField(queryset=SalesArea.objects.all(),label='Mesa', required=False, allow_null=True)
     sales_area_name = serializers.SerializerMethodField('get_salesareaname')
@@ -80,7 +85,7 @@ class OrderSerializer(serializers.ModelSerializer):
     customer_address = serializers.CharField(label='Dirección', required=False, allow_blank=True)
     customer_reference = serializers.CharField(label='Referencia', required=False, allow_blank=True)
     customer_phone = serializers.CharField(label='Teléfono', required=False, allow_blank=True)
-    update_customer_entry= serializers.BooleanField(label='Afectar cliente en futuras ordenes')
+    update_customer_entry= serializers.NullBooleanField(label='Afectar cliente en futuras ordenes', required=False)
 
     total = serializers.FloatField(label='Total')
     cash = serializers.FloatField(label='Efectivo')
@@ -93,7 +98,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id','created_date','number','clear','status','sales_area','sales_area_name','cashier_shift_id','customer_id','customer_name','customer_address',
+        fields = ('id','created_date','number','clear','to_go','to_pickup','delivered','status','sales_area','sales_area_name','cashier_shift_id','customer_id','customer_name','customer_address',
                   'customer_reference','customer_phone','update_customer_entry','total','cash','customer_change')
 
     def create(self, validated_data):

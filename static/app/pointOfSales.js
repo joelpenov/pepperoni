@@ -184,7 +184,8 @@
             self.details.remove(product);
         };
         self.reset=function(){
-
+            self.setdata({
+            });
         };
         self.setData=function(data){
             self.customerPhone(data.customer_phone);
@@ -211,28 +212,24 @@
         };
         self.getData=function(){
             return {
-                cash: self.id(),
+                id:self.id(),
+                customer_phone: self.customerPhone(),
+                customer_name: self.customerName(),
+                customer_address: self.customerAddress(),
+                customer_reference: self.customerReference(),
+                update_customer_entry: self.update_customer_entry(),
+                to_go: self.to_go(),
+                to_pickup: self.to_pickup(),
+                delivered: self.delivered(),
+                salesarea: self.salesarea(),
+                cash: self.paymentAmount(),
                 customer_change: self.changeAmount(),
                 total: self.total(),
-                update_customer_entry: self.update_customer_entry()
             };
         };
-    }
 
-
-    function PointOfSalesView(){
-        var self = this;
-        self.settings = {
-            url: "/api/orders/"
-        };
-
-        self.theShiftIsActive = ko.observable(false);
-        self.menuItems = ko.observableArray();
-        self.order = new OrderModel();
-        self.salesAreaList= ko.observableArray();
-        self.activeOrders = new ko.observableArray();
-
-        var saveOrder=function(data){
+        self.save=function(onSuccess, onError){
+            var data = self.getData();
             var method = "post";
             var link = self.settings.url;
             //formView.resetErrors();
@@ -255,9 +252,25 @@
                 }
             });
         };
+    }
+
+
+    function PointOfSalesView(){
+        var self = this;
+        self.settings = {
+            url: "/api/orders/"
+        };
+
+        self.theShiftIsActive = ko.observable(false);
+        self.menuItems = ko.observableArray();
+        self.order = new OrderModel();
+        self.salesAreaList= ko.observableArray();
+        self.activeOrders = new ko.observableArray();
+
+
 
         self.generateNewOrder = function(){
-            saveOrder(order.getData())
+            order.save();
         };
 
         self.refreshActiveOrders=function(cashierShift){
