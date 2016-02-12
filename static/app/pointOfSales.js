@@ -117,7 +117,8 @@
         self.customerAddress=ko.observable();
         self.customerReference=ko.observable();
         self.update_customer_entry=ko.observable();
-        self.DBcustomer = ko.observable();
+        self.isDBcustomer = ko.observable(false);
+        self.dbcustomerPhone = ko.observable();
 
         self.id = ko.observable(0);
         self.created_date = ko.observable();
@@ -142,7 +143,7 @@
         });
 
         self.customerIsNew=ko.computed(function(){
-            return !(self.DBcustomer() && self.DBcustomer().id > 0);
+            return !self.isDBcustomer();
         });
 
         self.isNew = ko.computed(function(){
@@ -150,27 +151,28 @@
         });
 
          self.isEditing = ko.computed(function(){
-             console.log("is editng", !self.isNew());
             return !self.isNew();
         });
 
         self.customerPhone.subscribe(function (value) {
-            if(loading || !value || (value && self.DBcustomer() && value === self.DBcustomer().phone)){
+            if(loading || !value || (value && self.isDBcustomer() && value === self.dbcustomerPhone())){
                 return;
             }
 
-            self.DBcustomer(null);
+            self.isDBcustomer(false);
             self.customerName(null);
             self.customerAddress(null);
             self.customerReference(null);
+            self.dbcustomerPhone(null);
 
             GenericViews.getData("/api/customers/?format=json&phone="+value, function(response){
                 if(response && response.length>0){
                     var customer = response[0];
-                    self.DBcustomer(customer);
+                    self.isDBcustomer(true);
                     self.customerName(customer.name);
                     self.customerAddress(customer.address);
                     self.customerReference(customer.reference);
+                    self.dbcustomerPhone(customer.phone);
                 }
             });
         });
@@ -212,7 +214,14 @@
             self.customerAddress(data.customer_address);
             self.customerReference(data.customer_reference);
             self.update_customer_entry(data.update_customer_entry);
-            self.DBcustomer(data.customer_phone);
+
+            if(data.customer_id && data.customer_id >0){
+                self.isDBcustomer(true);
+                self.dbcustomerPhone(data.customer_phone)
+            }else{
+                self.isDBcustomer(false);
+                self.dbcustomerPhone(null);
+            }
 
             self.id(data.id);
             self.created_date(data.created_date);

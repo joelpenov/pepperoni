@@ -138,6 +138,21 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderDetail.objects.create(order=order, **detail)
 
 
+    def setCustomer(self, order):
+        if(order.customer_phone!=None):
+            customer = Customer.objects.filter(phone=order.customer_phone).first()
+            if(customer==None):
+                customer = Customer.objects.create(phone=order.customer_phone,name=order.customer_name,address=order.customer_address,reference= order.customer_reference)
+                customer.save()
+            else:
+                if(order.update_customer_entry):
+                    customer.address=order.customer_address
+                    customer.reference=order.customer_reference
+                    customer.save()
+            order.customer_id = customer.id
+
+
+
     def create(self, validated_data):
         details_data = validated_data.pop('details')
         request = self.context.get('request')
@@ -152,7 +167,7 @@ class OrderSerializer(serializers.ModelSerializer):
         if action == 'finish':
             status=Order.FINISHED
         order = Order.objects.create(cashier_shift_id=shift.id,number=orderNumber.number, status=status,**validated_data)
-
+        self.setCustomer(order)
         order.save()
         #todo: validate price, and total. for the details and the order.
         self.updateDetails(order,details_data)
@@ -170,6 +185,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
         if action == 'finish':
             instance.status =Order.FINISHED
+
+        self.setCustomer(instance)
 
         order = super(OrderSerializer, self).update(instance, validated_data)
 
