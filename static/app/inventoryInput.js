@@ -19,6 +19,9 @@
             self.price = ko.observable();
             self.inputDescription = ko.observable("");
             self.note = ko.observable("");
+            self.warehouse = ko.observable("");
+            self.transactionDate = ko.observable("");
+            self.transactionId = ko.observable(0);
 
 
             settings.includeFields = settings.includeFields || [];
@@ -110,9 +113,11 @@
             };
 
             self.setHeaderDetails = function(response){
-                var inputDescriptionText = "Entrada a " + response.warehouse_description + " - " + response.transaction_date;
-                self.inputDescription(inputDescriptionText);
+                self.inputDescription("Entrada");
+                self.transactionId(response.id);
+                self.warehouse(response.warehouse_description);
                 self.note(response.note);
+                self.transactionDate(response.transaction_date);
             };
 
             self.viewDetails = function (id) {

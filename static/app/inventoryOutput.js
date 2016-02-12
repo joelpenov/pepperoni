@@ -21,6 +21,10 @@
             self.showDetailMode = ko.observable(false);
             self.inputDescription = ko.observable("");
             self.note = ko.observable("");
+            self.warehouse = ko.observable("");
+            self.transactionDate = ko.observable("");
+            self.transactionId = ko.observable(0);
+
 
             settings.includeFields = settings.includeFields || [];
 
@@ -110,10 +114,12 @@
                 });
             };
 
-            self.setHeaderDetails = function(response){
-                var inputDescriptionText = "Salida de " + response.warehouse_description + " - " + response.transaction_date;
-                self.inputDescription(inputDescriptionText);
+            self.setHeaderDetails = function(response){              
+                self.inputDescription("Salida");
+                self.transactionId(response.id);
+                self.warehouse(response.warehouse_description);
                 self.note(response.note);
+                self.transactionDate(response.transaction_date);
             };
 
             self.viewDetails = function (id) {
