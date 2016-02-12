@@ -1,5 +1,8 @@
 {% extends "menu-layout.html" %}
 {% load staticfiles %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "style/outputTransaction.css" %}" />
+{% endblock styling %}
 {% block content %}
 
     <div id="inventory-input-view">
@@ -10,11 +13,53 @@
                         Salida de Almacen
                     </h1>
                 </div>
-                <div class="col-md-6 align-right">
+                <div class="col-md-6 align-right "  data-bind="visible: canCreateNew">
                     <button class="btn" data-bind="click:addNew">Nueva salida</button>
                 </div>
             </div>
         </div>
+        <div data-bind="visible: showDetailMode" style="display: none;">
+            <div class="profile-user-info profile-user-info-striped">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Código </div>
+
+                        <div class="profile-info-value">
+                            <span data-bind="text: transactionId"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" > Tipo </div>
+
+                        <div class="profile-info-value">
+                            <span data-bind="text: inputDescription"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Origen </div>
+
+                        <div class="profile-info-value">            
+                            <span data-bind="text: warehouse"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Fecha </div>
+
+                        <div class="profile-info-value">
+                            <span data-bind="text: transactionDate"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Nota </div>
+
+                        <div class="profile-info-value">
+                            <span data-bind="text: note"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div class="row" data-bind="visible: creationMode">
             <form id="form_view" class="form-horizontal">
                 {% csrf_token %}

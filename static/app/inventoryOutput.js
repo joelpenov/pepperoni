@@ -16,8 +16,15 @@
             self.productDescription = ko.observable();
             self.quantity = ko.observable();
             self.price = ko.observable();
+            self.canCreateNew = ko.observable(true);
             self.creationMode = ko.observable(false);
             self.showDetailMode = ko.observable(false);
+            self.inputDescription = ko.observable("");
+            self.note = ko.observable("");
+            self.warehouse = ko.observable("");
+            self.transactionDate = ko.observable("");
+            self.transactionId = ko.observable(0);
+
 
             settings.includeFields = settings.includeFields || [];
 
@@ -66,12 +73,14 @@
                 self.creationMode(true);
                 self.showList(false);
                 self.showDetailMode(false);
+                self.canCreateNew(false);
             };
 
             self.save = function () {
                 var data = settings.form.serializeJSON();
                 data.details = self.orderDetails();
                 GenericViews.saveData(self,data );
+                self.canCreateNew(true);
             };
 
             self.resetErrors = function () {
@@ -92,6 +101,7 @@
                 GenericViews.resetFieldDefaultValue(self.fields());
                 self.resetErrors();
                 self.creationMode(false);
+                self.canCreateNew(true);
                 self.showList(true);
                 self.cleanDetails();
                 self.showDetailMode(false);
@@ -104,8 +114,18 @@
                 });
             };
 
+            self.setHeaderDetails = function(response){              
+                self.inputDescription("Salida");
+                self.transactionId(response.id);
+                self.warehouse(response.warehouse_description);
+                self.note(response.note);
+                self.transactionDate(response.transaction_date);
+            };
+
             self.viewDetails = function (id) {
                 GenericViews.getDataById(settings.url, id, function (response) {
+                    self.setHeaderDetails(response);
+                    self.canCreateNew(false);
                     GenericViews.loadEditFormData(self.fields(), response);
                     self.orderDetails(response.details);
                     self.creationMode(false);
@@ -146,7 +166,7 @@
                 viewId: "inventory-input-view",
                 form: $('#form_view'),
                 dataTableView: dataTableView,
-                includeFields:['id','warehouse', 'transaction_date']
+                includeFields:['id','warehouse', 'transaction_date', 'note']
             };
 
             var formView = new InventoryFormView(form_settings);

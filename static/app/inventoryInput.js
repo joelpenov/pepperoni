@@ -7,15 +7,22 @@
             self.fields = ko.observableArray();
             self.orderDetails= ko.observableArray();
             self.creationMode = ko.observable(false);
+            self.showDetailMode = ko.observable(false);            
             self.showList = ko.observable(true);
             self.productIdHasError = ko.observable(false);
             self.quantityHasError = ko.observable(false);
             self.priceHasError = ko.observable(false);
+            self.canCreateNew = ko.observable(true);
             self.productId = ko.observable();
             self.productDescription = ko.observable();
             self.quantity = ko.observable();
             self.price = ko.observable();
-            self.showDetailMode = ko.observable(false);
+            self.inputDescription = ko.observable("");
+            self.note = ko.observable("");
+            self.warehouse = ko.observable("");
+            self.transactionDate = ko.observable("");
+            self.transactionId = ko.observable(0);
+
 
             settings.includeFields = settings.includeFields || [];
 
@@ -63,6 +70,7 @@
             self.addNew = function () {
                 self.creationMode(true);
                 self.showList(false);
+                self.canCreateNew(false);
                 self.showDetailMode(false);
             };
 
@@ -70,6 +78,7 @@
                 var data = settings.form.serializeJSON();
                 data.details = self.orderDetails();
                 GenericViews.saveData(self,data );
+                self.canCreateNew(true);
             };
 
             self.resetErrors = function () {
@@ -91,6 +100,7 @@
                 self.resetErrors();
                 self.creationMode(false);
                 self.showList(true);
+                self.canCreateNew(true);
                 self.cleanDetails();
                 self.showDetailMode(false);
                 self.orderDetails([]);
@@ -102,11 +112,21 @@
                 });
             };
 
+            self.setHeaderDetails = function(response){
+                self.inputDescription("Entrada");
+                self.transactionId(response.id);
+                self.warehouse(response.warehouse_description);
+                self.note(response.note);
+                self.transactionDate(response.transaction_date);
+            };
+
             self.viewDetails = function (id) {
                 GenericViews.getDataById(settings.url, id, function (response) {
                     GenericViews.loadEditFormData(self.fields(), response);
                     self.orderDetails(response.details);
+                    self.setHeaderDetails(response);
                     self.creationMode(false);
+                    self.canCreateNew(false);
                     self.showList(false);
                     self.showDetailMode(true);
                 });
@@ -144,7 +164,7 @@
                 viewId: "inventory-input-view",
                 form: $('#form_view'),
                 dataTableView: dataTableView,
-                includeFields:['id','warehouse', 'transaction_date']
+                includeFields:['id','warehouse', 'transaction_date', 'note']
             };
 
             var formView = new InventoryFormView(form_settings);
