@@ -27,28 +27,58 @@
 
                 <div class="row">
                     <div class="col-sm-12">
+                        <button class="btn btn-white btn-info btn-bold" data-bind="click:newOrder">
+                            <i class="ace-icon fa fa-file-o bigger-120 blue"></i>
+                            Nuevo: F2
+                        </button>
+
+                         <button class="btn btn-white btn-info btn-bold"  data-bind="click:save">
+                            <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
+                            Guardar: F3
+                        </button>
+
+                        <button class="btn btn-white btn-info btn-bold"  data-bind="click:print">
+                            <i class="ace-icon fa fa-print bigger-120 blue"></i>
+                            Imprimir: F4
+                        </button>
+
+                        <button class="btn btn-white btn-info btn-bold" data-bind="click:finish">
+                            <i class="ace-icon fa fa-arrow-circle-right bigger-120 blue"></i>
+                            Finalizar: F5
+                        </button>
+
+                        <button class="btn btn-white btn-info btn-bold" data-bind="click:showOrders">
+                            <i class="ace-icon fa fa-list-ul bigger-120 blue"></i>
+                            Facturas: F6
+                        </button>
+
+                         <button class="btn btn-white btn-info btn-bold"  data-bind="click:finishShift">
+                            <i class="ace-icon fa fa-sign-out bigger-120 blue"></i>
+                            Cerrar Caja: F6
+                        </button>
+                    </div>
+                    <div class="col-sm-12">
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="col-sm-8">
                             <div class="row">
                                 <div class="widget-header widget-header-large">
-                                    <h3 class="inline smaller lighter blue">Orden</h3>
-
-                                    <div class="widget-toolbar no-border invoice-info">
+                                    <h3 class="inline smaller lighter blue">Orden <span data-bind="visible:order.isNew">Nueva</span></h3>
+                                    <div class="widget-toolbar no-border invoice-info" data-bind="visible:order.isEditing">
                                         <span class="invoice-info-label">Turno:</span>
-                                        <span class="red"  data-bind="text:order.number" >1</span>
+                                        <span class="red"  data-bind="text:order.number" ></span>
 
                                         <br />
                                         <span class="invoice-info-label">Cajero:</span>
-                                        <span class="blue"  data-bind="text:order.username">Jennipher</span>
+                                        <span class="blue"  data-bind="text:order.username"></span>
                                     </div>
 
-                                    <div class="widget-toolbar no-border invoice-info">
+                                    <div class="widget-toolbar no-border invoice-info" data-bind="visible:order.isEditing">
                                         <span class="invoice-info-label">Codigo:</span>
-                                        <span class="red"  data-bind="text:order.id">121212</span>
+                                        <span class="red"  data-bind="text:order.id"></span>
 
                                         <br />
                                         <span class="invoice-info-label">Fecha:</span>
-                                        <span class="blue"  data-bind="text:order.created_date">04/04/2014</span>
+                                        <span class="blue"  data-bind="text:order.created_date"></span>
                                     </div>
 
 
@@ -81,7 +111,7 @@
                                         <label> Llevar </label>
                                         <div class="form-group">
                                             <label>
-                                                <input data-bind="value:order.to_go" class="ace ace-switch" type="checkbox">
+                                                <input data-bind="checked:order.to_go" class="ace ace-switch" type="checkbox">
                                                 <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
                                             </label>
                                         </div>
@@ -91,7 +121,7 @@
                                         <label> Recoger </label>
                                         <div class="form-group">
                                             <label>
-                                                <input data-bind="value:order.to_pick" class="ace ace-switch" type="checkbox">
+                                                <input data-bind="checked:order.to_pickup" class="ace ace-switch" type="checkbox">
                                                 <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
                                             </label>
                                         </div>
@@ -101,7 +131,7 @@
                                         <label> Entregada </label>
                                         <div class="form-group">
                                             <label>
-                                                <input data-bind="value:order.delivered" class="ace ace-switch" type="checkbox">
+                                                <input data-bind="checked:order.delivered" class="ace ace-switch" type="checkbox">
                                                 <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
                                             </label>
                                         </div>
@@ -150,7 +180,7 @@
                                     </div>
                                     <div class="order-input col-sm-12">
                                         <label class="middle">
-                                            <input class="ace" type="checkbox" id="input_update_customer_entry" data-bind="value:order.update_customer_entry">
+                                            <input class="ace" type="checkbox" id="input_update_customer_entry" data-bind="checked:order.update_customer_entry">
                                             <span class="lbl"> Afectar direccion para futuras ordenes</span>
                                         </label>
                                     </div>
@@ -385,7 +415,7 @@
                             </div>
                             <div class="widget-box open-orders-widget">
                                 <div class="widget-header">
-                                    <h4 class="widget-title">Ordernes Activas</h4>
+                                    <h4 class="widget-title">Ordenes Activas</h4>
                                 </div>
 
                                 <div class="widget-body">
@@ -398,6 +428,7 @@
                                                     <th>Turno</th>
                                                     <th>Total</th>
                                                     <th>Mesa</th>
+                                                    <th></th>
                                                 </tr>
                                                 </thead>
 
@@ -407,6 +438,11 @@
                                                     <td data-bind="text:number"></td>
                                                     <td data-bind="text:total"></td>
                                                     <td data-bind="text:sales_area_name"></td>
+                                                    <td>
+                                                            <a class="blue" data-bind="click: $root.editActiveOrder">
+                                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                            </a>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -418,37 +454,7 @@
                         </div>
                         <!-- PAGE CONTENT ENDS -->
                     </div>
-                    <div class="col-sm-12">
-                        <button class="btn btn-white btn-info btn-bold">
-                            <i class="ace-icon fa fa-file-o bigger-120 blue"></i>
-                            Nuevo: F2
-                        </button>
 
-                         <button class="btn btn-white btn-info btn-bold">
-                            <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
-                            Guardar: F3
-                        </button>
-
-                        <button class="btn btn-white btn-info btn-bold">
-                            <i class="ace-icon fa fa-print bigger-120 blue"></i>
-                            Imprimir: F4
-                        </button>
-
-                        <button class="btn btn-white btn-info btn-bold">
-                            <i class="ace-icon fa fa-arrow-circle-right bigger-120 blue"></i>
-                            Finalizar: F5
-                        </button>
-
-                        <button class="btn btn-white btn-info btn-bold">
-                            <i class="ace-icon fa fa-list-ul bigger-120 blue"></i>
-                            Facturas: F6
-                        </button>
-
-                         <button class="btn btn-white btn-info btn-bold">
-                            <i class="ace-icon fa fa-sign-out bigger-120 blue"></i>
-                            Cerrar Caja: F6
-                        </button>
-                    </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->

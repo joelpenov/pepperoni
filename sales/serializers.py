@@ -107,6 +107,8 @@ class OrderSerializer(serializers.ModelSerializer):
     cash = serializers.FloatField(label='Efectivo')
     customer_change = serializers.FloatField(label='Cambio')
 
+    action = serializers.ChoiceField(choices=['save', 'finish'],write_only=True, required=True)
+
     details = OrderDetailSerializer(many=True)
 
     def get_salesareaname(self, obj):
@@ -117,7 +119,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id','created_date','number','clear','to_go','to_pickup','delivered','status','sales_area','sales_area_name','cashier_shift_id','customer_id','customer_name','customer_address',
-                  'customer_reference','customer_phone','update_customer_entry','total','cash','customer_change','details')
+                  'customer_reference','customer_phone','update_customer_entry','total','cash','customer_change','details','action')
 
     def getNextOrderNumber(self,shift ):
         orderNumber = OrderNumber.objects.filter(cashier_shift_id=shift.id).first()
@@ -128,19 +130,49 @@ class OrderSerializer(serializers.ModelSerializer):
         return orderNumber
 
 
+    def updateDetails(self, order, details_data):
+        for detail in order.details.all():
+            detail.delete()
+
+        for detail in details_data:
+            OrderDetail.objects.create(order=order, **detail)
+
+
     def create(self, validated_data):
         details_data = validated_data.pop('details')
-
-        user_id = self.context.get('request').user.id
+        request = self.context.get('request')
+        user_id = request.user.id
         shift = CashierShift.objects.filter(user_id=user_id, status=CashierShift.ACTIVE).first()
         if(shift==None):
             raise serializers.ValidationError("Debe haber un turno de caja activo para poder facturar.")
         orderNumber = self.getNextOrderNumber(shift)
 
-        order = Order.objects.create(cashier_shift_id=shift.id,number=orderNumber.number, status=Order.ACTIVE,**validated_data)
+        action = validated_data.pop('action')
+        status = Order.ACTIVE
+        if action == 'finish':
+            status=Order.FINISHED
+        order = Order.objects.create(cashier_shift_id=shift.id,number=orderNumber.number, status=status,**validated_data)
+
         order.save()
         #todo: validate price, and total. for the details and the order.
-        for detail in details_data:
-            OrderDetail.objects.create(order=order, **detail)
+        self.updateDetails(order,details_data)
+
+        return order
+
+
+    def update(self,instance, validated_data):
+        if instance.status == Order.FINISHED:
+             raise serializers.ValidationError("Orden finalizada no puede ser editada.")
+
+        details_data = validated_data.pop('details')
+
+        action = validated_data.pop('action')
+
+        if action == 'finish':
+            instance.status =Order.FINISHED
+
+        order = super(OrderSerializer, self).update(instance, validated_data)
+
+        self.updateDetails(order,details_data)
 
         return order
