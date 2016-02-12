@@ -37,6 +37,7 @@ class InventoryMove(models.Model):
 	warehouse = models.ForeignKey(Warehouse, related_name="inventory_moves")
 	transaction_type = models.CharField(max_length=20, choices=MOVE_TYPE_CHOICES)
 	transaction_date = models.DateField()
+	note = models.CharField(max_length=320, null=True, blank=True)
 	#transaction_id = models.UUIDField()
 
 

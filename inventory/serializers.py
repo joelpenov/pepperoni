@@ -40,6 +40,7 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
     warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all(), label='Almacen')
     transaction_date = serializers.DateField(label='Fecha')
     transaction_type = serializers.CharField(label='Tipo de transacción', read_only=True)
+    note = serializers.CharField(label='Nota', required=False, allow_blank=True)
     details = InventoryMoveDetailSerializer(many=True)
 
     warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
@@ -50,7 +51,7 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InventoryMove
-        fields = ('id','warehouse', 'transaction_date','warehouse_description','transaction_type', 'details')
+        fields = ('id','warehouse', 'transaction_date','warehouse_description','transaction_type', 'details', 'note')
 
     def saveDetails(self, move, details_data):
         for detail in details_data:

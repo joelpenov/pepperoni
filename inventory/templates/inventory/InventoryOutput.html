@@ -10,8 +10,18 @@
                         Salida de Almacen
                     </h1>
                 </div>
-                <div class="col-md-6 align-right">
+                <div class="col-md-6 align-right "  data-bind="visible: canCreateNew">
                     <button class="btn" data-bind="click:addNew">Nueva salida</button>
+                </div>
+            </div>
+        </div>
+        <div data-bind="visible: showDetailMode">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-bind="text: inputDescription"></h3>
+                </div>
+                <div class="panel-body" data-bind="text: note">
+                    
                 </div>
             </div>
         </div>
