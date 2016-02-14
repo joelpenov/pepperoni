@@ -309,7 +309,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <div class="widget-box client-history">
+                            <div class="widget-box client-history" data-bind="visible:customerHasOrdered">
                                 <div class="widget-header">
                                     <h4 class="widget-title">Historial Cliente</h4>
                                 </div>
@@ -317,65 +317,21 @@
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div id="accordion" class="accordion-style1 panel-group">
-                                            <div class="panel panel-default">
+                                            <div class="panel panel-default" data-bind="foreach:customerLastOrders">
                                                 <div class="panel-heading">
                                                     <h4 class="panel-title">
-                                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-bind="attr:{href:'#collapse_'+id}">
                                                             <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                            01/12/2015
+                                                            <span data-bind="text:created_date"></span>
                                                         </a>
                                                     </h4>
                                                 </div>
 
-                                                <div class="panel-collapse collapse in" id="collapseOne">
+                                                <div class="panel-collapse collapse in"  data-bind="attr:{id:'collapse_'+id}">
                                                     <div class="panel-body">
-                                                        <ul>
-                                                            <li>1. Pizza Grande</li>
-                                                            <li>1. 20 onza Cococola</li>
+                                                        <ul data-bind="foreach: details">
+                                                            <li><span data-bind="text:quantity +' x '+ product_description"></span></li>
                                                         </ul>
-                                                        <span>Delivery: Pedro Martinez</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                                            <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                            01/11/2015
-                                                        </a>
-                                                    </h4>
-                                                </div>
-
-                                                <div class="panel-collapse collapse" id="collapseTwo">
-                                                    <div class="panel-body">
-                                                        <ul>
-                                                            <li>1. Pizza Grande</li>
-                                                            <li>1. 20 onza Cococola</li>
-                                                        </ul>
-                                                        <span>Delivery: Pedro Martinez</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                                            <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                            01/10/2015
-                                                        </a>
-                                                    </h4>
-                                                </div>
-
-                                                <div class="panel-collapse collapse" id="collapseThree">
-                                                    <div class="panel-body">
-                                                        <ul>
-                                                            <li>1. Pizza Grande</li>
-                                                            <li>1. 20 onza Cococola</li>
-                                                        </ul>
-                                                        <span>Delivery: Pedro Martinez</span>
                                                     </div>
                                                 </div>
                                             </div>

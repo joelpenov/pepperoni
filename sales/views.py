@@ -49,6 +49,18 @@ class OrderList(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('cashier_shift','status',)
 
+class TopOrderList(viewsets.ModelViewSet):
+    permission_classes =((permissions.IsAuthenticated),)
+    queryset = Order.objects.filter(status=Order.FINISHED).order_by('-created_date')
+    serializer_class = OrderSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('customer_phone',)
+    http_method_names = ['get']
+
+    def filter_queryset(self, queryset):
+        query = super(TopOrderList, self).filter_queryset(queryset)
+        return query[:10]
+
 
 class CashierShiftList(viewsets.ModelViewSet):
     permission_classes =((permissions.IsAuthenticated),)

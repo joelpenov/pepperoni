@@ -6,6 +6,7 @@ def registerApiUrls(router):
 	router.register(r'cashregisters', views.CashRegisterList)
 	router.register(r'cashiershifts', views.CashierShiftList)
 	router.register(r'orders', views.OrderList)
+	router.register(r'toporders', views.TopOrderList)
 	router.register(r'salesarea', views.SalesAreaList)
 
 urlpatterns=[

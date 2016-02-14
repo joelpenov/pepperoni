@@ -150,11 +150,12 @@
             return self.id()===0;
         });
 
-         self.isEditing = ko.computed(function(){
+        self.isEditing = ko.computed(function(){
             return !self.isNew();
         });
 
         self.customerPhone.subscribe(function (value) {
+
             if(loading || !value || (value && self.isDBcustomer() && value === self.dbcustomerPhone())){
                 return;
             }
@@ -299,6 +300,23 @@
         self.salesAreaList= ko.observableArray();
         self.activeOrders = new ko.observableArray();
 
+        self.customerLastOrders= ko.observableArray();
+
+        self.order.customerPhone.subscribe(function (value) {
+            if(value){
+                GenericViews.getData('/api/toporders/?format=json&customer_phone='+value,function(response){
+                    self.customerLastOrders(response);
+                });
+            }else{
+                self.customerLastOrders([]);
+            }
+
+        });
+
+        self.customerHasOrdered=ko.computed(function(){
+            return self.customerLastOrders().length > 0;
+        });
+
         self.newOrder = function(){
             self.order.reset();
         };
@@ -318,7 +336,7 @@
         self.finish = function(){
             var request =self.order.save('finish');
             request.success(function(response){
-                self.order.setData(response);
+                self.order.reset();
                 self.refreshActiveOrders(self.order.cashierShift());
             });
         };
