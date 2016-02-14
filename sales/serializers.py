@@ -1,6 +1,11 @@
 from inventory.models import Warehouse, Product
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, OrderNumber, SalesArea
+
+
+class CustomValidation():
+    MobileRegexValidator = serializers.RegexValidator(regex=r'^\d{3}-\d{3}-\d{4}$', message='Favor utilizar el siguiente format para el telefono: 908-555-0000')
 
 
 class SalesAreaSerializer(serializers.ModelSerializer):
@@ -53,11 +58,13 @@ class CashierShiftSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+
     id = serializers.IntegerField(read_only=True, label='Código')
-    phone = serializers.CharField(label='Teléfono')
+    phone = serializers.CharField(label='Teléfono', max_length=12, validators=[CustomValidation.MobileRegexValidator, UniqueValidator(Customer.objects.all())] )
     name = serializers.CharField(label='Nombre')
     address = serializers.CharField(label='Dirección', required=False, allow_blank=True)
     reference = serializers.CharField(label='Referencia', required=False, allow_blank=True)
+
 
     class Meta:
         model = Customer
@@ -100,7 +107,7 @@ class OrderSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(label='Nombre', required=False, allow_blank=True)
     customer_address = serializers.CharField(label='Dirección', required=False, allow_blank=True)
     customer_reference = serializers.CharField(label='Referencia', required=False, allow_blank=True)
-    customer_phone = serializers.CharField(label='Teléfono', required=False, allow_blank=True)
+    customer_phone = serializers.CharField(label='Teléfono',required=False, allow_blank=True, max_length=12, validators=[CustomValidation.MobileRegexValidator] )
     update_customer_entry= serializers.NullBooleanField(label='Afectar cliente en futuras ordenes', required=False)
 
     total = serializers.FloatField(label='Total')
