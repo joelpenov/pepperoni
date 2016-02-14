@@ -4,7 +4,8 @@
             url: "/api/salesarea/",
             dataTable: $('#dynamic-table').dataTable({
                 //"aoColumns": columns,
-                data: []
+                data: [],
+                language: getDatatableLanguageProperties()
             })
         };
 

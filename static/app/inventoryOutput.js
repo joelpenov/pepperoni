@@ -151,7 +151,8 @@
                 url: "/api/inventoryoutputs/",
                 dataTable: $('#dynamic-table').dataTable({
                     //"aoColumns": columns,
-                    data: []
+                    data: [],
+                    language: getDatatableLanguageProperties()
                 }),
                 actionRender: function(item){
                 return '<div class="action-buttons"> <a class="view blue"><i '+

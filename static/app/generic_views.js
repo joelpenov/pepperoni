@@ -177,6 +177,10 @@ var GenericViews = GenericViews || {};
 
     function DataTableView(settings) {
         self = this;
+        var data_source = [];
+        
+
+        settings.booleanFields;
         self.dataTable= settings.dataTable;
         settings.actionRender = settings.actionRender || function(item){
                 return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
@@ -187,7 +191,6 @@ var GenericViews = GenericViews || {};
                 type: "get",
                 data: {},
                 success: function (response) {
-                    var data_source = [];
                     response.forEach(function (item) {
                         var theaders = settings.dataTable.find('thead tr th');
                         var row = [];
@@ -204,6 +207,9 @@ var GenericViews = GenericViews || {};
                             }
 
                         });
+
+                        if (settings.booleanFields) row = self.setBooleanIcon(settings.booleanFields, row);
+
                         data_source.push(row);
                         settings.dataTable.fnClearTable();
                         settings.dataTable.fnAddData(data_source);
@@ -214,6 +220,17 @@ var GenericViews = GenericViews || {};
                     console.error(errorThrown);
                 }
             });
+        };
+
+        self.setBooleanIcon = function(booleanFields, row){
+            var trueValueLogo = '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>';
+            var falseValueLogo = '<div class="action-buttons"><a class="edit red"><i class="fa fa-times bigger-130"></i></a></div>';
+            
+            booleanFields.forEach(function(field){
+                row[field] = row[field] ? trueValueLogo : falseValueLogo;
+            });
+
+            return row;
         };
     }
 

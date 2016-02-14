@@ -4,8 +4,10 @@
             url: "/api/products/",
             dataTable: $('#dynamic-table').dataTable({
                 //"aoColumns": columns,
-                data: []
-            })
+                data: [],
+                language: getDatatableLanguageProperties()
+            }),
+            booleanFields: [6, 7]
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);

@@ -4,7 +4,8 @@
             url: "/api/cashregisters/",
             dataTable: $('#dynamic-table').dataTable({
                 //"aoColumns": columns,
-                data: []
+                data: [],
+                language: getDatatableLanguageProperties()
             })
         };
 
