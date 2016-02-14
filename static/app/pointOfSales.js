@@ -335,9 +335,22 @@
         };
 
         self.save = function(){
-            var request = self.order.save('save')
+            var request = self.order.save('save');
             request.success(function(response){
                 self.order.setData(response);
+                self.refreshActiveOrders(self.order.cashierShift());
+            });
+        };
+
+        self.cancel = function(){
+            if(self.order.isNew()){
+                self.order.reset();
+                return;
+            }
+
+            var request = self.order.save('cancel');
+            request.success(function(response){
+                self.order.reset();
                 self.refreshActiveOrders(self.order.cashierShift());
             });
         };

@@ -32,29 +32,34 @@
                             Nuevo: F2
                         </button>
 
-                         <button class="btn btn-white btn-info btn-bold"  data-bind="click:save">
+                        <button class="btn btn-white btn-info btn-bold"  data-bind="click:save">
                             <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
                             Guardar: F3
                         </button>
 
-                        <button class="btn btn-white btn-info btn-bold"  data-bind="click:print">
-                            <i class="ace-icon fa fa-print bigger-120 blue"></i>
-                            Imprimir: F4
-                        </button>
-
                         <button class="btn btn-white btn-info btn-bold" data-bind="click:finish">
                             <i class="ace-icon fa fa-arrow-circle-right bigger-120 blue"></i>
-                            Finalizar: F5
+                            Finalizar: F4
+                        </button>
+
+                        <button class="btn btn-white btn-info btn-bold" data-bind="click:cancel">
+                            <i class="ace-icon fa fa-arrow-circle-right bigger-120 blue"></i>
+                            Cancelar: F5
+                        </button>
+
+                        <button class="btn btn-white btn-info btn-bold"  data-bind="click:print">
+                            <i class="ace-icon fa fa-print bigger-120 blue"></i>
+                            Imprimir: F6
                         </button>
 
                         <button class="btn btn-white btn-info btn-bold" data-bind="click:showOrders">
                             <i class="ace-icon fa fa-list-ul bigger-120 blue"></i>
-                            Facturas: F6
+                            Facturas: F7
                         </button>
 
-                         <button class="btn btn-white btn-info btn-bold"  data-bind="click:finishShift">
+                        <button class="btn btn-white btn-info btn-bold"  data-bind="click:finishShift">
                             <i class="ace-icon fa fa-sign-out bigger-120 blue"></i>
-                            Cerrar Caja: F6
+                            Cerrar Caja: F8
                         </button>
                     </div>
                     <div class="col-sm-12">
@@ -181,8 +186,8 @@
                                     <div class="order-input col-sm-12" data-bind=" visible: !order.customerIsNew()">
                                         <label class="middle">
                                             <span class="lbl align-top"> Afectar direccion para futuras ordenes</span>
-                                                <input data-bind="checked:order.update_customer_entry" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+                                            <input data-bind="checked:order.update_customer_entry" class="ace ace-switch" type="checkbox">
+                                            <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
                                         </label>
                                     </div>
                                 </form>
@@ -396,9 +401,9 @@
                                                     <td data-bind="text:total"></td>
                                                     <td data-bind="text:sales_area_name"></td>
                                                     <td>
-                                                            <a class="blue" data-bind="click: $root.editActiveOrder">
-                                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
-                                                            </a>
+                                                        <a class="blue" data-bind="click: $root.editActiveOrder">
+                                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 </tbody>

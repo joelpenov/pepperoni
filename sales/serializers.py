@@ -114,7 +114,7 @@ class OrderSerializer(serializers.ModelSerializer):
     cash = serializers.FloatField(label='Efectivo')
     customer_change = serializers.FloatField(label='Cambio')
 
-    action = serializers.ChoiceField(choices=['save', 'finish'],write_only=True, required=True)
+    action = serializers.ChoiceField(choices=['save', 'finish', 'cancel'],write_only=True, required=True)
 
     details = OrderDetailSerializer(many=True)
 
@@ -173,6 +173,10 @@ class OrderSerializer(serializers.ModelSerializer):
         status = Order.ACTIVE
         if action == 'finish':
             status=Order.FINISHED
+
+        if action == 'cancel':
+            raise serializers.ValidationError("La orden ha cancelar no existe.")
+
         order = Order.objects.create(cashier_shift_id=shift.id,number=orderNumber.number, status=status,**validated_data)
         self.setCustomer(order)
         order.save()
@@ -192,6 +196,9 @@ class OrderSerializer(serializers.ModelSerializer):
 
         if action == 'finish':
             instance.status =Order.FINISHED
+
+        if action == 'cancel':
+            instance.status =Order.VOID
 
         self.setCustomer(instance)
 
