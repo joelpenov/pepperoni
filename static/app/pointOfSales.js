@@ -13,6 +13,7 @@
         self.theShiftIsNotActive = ko.observable(false);
 
         self.cashierShift.subscribe(function(cashierShift){
+            settings.pointOfSaleView.order.cashierShift(cashierShift);
             settings.pointOfSaleView.refreshActiveOrders(cashierShift);
         });
 
@@ -108,7 +109,7 @@
 
     }
 
-    function OrderModel(){
+    function OrderModel(settings){
         var loading = false;
         var self = this;
         self.customerPhone=ko.observable();
@@ -116,15 +117,16 @@
         self.customerAddress=ko.observable();
         self.customerReference=ko.observable();
         self.update_customer_entry=ko.observable();
-        self.DBcustomer = ko.observable();
+        self.isDBcustomer = ko.observable(false);
+        self.dbcustomerPhone = ko.observable();
 
-        self.id = ko.observable();
+        self.id = ko.observable(0);
         self.created_date = ko.observable();
         self.number = ko.observable();
         self.username = ko.observable();
-        self.to_go = ko.observable();
-        self.to_pickup = ko.observable();
-        self.delivered = ko.observable();
+        self.to_go = ko.observable(false);
+        self.to_pickup = ko.observable(false);
+        self.delivered = ko.observable(false);
         self.salesarea = ko.observable();
 
         self.total=ko.observable(0);
@@ -141,26 +143,36 @@
         });
 
         self.customerIsNew=ko.computed(function(){
-            return !(self.DBcustomer() && self.DBcustomer().id > 0);
+            return !self.isDBcustomer();
+        });
+
+        self.isNew = ko.computed(function(){
+            return self.id()===0;
+        });
+
+         self.isEditing = ko.computed(function(){
+            return !self.isNew();
         });
 
         self.customerPhone.subscribe(function (value) {
-            if(loading || !value || (value && self.DBcustomer() && value === self.DBcustomer().phone)){
+            if(loading || !value || (value && self.isDBcustomer() && value === self.dbcustomerPhone())){
                 return;
             }
 
-            self.DBcustomer(null);
+            self.isDBcustomer(false);
             self.customerName(null);
             self.customerAddress(null);
             self.customerReference(null);
+            self.dbcustomerPhone(null);
 
             GenericViews.getData("/api/customers/?format=json&phone="+value, function(response){
                 if(response && response.length>0){
                     var customer = response[0];
-                    self.DBcustomer(customer);
+                    self.isDBcustomer(true);
                     self.customerName(customer.name);
                     self.customerAddress(customer.address);
                     self.customerReference(customer.reference);
+                    self.dbcustomerPhone(customer.phone);
                 }
             });
         });
@@ -184,7 +196,16 @@
             self.details.remove(product);
         };
         self.reset=function(){
-            self.setdata({
+            self.setData({
+                id:0,
+                update_customer_entry:false,
+                to_go:false,
+                to_pickup:false,
+                delivered:false,
+                total:0,
+                cash:0,
+                sales_area:undefined,
+                details:[]
             });
         };
         self.setData=function(data){
@@ -193,22 +214,29 @@
             self.customerAddress(data.customer_address);
             self.customerReference(data.customer_reference);
             self.update_customer_entry(data.update_customer_entry);
-            self.DBcustomer(data.customer_phone);
+
+            if(data.customer_id && data.customer_id >0){
+                self.isDBcustomer(true);
+                self.dbcustomerPhone(data.customer_phone)
+            }else{
+                self.isDBcustomer(false);
+                self.dbcustomerPhone(null);
+            }
 
             self.id(data.id);
             self.created_date(data.created_date);
             self.number(data.number);
             self.username(self.cashierShift().user_name);
             self.to_go(data.to_go);
-            self.to_pickup(data.to_pick);
+            self.to_pickup(data.to_pickup);
             self.delivered(data.delivered);
-            self.salesarea(data.salesarea);
+            self.salesarea(data.sales_area);
 
             self.total(data.total);
             self.paymentAmount(data.cash);
 
-            self.details([]);
             self.detailModel.reset();
+            self.details(data.details);
         };
         self.getData=function(){
             return {
@@ -221,23 +249,26 @@
                 to_go: self.to_go(),
                 to_pickup: self.to_pickup(),
                 delivered: self.delivered(),
-                salesarea: self.salesarea(),
+                sales_area: self.salesarea(),
                 cash: self.paymentAmount(),
                 customer_change: self.changeAmount(),
                 total: self.total(),
+                details:self.details()
             };
         };
 
-        self.save=function(onSuccess, onError){
+        self.save=function(action, onSuccess, onError){
             var data = self.getData();
+            data.action = action;
             var method = "post";
-            var link = self.settings.url;
+            var link = settings.url;
             //formView.resetErrors();
-            //
-            //if (formView.isEditMode) {
-            //    method = "put";
-            //    link += formView.currentItemId + "/";
-            //}
+
+            if (self.isEditing()) {
+                method = "put";
+                link += self.id() + "/";
+            }
+
             return $.ajax({
                 url: link + '?format=json',
                 type: method,
@@ -245,6 +276,7 @@
                 data: JSON.stringify(data),
                 success: function (response) {
                     console.log('created order', response)
+                    if(onSuccess) onSuccess(response);
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.log('errors',textStatus, errorThrown);
@@ -263,24 +295,51 @@
 
         self.theShiftIsActive = ko.observable(false);
         self.menuItems = ko.observableArray();
-        self.order = new OrderModel();
+        self.order = new OrderModel(self.settings);
         self.salesAreaList= ko.observableArray();
         self.activeOrders = new ko.observableArray();
 
+        self.newOrder = function(){
+            self.order.reset();
+        };
 
+        self.save = function(){
+            var request = self.order.save('save')
+            request.success(function(response){
+                self.order.setData(response);
+                self.refreshActiveOrders(self.order.cashierShift());
+            });
+        };
 
-        self.generateNewOrder = function(){
-            order.save();
+        self.print = function(){
+            alert('printing');
+        };
+
+        self.finish = function(){
+            var request =self.order.save('finish');
+            request.success(function(response){
+                self.order.setData(response);
+                self.refreshActiveOrders(self.order.cashierShift());
+            });
+        };
+
+        self.showOrders = function(){
+            alert('order list');
+        };
+
+        self.finishShift = function(){
+            alert('finish list');
+        };
+
+        self.editActiveOrder = function(order){
+            self.order.setData(order);
         };
 
         self.refreshActiveOrders=function(cashierShift){
             GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+cashierShift.id, function(response){
                 self.activeOrders(response);
                 if(response.length>0){
-                    self.order.cashierShift(cashierShift);
-                    self.order.setData(response[response.length-1])
-                }else{
-                    self.generateNewOrder()
+                    //self.order.setData(response[response.length-1])
                 }
                 console.log('active orders', response);
             });
