@@ -66,9 +66,14 @@
 
             GenericViews.getDataById("/api/products/", self.productId(),function (response) {
                 self.productDescription(response.description);
+                self.quantity(1);
                 self.price(response.sell_price);
             });
         });
+
+        self.addItemToDetailEditor=function(item){
+            self.productId(item.id);
+        };
 
         self.reset = function(){
             self.productId(null);
@@ -155,6 +160,14 @@
         });
 
         self.customerPhone.subscribe(function (value) {
+
+            if(!value){
+                self.isDBcustomer(false);
+                self.customerName(null);
+                self.customerAddress(null);
+                self.customerReference(null);
+                self.dbcustomerPhone(null);
+            }
 
             if(loading || !value || (value && self.isDBcustomer() && value === self.dbcustomerPhone())){
                 return;
