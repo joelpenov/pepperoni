@@ -5,8 +5,9 @@
             dataTable: $('#dynamic-table').dataTable({
                 //"aoColumns": columns,
                 data: [],
-                    language: getDatatableLanguageProperties()
-            })
+                language: getDatatableLanguageProperties()
+            }),
+            booleanFields: [6, 7]
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);
