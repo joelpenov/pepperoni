@@ -67,8 +67,8 @@
         <label class="col-sm-2 control-label" data-bind="text:label, attr:{ for:fieldId }"></label>
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="True"  data-bind="attr:{ id: fieldId, name: name}, checked: value" class="ace" data-unchecked-value="false" />
-                <span class="lbl"></span>
+                <input type="checkbox" value="True"  data-bind="attr:{ id: fieldId, name: name}, checked: value" class="ace ace-switch" data-unchecked-value="false" />
+                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
                 <span class="help-block" data-bind="foreach:errors">
                      <span data-bind="text: $data"></span>
                 </span>

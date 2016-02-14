@@ -180,8 +180,9 @@
                                     </div>
                                     <div class="order-input col-sm-12" data-bind=" visible: !order.customerIsNew()">
                                         <label class="middle">
-                                            <input class="ace" type="checkbox" id="input_update_customer_entry" data-bind="checked:order.update_customer_entry">
-                                            <span class="lbl"> Afectar direccion para futuras ordenes</span>
+                                            <span class="lbl align-top"> Afectar direccion para futuras ordenes</span>
+                                                <input data-bind="checked:order.update_customer_entry" class="ace ace-switch" type="checkbox">
+                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
                                         </label>
                                     </div>
                                 </form>
