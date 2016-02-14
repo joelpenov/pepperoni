@@ -223,8 +223,8 @@ var GenericViews = GenericViews || {};
         };
 
         self.setBooleanIcon = function(booleanFields, row){
-            var trueValueLogo = '<div class="action-buttons"><a class="edit green" data-item-id="1"><i class="ace-icon fa fa-check bigger-130"></i></a></div>';
-            var falseValueLogo = '<div class="action-buttons"><a class="edit red" data-item-id="1"><i class="ace-icon fa fa-times bigger-130"></i></a></div>';
+            var trueValueLogo = '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>';
+            var falseValueLogo = '<div class="action-buttons"><a class="edit red"><i class="fa fa-times bigger-130"></i></a></div>';
             
             booleanFields.forEach(function(field){
                 row[field] = row[field] ? trueValueLogo : falseValueLogo;
