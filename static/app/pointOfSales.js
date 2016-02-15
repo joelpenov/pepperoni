@@ -301,7 +301,7 @@
     }
 
 
-    function PointOfSalesView(){
+    function PointOfSalesView(posSettings){
         var self = this;
         self.settings = {
             url: "/api/orders/"
@@ -389,6 +389,16 @@
             });
         };
 
+        self.openCustomerSearch = function(){
+            $('#searchClientsModal').modal('show');
+            posSettings.customerSearchTable.refreshDataTable();
+        };
+
+         self.openProductSearch = function(){
+            posSettings.productSearchTable.refreshDataTable();
+            $('#searchProductsModal').modal('show')
+        };
+
     }
 
 
@@ -409,9 +419,39 @@
             }
         });
     }
+    function initializeCustomerSearch(posSettings){
+        var table_settings = {
+            url: "/api/customers/",
+            dataTable: $('#search_customer_modal').dataTable({
+                //"aoColumns": columns,
+                data: [],
+                language: getDatatableLanguageProperties()
+            })
+        };
+
+        var customerSearchTable = new GenericViews.DataTableView(table_settings);
+        posSettings.customerSearchTable=customerSearchTable;
+    }
+    function initializeProductSearch(posSettings){
+        var table_settings = {
+            url: "/api/products/",
+            dataTable: $('#search_product_modal').dataTable({
+                //"aoColumns": columns,
+                data: [],
+                language: getDatatableLanguageProperties()
+            })
+        };
+
+        var productSearchTable = new GenericViews.DataTableView(table_settings);
+        posSettings.productSearchTable=productSearchTable;
+    }
 
     $(document).ready(function(){
-        var pointOfSaleView = new PointOfSalesView();
+        var posSettings = {};
+        initializeCustomerSearch(posSettings);
+        initializeProductSearch(posSettings);
+
+        var pointOfSaleView = new PointOfSalesView(posSettings);
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
 
         var form_settings = {
@@ -421,7 +461,6 @@
             includeFields: ['cash_register'],
             pointOfSaleView: pointOfSaleView
         };
-
         var cashierShiftFormView = new CashierShiftFormView(form_settings);
         cashierShiftFormView.init();
 
