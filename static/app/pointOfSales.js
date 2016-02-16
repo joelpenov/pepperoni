@@ -394,6 +394,13 @@
             $('#searchClientsModal').modal('show');
         };
 
+        $('#search_customer_modal tbody').on( 'click', 'tr', function () {
+            var row = $(this);
+            var phone = row.find('td:first').html();
+            self.order.customerPhone(phone);
+            $('#searchClientsModal').modal('hide');
+        });
+
         self.openProductSearch = function(){
             posSettings.productSearchTable.refreshDataTable();
             $('#searchProductsModal').modal('show')
