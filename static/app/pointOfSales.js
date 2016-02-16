@@ -390,18 +390,16 @@
         };
 
         self.openCustomerSearch = function(){
-            $('#searchClientsModal').modal('show');
             posSettings.customerSearchTable.refreshDataTable();
+            $('#searchClientsModal').modal('show');
         };
 
-         self.openProductSearch = function(){
+        self.openProductSearch = function(){
             posSettings.productSearchTable.refreshDataTable();
             $('#searchProductsModal').modal('show')
         };
 
     }
-
-
 
     function continueOrCreateShift(cashierShiftFormView, pointOfSaleView){
         var current_user_id = $('#current_user_id').val();
