@@ -406,6 +406,13 @@
             $('#searchProductsModal').modal('show')
         };
 
+        $('#search_product_modal tbody').on( 'click', 'tr', function () {
+            var row = $(this);
+            var codigo = row.find('td:first').html();
+            self.order.detailModel.productId(codigo);
+            $('#searchProductsModal').modal('hide');
+        });
+
     }
 
     function continueOrCreateShift(cashierShiftFormView, pointOfSaleView){
@@ -430,7 +437,8 @@
             dataTable: $('#search_customer_modal').dataTable({
                 //"aoColumns": columns,
                 data: [],
-                language: getDatatableLanguageProperties()
+                language: getDatatableLanguageProperties(),
+                keys: true
             })
         };
 
@@ -443,7 +451,8 @@
             dataTable: $('#search_product_modal').dataTable({
                 //"aoColumns": columns,
                 data: [],
-                language: getDatatableLanguageProperties()
+                language: getDatatableLanguageProperties(),
+                keys: true
             })
         };
 
