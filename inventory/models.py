@@ -3,7 +3,6 @@ from django.db import models
 
 class Warehouse(models.Model):
 	name = models.CharField(max_length=50)
-
 	def __str__(self):
 		return self.name
 
@@ -57,8 +56,12 @@ class InventoryMoveDetail(models.Model):
     
 		if(move.transaction_type==InventoryMove.INPUT):
 			stock.quantity = stock.quantity + self.quantity
+		
 		else:
 			stock.quantity = stock.quantity - self.quantity
+
+		#if(move.transaction_type==InventoryMove.TRANSFER):
+			#stock.quantity = stock.quantity + self.quantity sumar al otro
     
 		stock.save()
     
