@@ -65,6 +65,3 @@ class WerehouseStockList(viewsets.ModelViewSet):
 	permission_classes =((permissions.IsAuthenticated),)
 	queryset = Stock.objects.all()
 	serializer_class = WerehouseStockSerializer
-
-	def get_serializer_context(self):
-		return {'request': self.request, 'transaction_type':InventoryMove.OUTPUT}

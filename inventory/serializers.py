@@ -67,43 +67,21 @@ class InventoryMoveSerializer(serializers.ModelSerializer):
         return move
 
 
-
-
-class WarehouseStockDetailSerializer(serializers.ModelSerializer):
-    
-    warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
-
-    def get_warehousedescription(self, obj):
-        return obj.warehouse.name  
-
-
-    class Meta:
-        model = Warehouse
-        fields = ('warehouse_description',)
-
-
 class WerehouseStockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
-    warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all(), label='Almacen')
-    warehouse_stock = WarehouseStockDetailSerializer(many=True)
+    warehouse_id = serializers.IntegerField(label='Codigo almacen')
+    product_id = serializers.IntegerField(label='Producto')
 
+    warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
+    product_description = serializers.SerializerMethodField('get_productdescription')
+    quantity = serializers.FloatField(label='Cantidad')    
 
-    # quantity = serializers.FloatField(label='Cantidad')
+    def get_warehousedescription(self, obj):
+        return obj.warehouse.name
 
-    # warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all(), label='Almacen')
-    # product = serializers.PrimaryKeyRelatedField(queryset = Product.objects.all(), label='Producto')
-
-    # product_stock = ProductSerializer(many=True)
-    # product_description = 
-
-    
-
-    # def get_productdescription(self, obj):
-    #     return obj.product.description
-
-    # def get_warehousedescription(self, obj):
-    #     return obj.warehouse.name  
+    def get_productdescription(self, obj):
+        return obj.product.description
 
     class Meta:
         model = Stock
-        fields = ('id','warehouse','warehouse_stock' )
+        fields = ('id', 'warehouse_id','product_id','warehouse_description','product_description', 'quantity')
