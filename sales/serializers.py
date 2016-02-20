@@ -52,6 +52,9 @@ class CashierShiftSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_id = self.context.get('request').user.id
+        oldShift = CashierShift.objects.filter(user_id=user_id,status=CashierShift.ACTIVE).first()
+        if(oldShift!=None):
+            raise serializers.ValidationError("Solo puede tener un turno activo por almacen")
         shift = CashierShift.objects.create(user_id=user_id,status=CashierShift.ACTIVE, **validated_data)
         shift.save()
         return shift
@@ -116,7 +119,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     action = serializers.ChoiceField(choices=['save', 'finish', 'cancel'],write_only=True, required=True)
 
-    details = OrderDetailSerializer(many=True)
+    details = OrderDetailSerializer(many=True, required=True)
 
     def get_salesareaname(self, obj):
         if obj.sales_area==None:
@@ -162,6 +165,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         details_data = validated_data.pop('details')
+
+        if(len(details_data)==0):
+            raise serializers.ValidationError("Debe agregar por lo menos un producto para generar la factura")
+
         request = self.context.get('request')
         user_id = request.user.id
         shift = CashierShift.objects.filter(user_id=user_id, status=CashierShift.ACTIVE).first()
@@ -191,6 +198,9 @@ class OrderSerializer(serializers.ModelSerializer):
              raise serializers.ValidationError("Orden finalizada no puede ser editada.")
 
         details_data = validated_data.pop('details')
+
+        if(len(details_data)==0):
+            raise serializers.ValidationError("Debe agregar por lo menos un producto para generar la factura")
 
         action = validated_data.pop('action')
 
