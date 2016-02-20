@@ -157,6 +157,7 @@ var GenericViews = GenericViews || {};
         });
     };
     GenericViews.getData = function(url,callback){
+        console.log("getting data for ", url);
         return $.ajax({
             url: url,
             type: "get",
