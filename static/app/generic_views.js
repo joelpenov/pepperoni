@@ -216,12 +216,12 @@ var GenericViews = GenericViews || {};
                         settings.dataTable.fnClearTable();
                     });
                     if(data_source.length===0) return;
-                    
+
                     settings.dataTable.fnAddData(data_source);
 
                     //$($.fn.dataTable.tables(true)).DataTable()
                     //    .columns.adjust();
-                     settings.dataTable.fnAdjustColumnSizing();
+                   //  settings.dataTable.fnAdjustColumnSizing();
 
                 },
                 error: function (jXHR, textStatus, errorThrown) {
@@ -232,7 +232,7 @@ var GenericViews = GenericViews || {};
 
         self.setBooleanIcon = function(booleanFields, row){
             var trueValueLogo = '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>';
-            var falseValueLogo = '<div class="action-buttons"><a class="edit red"><i class="fa fa-times bigger-130"></i></a></div>';
+            var falseValueLogo = '';
 
             booleanFields.forEach(function(field){
                 row[field] = row[field] ? trueValueLogo : falseValueLogo;
