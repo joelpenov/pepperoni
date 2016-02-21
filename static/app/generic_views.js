@@ -215,6 +215,8 @@ var GenericViews = GenericViews || {};
                         data_source.push(row);
                         settings.dataTable.fnClearTable();
                     });
+                    if(data_source.length===0) return;
+                    
                     settings.dataTable.fnAddData(data_source);
 
                     //$($.fn.dataTable.tables(true)).DataTable()
