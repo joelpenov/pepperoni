@@ -7,7 +7,7 @@
                 data: [],
                 language: getDatatableLanguageProperties()
             }),
-            booleanFields: [6, 7]
+            booleanFields: ['is_raw_material', 'show_in_menu']
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);

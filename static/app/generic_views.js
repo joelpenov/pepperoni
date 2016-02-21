@@ -181,7 +181,7 @@ var GenericViews = GenericViews || {};
         var data_source = [];
 
 
-        settings.booleanFields;
+        settings.booleanFields=settings.booleanFields||[];
         self.dataTable= settings.dataTable;
         settings.actionRender = settings.actionRender || function(item){
                 return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
@@ -198,7 +198,10 @@ var GenericViews = GenericViews || {};
                         var row = [];
                         theaders.each(function (index, thcell) {
                             var column_name = $(thcell).attr("name");
-                            if (item[column_name]) {
+                            if(settings.booleanFields.indexOf(column_name)>-1){
+                                row.push( self.setBooleanIcon(item[column_name]));
+                            }
+                            else if (item[column_name]) {
                                 row.push(item[column_name]);
                             }
                             else if (column_name == "actions") {
@@ -207,10 +210,7 @@ var GenericViews = GenericViews || {};
                             else {
                                 row.push("");
                             }
-
                         });
-
-                        if (settings.booleanFields) row = self.setBooleanIcon(settings.booleanFields, row);
 
                         data_source.push(row);
                         settings.dataTable.fnClearTable();
@@ -230,15 +230,8 @@ var GenericViews = GenericViews || {};
             });
         };
 
-        self.setBooleanIcon = function(booleanFields, row){
-            var trueValueLogo = '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>';
-            var falseValueLogo = '';
-
-            booleanFields.forEach(function(field){
-                row[field] = row[field] ? trueValueLogo : falseValueLogo;
-            });
-
-            return row;
+        self.setBooleanIcon = function(value){
+            return value === true? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': '';
         };
 
         self.reset  =function(){
