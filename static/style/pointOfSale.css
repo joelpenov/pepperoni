@@ -19,6 +19,26 @@
     color:black!important;
 }
 
+.table-hover>tbody>tr:not(.detail-container):hover {
+    background-color: lightblue!important;
+}
+
+.table.order-review-table .table.detail-table {
+    width: 80%;
+}
+
+.table.order-review-table .table.detail-table thead tr{
+    background-image: none;
+    background-color: #F5F5F5;
+}
+
+.table.order-review-table>tbody>tr.odd {
+    background-color: #f9f9f9;
+}
+
+.table.order-review-table tr.detail-container{
+    background-color: mintcream;
+}
 
 
 @media(min-width:700px) {}

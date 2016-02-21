@@ -508,7 +508,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover order-review-table">
                     <thead>
                     <tr>
                         <th>Codigo</th>
@@ -521,7 +521,7 @@
                     </tr>
                     </thead>
                     <tbody data-bind="foreach:orders">
-                    <tr data-bind="click:$root.toggleDetails">
+                    <tr data-bind="click:$root.toggleDetails, css: { 'odd': ($index() % 2 !== 0) }">
                         <td data-bind="text:id"></td>
                         <td data-bind="text:status"></td>
                         <td data-bind="text:customer_phone"></td>
@@ -530,10 +530,9 @@
                         <td data-bind="text:to_go"></td>
                         <td data-bind="text:delivered"></td>
                     </tr>
-                    <tr style="display: none" data-bind="visible:showDetails">
-                        <td ></td>
-                        <td colspan="5" >
-                            <table cellpadding="0" cellspacing="0" border="0" class="table">
+                    <tr class="detail-container" style="display: none" data-bind="visible:showDetails">
+                        <td colspan="7" >
+                            <table cellpadding="0" cellspacing="0" border="0" class="table table-condensed detail-table">
                                 <thead>
                                 <tr>
                                     <th>Codigo</th>
@@ -554,7 +553,6 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td ></td>
                     </tr>
                     </tbody>
                 </table>
