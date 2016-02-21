@@ -508,8 +508,54 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table id="grid-table"></table>
-                <div id="grid-pager"></div>
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Telefono</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>LLevar</th>
+                        <th>Entregada</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach:orders">
+                    <tr data-bind="click:$root.toggleDetails">
+                        <td data-bind="text:id"></td>
+                        <td data-bind="text:customer_phone"></td>
+                        <td data-bind="text:customer_name"></td>
+                        <td data-bind="text:total"></td>
+                        <td data-bind="text:to_go"></td>
+                        <td data-bind="text:delivered"></td>
+                    </tr>
+                    <tr style="display: none" data-bind="visible:showDetails">
+                        <td ></td>
+                        <td colspan="4" >
+                            <table cellpadding="0" cellspacing="0" border="0" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody data-bind="foreach:details">
+                                <tr>
+                                    <td data-bind="text:product_id"></td>
+                                    <td data-bind="text:product_description"></td>
+                                    <td data-bind="text:quantity"></td>
+                                    <td data-bind="text:price"></td>
+                                    <td data-bind="text:total"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td ></td>
+                    </tr>
+                    </tbody>
+                </table>
 
             </div>
         </div>
@@ -518,8 +564,8 @@
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static "assets/js/jquery.jqGrid.min.js" %}"></script>
-    <script src="{% static "assets/js/grid.locale-en.js" %}"></script>
+    {#    <script src="{% static "assets/js/jquery.jqGrid.min.js" %}"></script>#}
+    {#    <script src="{% static "assets/js/grid.locale-en.js" %}"></script>#}
 
     <script src="{% static "app/pointOfSales.js" %}"></script>
 {% endblock javascript %}
