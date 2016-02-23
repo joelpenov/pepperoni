@@ -55,7 +55,7 @@ class Order(models.Model):
 	VOID = 'VOID'
 	ORDER_STATUS = (
 		(ACTIVE, 'Activo'),
-		(FINISHED, 'Terminada'),
+		(FINISHED, 'Terminado'),
 		(VOID, 'Nulo'),
 	)
 

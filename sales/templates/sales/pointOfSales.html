@@ -557,12 +557,30 @@
                             <tbody data-bind="foreach:orders">
                                 <tr data-bind="click:$root.toggleDetails, css: { 'odd': ($index() % 2 !== 0) }">
                                     <td data-bind="text:id"></td>
-                                    <td data-bind="text:status"></td>
+                                    <td>
+                                        <!-- ko if: status === 'FINISHED' -->
+                                            Terminado
+                                        <!-- /ko  -->
+                                         <!-- ko if: status === 'ACTIVE' -->
+                                            Activo
+                                        <!-- /ko  -->
+                                        <!-- ko if: status === 'VOID' -->
+                                            Nulo
+                                        <!-- /ko  -->
+                                    </td>
                                     <td data-bind="text:customer_phone"></td>
                                     <td data-bind="text:customer_name"></td>
                                     <td data-bind="text:total"></td>
-                                    <td data-bind="text:to_go"></td>
-                                    <td data-bind="text:delivered"></td>
+                                    <td>
+                                        <!-- ko if: to_go -->
+                                            <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
+                                        <!-- /ko  -->
+                                    </td>
+                                    <td>
+                                        <!-- ko if: delivered -->
+                                            <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
+                                        <!-- /ko  -->
+                                    </td>
                                 </tr>
                                 <tr class="detail-container" style="display: none" data-bind="visible:showDetails">
                                     <td colspan="7" >
