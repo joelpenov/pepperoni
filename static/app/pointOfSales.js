@@ -246,7 +246,8 @@
                     if(onSuccess) onSuccess(response);
                 },
                 error: function (jXHR, textStatus, errorThrown) {
-                    console.log('errors',textStatus, errorThrown);
+                    console.log('errors',jXHR.responseJSON, textStatus, errorThrown);
+                    alert(jXHR.responseJSON);
                     //GenericViews.errorHandler(formView.fields(),jXHR,textStatus, errorThrown);
                 }
             });
@@ -524,7 +525,28 @@
     function FinishShiftView(settings){
         var self = this;
         self.showFinishSwiftView = ko.observable(false);
+        self.totalRegister = ko.observable(0);
+        self.totalSold = ko.observable(0);
+        self.difference = ko.observable(0);
+        self.totalNotDelivered = ko.observable(0);
         self.orders = ko.observableArray();
+
+        self.totalRegister.subscribe(function(){
+            self.difference(self.totalRegister()-self.totalSold());
+        });
+
+        self.orders.subscribe(function(){
+            var totalSold=0;
+            var totalNotDelivered= 0;
+            self.orders().forEach(function(order){
+                totalSold+=order.total;
+                if(order.delivered!==true)
+                    totalNotDelivered += order.total;
+            });
+            self.totalSold(totalSold);
+            self.totalNotDelivered(totalNotDelivered);
+            self.difference(self.totalRegister()-self.totalSold());
+        });
 
         self.show=function(){
             self.showFinishSwiftView(true);
@@ -548,6 +570,7 @@
         };
 
         self.toggleDetails=function(order){
+            console.log("test");
             order.showDetails(!order.showDetails());
         };
 
