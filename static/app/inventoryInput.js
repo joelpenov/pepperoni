@@ -158,7 +158,6 @@
                 }
             };
 
-debugger;
             var dataTableView = new GenericViews.DataTableView(table_settings);
 
             var form_settings = {
