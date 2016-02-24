@@ -542,25 +542,73 @@
                         </form>
                     </div>
                     <div class="col-md-12">
-                        <h1>
-                            Ordenes activas
-                        </h1>
-                        <!-- ko template: {name: "orders-history-template", data :{ orders:ActiveOrders, toggleDetails: $root.toggleDetails} } -->
-                        <!-- /ko -->
-                    </div>
-                    <div class="col-md-12">
-                        <h1>
-                            Ordenes nulas
-                        </h1>
-                        <!-- ko template: {name: "orders-history-template", data:{ orders:VoidOrders, toggleDetails: $root.toggleDetails }} -->
-                        <!-- /ko -->
-                    </div>
-                      <div class="col-md-12">
-                        <h1>
-                            Ordenes terminadas
-                        </h1>
-                        <!-- ko template: {name: "orders-history-template", data:{ orders:FinishedOrders, toggleDetails: $root.toggleDetails} } -->
-                        <!-- /ko -->
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover order-review-table">
+                            <thead>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Estado</th>
+                                <th>Telefono</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>LLevar</th>
+                                <th>Entregada</th>
+                            </tr>
+                            </thead>
+                            <tbody data-bind="foreach:orders">
+                                <tr data-bind="click:$root.toggleDetails, css: { 'odd': ($index() % 2 !== 0) }">
+                                    <td data-bind="text:id"></td>
+                                    <td>
+                                        <!-- ko if: status === 'FINISHED' -->
+                                            Terminado
+                                        <!-- /ko  -->
+                                         <!-- ko if: status === 'ACTIVE' -->
+                                            Activo
+                                        <!-- /ko  -->
+                                        <!-- ko if: status === 'VOID' -->
+                                            Nulo
+                                        <!-- /ko  -->
+                                    </td>
+                                    <td data-bind="text:customer_phone"></td>
+                                    <td data-bind="text:customer_name"></td>
+                                    <td data-bind="text:total"></td>
+                                    <td>
+                                        <!-- ko if: to_go -->
+                                            <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
+                                        <!-- /ko  -->
+                                    </td>
+                                    <td>
+                                        <!-- ko if: delivered -->
+                                            <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
+                                        <!-- /ko  -->
+                                    </td>
+                                </tr>
+                                <tr class="detail-container" style="display: none" data-bind="visible:showDetails">
+                                    <td colspan="7" >
+                                        <table cellpadding="0" cellspacing="0" border="0" class="table table-condensed detail-table">
+                                            <thead>
+                                            <tr>
+                                                <th>Codigo</th>
+                                                <th>Producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach:details">
+                                            <tr>
+                                                <td data-bind="text:product_id"></td>
+                                                <td data-bind="text:product_description"></td>
+                                                <td data-bind="text:quantity"></td>
+                                                <td data-bind="text:price"></td>
+                                                <td data-bind="text:total"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
@@ -634,5 +682,6 @@
         </table>
     </script>
 
+    <script src="{% static "assets/js/shortcut.js" %}"></script>
     <script src="{% static "app/pointOfSales.js" %}"></script>
 {% endblock javascript %}

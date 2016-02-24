@@ -651,6 +651,14 @@
         var pointOfSaleView = new PointOfSalesView(posSettings);
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
         pointOfSaleView.init();
+        
+        shortcut.add('F2', function(){pointOfSaleView.newOrder();})
+        shortcut.add('F3', function(){pointOfSaleView.save();})
+        shortcut.add('F4', function(){pointOfSaleView.finish();})
+        shortcut.add('F5', function(){pointOfSaleView.cancel();})
+        shortcut.add('F6', function(){pointOfSaleView.print();})
+        shortcut.add('F7', function(){pointOfSaleView.showOrders();})
+        shortcut.add('F8', function(){pointOfSaleView.finishShift();})
 
     });
 })();
