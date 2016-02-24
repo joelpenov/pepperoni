@@ -5,6 +5,7 @@ from .models.CashRegister import CashRegister
 from .models.CashierShift import CashierShift
 from .models.Customer import Customer
 from .models.Order import Order
+from .models.OrderNumber import OrderNumber
 from .models.OrderDetail import OrderDetail
 from .models.SalesArea import SalesArea
 
