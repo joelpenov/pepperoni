@@ -16,6 +16,7 @@ class SalesAreaSerializer(serializers.ModelSerializer):
         model = SalesArea
         fields = ('id','name')
 
+
 class CashRegisterSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
     name = serializers.CharField(label='Nombre')

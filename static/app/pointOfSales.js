@@ -530,6 +530,9 @@
         self.difference = ko.observable(0);
         self.totalNotDelivered = ko.observable(0);
         self.orders = ko.observableArray();
+        self.ActiveOrders = ko.observableArray();
+        self.FinishedOrders = ko.observableArray();
+        self.VoidOrders = ko.observableArray();
 
         self.totalRegister.subscribe(function(){
             self.difference(self.totalRegister()-self.totalSold());
@@ -546,6 +549,18 @@
             self.totalSold(totalSold);
             self.totalNotDelivered(totalNotDelivered);
             self.difference(self.totalRegister()-self.totalSold());
+
+            self.ActiveOrders(ko.utils.arrayFilter(self.orders(),function(order){
+                return order.status ==='ACTIVE';
+            }));
+
+            self.FinishedOrders(ko.utils.arrayFilter(self.orders(),function(order){
+                return order.status ==='FINISHED';
+            }));
+
+            self.VoidOrders(ko.utils.arrayFilter(self.orders(),function(order){
+                return order.status ==='VOID';
+            }));
         });
 
         self.show=function(){
