@@ -2,7 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
 
-from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, SalesArea
+from .models.CashRegister import CashRegister
+from .models.CashierShift import CashierShift
+from .models.Customer import Customer
+from .models.Order import Order
+from .models.SalesArea import SalesArea
 from .serializers import CashRegisterSerializer, CustomerSerializer, CashierShiftSerializer, OrderSerializer, SalesAreaSerializer
 
 

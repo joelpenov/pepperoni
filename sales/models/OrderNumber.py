@@ -1,5 +1,5 @@
 from django.db import models
-from sales.models import CashierShift
+from sales.models.CashierShift import CashierShift
 
 
 class OrderNumber(models.Model):

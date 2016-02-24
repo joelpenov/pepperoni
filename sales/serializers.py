@@ -1,7 +1,12 @@
 from inventory.models import Warehouse, Product
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import CashRegister, Customer, CashierShift, Order, OrderDetail, OrderNumber, SalesArea
+from .models.CashRegister import CashRegister
+from .models.CashierShift import CashierShift
+from .models.Customer import Customer
+from .models.Order import Order
+from .models.OrderDetail import OrderDetail
+from .models.SalesArea import SalesArea
 
 
 class CustomValidation():

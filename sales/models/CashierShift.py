@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from sales.models.CashRegister import CashRegister
 
 class CashierShift(models.Model):
 	ACTIVE = 'ACTIVE'

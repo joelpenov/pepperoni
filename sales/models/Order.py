@@ -1,5 +1,8 @@
 from django.db import models
-from sales.models import SalesArea, CashierShift, Customer
+from sales.models.SalesArea import SalesArea
+from sales.models.CashierShift import CashierShift
+from sales.models.Customer import Customer
+
 
 class Order(models.Model):
 	ACTIVE = 'ACTIVE'

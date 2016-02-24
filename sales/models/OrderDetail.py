@@ -1,6 +1,7 @@
 from django.db import models
-from sales.models import Order
+from sales.models.Order import Order
 from inventory.models import Product
+
 
 class OrderDetail(models.Model):
 	order = models.ForeignKey(Order, related_name='details')
