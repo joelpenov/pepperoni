@@ -1,53 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
-from inventory.models import Product, Warehouse
-
-
-class SalesArea(models.Model):
-	name = models.CharField(max_length=70)
-
-	def __str__(self):
-		return self.name
-
-
-class CashRegister(models.Model):
-	name = models.CharField(max_length=70)
-	warehouse= models.ForeignKey(Warehouse,related_name='cash_registers')
-
-	def __str__(self):
-		return self.name+' - '+self.warehouse.name
-
-
-class CashierShift(models.Model):
-	ACTIVE = 'ACTIVE'
-	CLOSE = 'CLOSE'
-	SHIFT_STATUS = (
-		(ACTIVE, 'Activo'),
-		(CLOSE, 'Cerrado'),
-	)
-
-	user = models.ForeignKey(User, related_name='cashier_users')
-	cash_register = models.ForeignKey(CashRegister,related_name='cashier_shifts')
-	start_date= models.DateTimeField(auto_now_add=True)
-	end_date= models.DateTimeField(null=True, default=None)
-	close_balance = models.FloatField(null=True)
-	status = models.CharField(max_length=15, choices=SHIFT_STATUS)
-
-
-class Customer(models.Model):
-	name = models.CharField(max_length=70)
-	address = models.CharField(max_length=180, blank=True)
-	reference = models.CharField(max_length=180, blank=True)
-	phone = models.CharField(max_length=15, unique=True, db_index=True)
-
-	def __str__(self):
-		return self.name
-
-
-class OrderNumber(models.Model):
-	cashier_shift = models.ForeignKey(CashierShift,related_name='numbers')
-	number = models.IntegerField()
-
+from sales.models.SalesArea import SalesArea
+from sales.models.CashierShift import CashierShift
+from sales.models.Customer import Customer
+from inventory.models.Product import Product
 
 class Order(models.Model):
 	ACTIVE = 'ACTIVE'

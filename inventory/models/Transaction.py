@@ -1,29 +1,10 @@
 from django.db import models
+from inventory.models.Warehouse import Warehouse
+from inventory.models.Stock import Stock
+from inventory.models.Product import Product
 
 
-class Warehouse(models.Model):
-	name = models.CharField(max_length=50)
-	def __str__(self):
-		return self.name
-
-
-class Product(models.Model):
-	description = models.CharField(max_length=255)
-	sell_price = models.FloatField(default=0)
-	show_in_menu= models.BooleanField()
-	is_raw_material= models.BooleanField()
-
-	def __str__(self):
-		return self.description
-
-
-class Stock(models.Model):
-	product = models.ForeignKey(Product, related_name="product_stock")
-	warehouse = models.ForeignKey(Warehouse, related_name="warehouse_stock")
-	quantity = models.FloatField()
-
-
-class InventoryMove(models.Model):
+class Transaction(models.Model):
 	INPUT = 'INPUT'
 	OUTPUT = 'OUTPUT'
 	TRANSFER = 'TRANSFER'
@@ -40,8 +21,8 @@ class InventoryMove(models.Model):
 	#transaction_id = models.UUIDField()
 
 
-class InventoryMoveDetail(models.Model):
-	inventory_move = models.ForeignKey(InventoryMove, related_name="details")
+class TransactionDetail(models.Model):
+	inventory_move = models.ForeignKey(Transaction, related_name="details")
 	product = models.ForeignKey(Product, related_name="inventory_move_details")
 	quantity = models.FloatField()
 	price = models.FloatField()
@@ -53,20 +34,19 @@ class InventoryMoveDetail(models.Model):
 		stock = Stock.objects.filter(product_id=self.product_id).filter(warehouse_id=move.warehouse_id).first()
 		if(stock==None):
 			stock = Stock.objects.create(product_id=self.product_id, warehouse_id  = move.warehouse_id, quantity = 0)
-    
-		if(move.transaction_type==InventoryMove.INPUT):
+
+		if(move.transaction_type==Transaction.INPUT):
 			stock.quantity = stock.quantity + self.quantity
-		
+
 		else:
 			stock.quantity = stock.quantity - self.quantity
 
 		#if(move.transaction_type==InventoryMove.TRANSFER):
 			#stock.quantity = stock.quantity + self.quantity sumar al otro
-    
+
 		stock.save()
-    
-    
+
+
 	def save(self, *args, **kwargs):
-		super(InventoryMoveDetail, self).save(*args, **kwargs)
+		super(TransactionDetail, self).save(*args, **kwargs)
 		self.updateStock()
-    
