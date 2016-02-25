@@ -177,12 +177,14 @@ var GenericViews = GenericViews || {};
     };
 
     function DataTableView(settings) {
-        self = this;
+        var self = this;
         var data_source = [];
 
-
         settings.booleanFields=settings.booleanFields||[];
+        settings.moneyFields=settings.moneyFields||[];
+        settings.dateFields=settings.dateFields||[];
         self.dataTable= settings.dataTable;
+        
         settings.actionRender = settings.actionRender || function(item){
                 return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
             };
@@ -198,8 +200,16 @@ var GenericViews = GenericViews || {};
                         var row = [];
                         theaders.each(function (index, thcell) {
                             var column_name = $(thcell).attr("name");
+                            console.log(column_name);
                             if(settings.booleanFields.indexOf(column_name)>-1){
                                 row.push( self.setBooleanIcon(item[column_name]));
+                            }
+                            else if(settings.moneyFields.indexOf(column_name)>-1){
+                                row.push( self.setMoneyFormat(item[column_name]));
+                            }
+                            else if(settings.dateFields.indexOf(column_name)>-1){
+                                row.push( self.setDateFormat(item[column_name]));
+                                console.log(column_name);
                             }
                             else if (item[column_name]) {
                                 row.push(item[column_name]);
@@ -209,7 +219,7 @@ var GenericViews = GenericViews || {};
                             }
                             else {
                                 row.push("");
-                            }
+                            }       
                         });
 
                         data_source.push(row);
@@ -233,6 +243,15 @@ var GenericViews = GenericViews || {};
         self.setBooleanIcon = function(value){
             return value === true? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': '';
         };
+
+        self.setMoneyFormat = function(value){
+            return formatAsMoney(value);
+        };       
+
+        self.setDateFormat = function(date){
+            return longDateFormat(date);
+        };
+        
 
         self.reset  =function(){
             settings.dataTable.fnDestroy();
@@ -290,7 +309,6 @@ var GenericViews = GenericViews || {};
             self.loadForm();
         };
     }
-
 
     GenericViews.DataTableView = DataTableView;
     GenericViews.FormView = FormView;
