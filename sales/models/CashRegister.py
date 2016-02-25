@@ -1,5 +1,5 @@
 from django.db import models
-from inventory.models import Warehouse
+from inventory.models.Warehouse import Warehouse
 
 class CashRegister(models.Model):
 	name = models.CharField(max_length=70)

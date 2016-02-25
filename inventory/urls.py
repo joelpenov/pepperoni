@@ -1,20 +1,23 @@
 from django.conf.urls import url
 
-from inventory import views
+from inventory.views import Warehouse
+from inventory.views import Transaction
+from inventory.views import Product
+from inventory.views import Stock
 
 
 def registerApiUrls(router):
-	router.register(r'warehouses', views.WarehouseList)
-	router.register(r'inventoryinputs', views.InventoryInputList)
-	router.register(r'inventoryoutputs', views.InventoryOutputList)
-	router.register(r'products', views.ProductList)
-	router.register(r'stocks', views.WerehouseStockList)
+	router.register(r'warehouses', Warehouse.WarehouseList)
+	router.register(r'inventoryinputs', Transaction.InventoryInputList)
+	router.register(r'inventoryoutputs', Transaction.InventoryOutputList)
+	router.register(r'products', Product.ProductList)
+	router.register(r'stocks', Stock.WerehouseStockList)
 
 urlpatterns=[
-		url(r'^warehouse/', views.warehouse),
-		url(r'^inputs/', views.inventoryInput),
-		url(r'^outputs/', views.inventoryOutput),
-		url(r'^products/', views.product),
-		url(r'^stock/', views.stock),
-		url(r'^transfer/', views.inventoryTransfer)
+		url(r'^warehouse/', Warehouse.warehouse),
+		url(r'^inputs/', Transaction.inventoryInput),
+		url(r'^outputs/', Transaction.inventoryOutput),
+		url(r'^products/', Product.product),
+		url(r'^stock/', Stock.stock),
+		url(r'^transfer/', Transaction.inventoryTransfer)
 	]

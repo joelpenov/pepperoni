@@ -2,7 +2,7 @@ from django.db import models
 from sales.models.SalesArea import SalesArea
 from sales.models.CashierShift import CashierShift
 from sales.models.Customer import Customer
-from inventory.models import Product
+from inventory.models.Product import Product
 
 class Order(models.Model):
 	ACTIVE = 'ACTIVE'

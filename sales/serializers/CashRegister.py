@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from sales.models.CashRegister import CashRegister
-from inventory.models import Warehouse
+from inventory.models.Warehouse import Warehouse
 
 
 class CashRegisterSerializer(serializers.ModelSerializer):
