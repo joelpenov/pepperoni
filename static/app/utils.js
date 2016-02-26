@@ -1,3 +1,6 @@
+
+moment.locale('es');
+
 var getDatatableLanguageProperties = function(){
 		return {
                 "sProcessing":     "Procesando...",
@@ -24,3 +27,28 @@ var getDatatableLanguageProperties = function(){
                 }
             };
 	};
+
+Number.prototype.formatMoney = function(c){
+var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+    d = "." , 
+    t = ",", 
+    s = n < 0 ? "-" : "", 
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+    j = (j = i.length) > 3 ? j % 3 : 0;
+
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
+
+var formatAsMoney = function(numberToMoney){
+    if(isNaN(numberToMoney)) return;
+    var result = parseFloat(numberToMoney.toFixed(2));
+    var moneyResult = (result).formatMoney(2)
+    console.log(moneyResult);
+    return moneyResult;
+};
+
+
+var longDateFormat = function(date){
+    return moment(date).format("dddd, D MMMM YYYY, h:mm:ss a");
+};

@@ -52,15 +52,18 @@
 
                 if(self.productIdHasError() || self.quantityHasError() || self.priceHasError()) return;
 
-                self.orderDetails.push({
-                    product_id:self.productId(),
-                    product_description: self.productDescription(),
-                    quantity: self.quantity(),
-                    price: self.price(),
-                    total: (self.quantity() * self.price())
-                });
-
+                self.addDetail(self.productId(), self.productDescription(), self.quantity(), self.price(), self.quantity());
                 self.cleanDetails();
+            };
+
+            self.addDetail = function(id, description, quantity, price, total){
+                self.orderDetails.push({
+                    product_id: id,
+                    product_description: description,
+                    quantity: quantity,
+                    price: formatAsMoney(price),
+                    total: formatAsMoney(total)
+                });
             };
 
             self.deleteProduct = function(product){
@@ -120,10 +123,21 @@
                 self.transactionDate(response.transaction_date);
             };
 
+            self.addAllDetails = function(details){
+                details.forEach(function(item){
+                    self.addDetail(
+                                    item.id, 
+                                    item.product_description,
+                                    item.quantity,
+                                    item.price,
+                                    item.total);
+                });
+            };
+
             self.viewDetails = function (id) {
                 GenericViews.getDataById(settings.url, id, function (response) {
                     GenericViews.loadEditFormData(self.fields(), response);
-                    self.orderDetails(response.details);
+                    self.addAllDetails(response.details);
                     self.setHeaderDetails(response);
                     self.creationMode(false);
                     self.canCreateNew(false);

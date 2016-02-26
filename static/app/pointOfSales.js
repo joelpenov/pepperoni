@@ -191,7 +191,7 @@
             }
 
             self.id(data.id);
-            self.created_date(data.created_date);
+            self.created_date(longDateFormat(data.created_date));
             self.number(data.number);
             self.username(self.cashierShift().user_name);
             self.to_go(data.to_go);

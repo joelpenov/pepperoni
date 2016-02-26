@@ -7,7 +7,8 @@
                 data: [],
                 language: getDatatableLanguageProperties()
             }),
-            booleanFields: ['is_raw_material', 'show_in_menu']
+            booleanFields: ['is_raw_material', 'show_in_menu'],
+            moneyFields: ['sell_price']
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);
