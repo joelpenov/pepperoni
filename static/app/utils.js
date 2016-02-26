@@ -42,9 +42,9 @@ var n = this,
 
 var formatAsMoney = function(numberToMoney){
     if(isNaN(numberToMoney)) return;
+    numberToMoney = parseFloat(numberToMoney);
     var result = parseFloat(numberToMoney.toFixed(2));
     var moneyResult = (result).formatMoney(2)
-    console.log(moneyResult);
     return moneyResult;
 };
 
