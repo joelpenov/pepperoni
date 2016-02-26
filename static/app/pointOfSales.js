@@ -589,6 +589,10 @@
             order.showDetails(!order.showDetails());
         };
 
+        self.finishShift = function(){
+            GenericViews.save()
+        };
+
         self.init=function(){
             ko.applyBindings(self,document.getElementById('finish-shift-view'));
         };
