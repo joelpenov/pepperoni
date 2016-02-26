@@ -1,12 +1,10 @@
+var PEPPERONI = PEPPERONI || {};
+
 (function(){
     $(document).ready(function(){
         var table_settings = {
             url: "/api/customers/",
-            dataTable: $('#dynamic-table').dataTable({
-                //"aoColumns": columns,
-                data: [],
-                language: getDatatableLanguageProperties()
-            })
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'})            
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);

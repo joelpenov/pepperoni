@@ -1,13 +1,11 @@
+var PEPPERONI = PEPPERONI || {};
+
 (function(){
 
     $(document).ready(function(){
         var table_settings = {
             url: "/api/cashiershifts/",
-            dataTable: $('#dynamic-table').dataTable({
-                //"aoColumns": columns,
-                data: [],
-                language: getDatatableLanguageProperties()
-            }),
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'}),
             actionRender: function(item){
                 return '<div class="action-buttons">'+
                     '<a class="view blue" data-item-id="' + item.id + '"><i class="ace-icon fa fa-eye bigger-130"></i></a>' +

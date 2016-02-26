@@ -1,3 +1,5 @@
+var PEPPERONI = PEPPERONI || {};
+
 (function(){
 
     function OrderDetailModel (){
@@ -191,7 +193,7 @@
             }
 
             self.id(data.id);
-            self.created_date(longDateFormat(data.created_date));
+            self.created_date(PEPPERONI.longDateFormat(data.created_date));
             self.number(data.number);
             self.username(self.cashierShift().user_name);
             self.to_go(data.to_go);
@@ -585,7 +587,6 @@
         };
 
         self.toggleDetails=function(order){
-            console.log("test");
             order.showDetails(!order.showDetails());
         };
 
@@ -597,12 +598,7 @@
     function initializeCustomerSearch(){
         var table_settings = {
             url: "/api/customers/",
-            dataTable: $('#search_customer_modal').dataTable({
-                //"aoColumns": columns,
-                data: [],
-                language: getDatatableLanguageProperties(),
-                keys: true
-            })
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_customer_modal', keys: true})           
         };
 
         return new GenericViews.DataTableView(table_settings);
@@ -611,12 +607,7 @@
     function initializeProductSearch(){
         var table_settings = {
             url: "/api/products/",
-            dataTable: $('#search_product_modal').dataTable({
-                //"aoColumns": columns,
-                data: [],
-                language: getDatatableLanguageProperties(),
-                keys: true
-            })
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true})
         };
 
         return new GenericViews.DataTableView(table_settings);

@@ -1,8 +1,22 @@
 
-moment.locale('es');
+var PEPPERONI = PEPPERONI || {};
 
-var getDatatableLanguageProperties = function(){
-		return {
+(function (){   
+
+    Number.prototype.formatMoney = function(c){
+    var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = "." , 
+        t = ",", 
+        s = n < 0 ? "-" : "", 
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
+
+    PEPPERONI.getDatatableLanguageProperties = function(){
+        return {
                 "sProcessing":     "Procesando...",
                 "sLengthMenu":     "Mostrar _MENU_ registros",
                 "sZeroRecords":    "No se encontraron resultados",
@@ -26,29 +40,27 @@ var getDatatableLanguageProperties = function(){
                     "sSortDescending": ": Ordenar la columna de manera descendente"
                 }
             };
-	};
+    };
 
-Number.prototype.formatMoney = function(c){
-var n = this, 
-    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-    d = "." , 
-    t = ",", 
-    s = n < 0 ? "-" : "", 
-    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
-    j = (j = i.length) > 3 ? j % 3 : 0;
+    PEPPERONI.createDatatableInstance = function(settings){
+       var settings = settings || {};
+       settings.data = settings.data || [];
+       settings.language = PEPPERONI.getDatatableLanguageProperties() 
+       return $(settings.tableId).dataTable(settings);
+    };    
 
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
-
-var formatAsMoney = function(numberToMoney){
-    if(isNaN(numberToMoney)) return;
-    numberToMoney = parseFloat(numberToMoney);
-    var result = parseFloat(numberToMoney.toFixed(2));
-    var moneyResult = (result).formatMoney(2)
-    return moneyResult;
-};
+    PEPPERONI.formatAsMoney = function(numberToMoney){
+        if(isNaN(numberToMoney)) return;
+        numberToMoney = parseFloat(numberToMoney);
+        var result = parseFloat(numberToMoney.toFixed(2));
+        var moneyResult = (result).formatMoney(2)
+        return moneyResult;
+    };
 
 
-var longDateFormat = function(date){
-    return moment(date).format("dddd, D MMMM YYYY, h:mm:ss a");
-};
+    PEPPERONI.longDateFormat = function(date){
+       moment.locale('es');
+       return moment(date).format("dddd, D MMMM YYYY, h:mm:ss a");
+    };
+
+})();

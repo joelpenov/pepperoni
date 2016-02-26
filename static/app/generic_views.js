@@ -1,4 +1,6 @@
 var GenericViews = GenericViews || {};
+var PEPPERONI = PEPPERONI || {};
+
 (function () {
 
     GenericViews.errorHandler=function(fields, jXHR, status, errorThrown){
@@ -184,7 +186,7 @@ var GenericViews = GenericViews || {};
         settings.moneyFields=settings.moneyFields||[];
         settings.dateFields=settings.dateFields||[];
         self.dataTable= settings.dataTable;
-        
+
         settings.actionRender = settings.actionRender || function(item){
                 return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
             };
@@ -244,11 +246,11 @@ var GenericViews = GenericViews || {};
         };
 
         self.setMoneyFormat = function(value){
-            return formatAsMoney(value);
+            return PEPPERONI.formatAsMoney(value);
         };       
 
         self.setDateFormat = function(date){
-            return longDateFormat(date);
+            return PEPPERONI.longDateFormat(date);
         };
         
 
