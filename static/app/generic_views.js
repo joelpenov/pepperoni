@@ -200,7 +200,6 @@ var GenericViews = GenericViews || {};
                         var row = [];
                         theaders.each(function (index, thcell) {
                             var column_name = $(thcell).attr("name");
-                            console.log(column_name);
                             if(settings.booleanFields.indexOf(column_name)>-1){
                                 row.push( self.setBooleanIcon(item[column_name]));
                             }

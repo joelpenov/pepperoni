@@ -6,7 +6,7 @@
             dataTable: $('#dynamic-table').dataTable({
                 //"aoColumns": columns,
                 data: [],
-                language: getDatatableLanguageProperties(),
+                language: getDatatableLanguageProperties()
             }),
             actionRender: function(item){
                 return '<div class="action-buttons">'+
