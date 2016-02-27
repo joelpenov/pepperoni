@@ -656,7 +656,7 @@ var PEPPERONI = PEPPERONI || {};
             url: "/api/cashiershifts/",
             formId: "form_view",
             form: $('#form_view'),
-            includeFields: ['cash_register'],
+            includeFields: ['cash_register','start_balance'],
         };
         var cashierShiftFormView = new CashierShiftFormView(form_settings);
         cashierShiftFormView.init();
