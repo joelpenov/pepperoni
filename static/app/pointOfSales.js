@@ -529,19 +529,19 @@ var PEPPERONI = PEPPERONI || {};
     function FinishShiftView(settings){
         var self = this;
         self.showFinishSwiftView = ko.observable(false);
-        self.totalRegister = ko.observable(0);
-        self.totalActive = ko.observable(0);
-        self.totalFinished = ko.observable(0);
-        self.totalVoid = ko.observable(0);
-        self.difference = ko.observable(0);
-        self.totalNotDelivered = ko.observable(0);
+        self.totalRegister = ko.observable(0).extend({numeric:2});
+        self.totalActive = ko.observable(0).extend({numeric:2});
+        self.totalFinished = ko.observable(0).extend({numeric:2});
+        self.totalVoid = ko.observable(0).extend({numeric:2});
+        self.difference = ko.observable(0).extend({numeric:2});
+        self.totalNotDelivered = ko.observable(0).extend({numeric:2});
         self.orders = ko.observableArray();
         self.activeOrders = ko.observableArray();
         self.finishedOrders = ko.observableArray();
         self.voidOrders = ko.observableArray();
 
         self.totalRegister.subscribe(function(){
-            self.difference(self.totalRegister()-self.totalActive());
+            self.difference(PEPPERONI.formatAsMoney(self.totalRegister()-self.totalFinished()));
         });
 
         self.filterBy=function(matches){

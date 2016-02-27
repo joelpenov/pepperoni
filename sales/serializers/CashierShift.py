@@ -10,6 +10,7 @@ class CashierShiftSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField('get_username')
     status = serializers.CharField(label='Estado', read_only=True)
     start_date= serializers.DateTimeField(read_only=True,label='Fecha inicio')
+    start_balance = serializers.FloatField(required=True, label='Balance de inicial')
     close_date= serializers.DateTimeField(read_only=True,label='Fecha cierre', allow_null=True)
     close_balance = serializers.FloatField(required=False, label='Balance de cierre', default=0)
 
@@ -21,7 +22,7 @@ class CashierShiftSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashierShift
-        fields = ('id','cash_register','cash_register_name','user_name','status','start_date','close_date', 'close_balance')
+        fields = ('id','cash_register','cash_register_name','user_name','start_balance','status','start_date','close_date', 'close_balance')
 
 
     def validateShift(self,user_id):

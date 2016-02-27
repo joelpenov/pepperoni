@@ -26,3 +26,11 @@
     z-index: 50;
     width: 500px;
 }
+
+.float-right{
+    float: right;
+}
+
+.align-right{
+    text-align: right;
+}

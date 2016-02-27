@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block styling %}
     <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
-    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />
+    {#    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />#}
 {% endblock styling %}
 {% block maincontent %}
 
@@ -327,7 +327,7 @@
                                                     <h4 class="panel-title">
                                                         <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" data-bind="attr:{href:'#collapse_'+id}">
                                                             <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                            <span data-bind="text:longDateFormat(created_date)"></span>
+                                                            <span data-bind="text:created_date"></span>
                                                         </a>
                                                     </h4>
                                                 </div>
@@ -512,30 +512,38 @@
                 <div class="row">
                     <div>
                         <form class="finish-shift-form">
-                            <div class="order-input col-sm-3">
-                                <label for="input_total_register"> Total en caja </label>
-                                <div class="form-group">
-                                    <input id="input_total_register" type="text" data-bind="value:totalRegister" />
+                            <div class="col-sm-10">
+                                <div class="order-input col-sm-3">
+                                    <label for="input_total_register"> Total en caja </label>
+                                    <div class="form-group">
+                                        <input id="input_total_register" type="number" data-bind="value:totalRegister" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="order-input col-sm-3">
-                                <label for="input_customer_address"> Total vendidos </label>
-                                <div class="form-group">
-                                    <input id="input_customer_address" type="text" data-bind="value:totalSold" disabled="disabled" />
+                                <div class="order-input col-sm-3">
+                                    <label for="input_customer_address"> Total vendidos </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:totalFinished" disabled="disabled" />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-3">
+                                    <label for="input_customer_address"> Diferencia </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-3">
+                                    <label for="input_customer_address"> Total no entregadas </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="order-input col-sm-3">
-                                <label for="input_customer_address"> Diferencia </label>
-                                <div class="form-group">
-                                    <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" />
-                                </div>
-                            </div>
 
-                            <div class="order-input col-sm-3">
-                                <label for="input_customer_address"> Total venta no entregadas </label>
+                            <div class="order-input col-sm-2">
+                                <label >  </label>
                                 <div class="form-group">
-                                    <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" />
+                                    <input type="button" class="btn btn-default" data-bind="click:finishShift" value="Terminar Turno">
                                 </div>
                             </div>
 
@@ -543,27 +551,17 @@
                     </div>
                     <div class="col-md-12">
                         <div class="col-md-12">
-                            <h1>
-                                Ordenes activas
-                            </h1>
-                            <!-- ko template: {name: "orders-history-template", data :{ orders:ActiveOrders, toggleDetails: $root.toggleDetails} } -->
+                            <!-- ko template: {name: "orders-history-template", data :{ title:"Ordenes activas", total: totalActive,totalNotDelivered: false,  orders:activeOrders, toggleDetails: $root.toggleDetails} } -->
                             <!-- /ko -->
                         </div>
                         <div class="col-md-12">
-                            <h1>
-                                Ordenes nulas
-                            </h1>
-                            <!-- ko template: {name: "orders-history-template", data:{ orders:VoidOrders, toggleDetails: $root.toggleDetails }} -->
+                            <!-- ko template: {name: "orders-history-template", data:{ title:"Ordenes nulas", total: totalVoid,totalNotDelivered: false, orders:voidOrders, toggleDetails: $root.toggleDetails }} -->
                             <!-- /ko -->
                         </div>
                         <div class="col-md-12">
-                            <h1>
-                                Ordenes terminadas
-                            </h1>
-                            <!-- ko template: {name: "orders-history-template", data:{ orders:FinishedOrders, toggleDetails: $root.toggleDetails} } -->
+                            <!-- ko template: {name: "orders-history-template", data:{ title:"Ordenes terminadas", total: totalFinished, totalNotDelivered: false, orders:finishedOrders, toggleDetails: $root.toggleDetails} } -->
                             <!-- /ko -->
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -578,7 +576,7 @@
     {#    <script src="{% static "assets/js/grid.locale-en.js" %}"></script>#}
 
     <script type="text/html" id="orders-history-template">
-
+        <h3 class="header smaller lighter blue" data-bind="text:title"></h3>
         <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover order-review-table">
             <thead>
             <tr>
@@ -586,9 +584,9 @@
                 <th>Fecha</th>
                 <th>Telefono</th>
                 <th>Cliente</th>
-                <th>Total</th>
-                <th>LLevar</th>
-                <th>Entregada</th>
+                <th class="align-right">Total</th>
+                <th class="align-center">LLevar</th>
+                <th class="align-center">Entregada</th>
             </tr>
             </thead>
             <tbody data-bind="foreach:orders">
@@ -597,7 +595,7 @@
                 <td data-bind="text:created_date"></td>
                 <td data-bind="text:customer_phone"></td>
                 <td data-bind="text:customer_name"></td>
-                <td data-bind="text:total"></td>
+                <td class="align-right" data-bind="text:total"></td>
                 <td>
                     <!-- ko if: to_go -->
                     <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
@@ -616,18 +614,18 @@
                         <tr>
                             <th>Codigo</th>
                             <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Total</th>
+                            <th class="align-right">Cantidad</th>
+                            <th class="align-right">Precio</th>
+                            <th class="align-right">Total</th>
                         </tr>
                         </thead>
                         <tbody data-bind="foreach:details">
                         <tr>
                             <td data-bind="text:product_id"></td>
                             <td data-bind="text:product_description"></td>
-                            <td data-bind="text:quantity"></td>
-                            <td data-bind="text:price"></td>
-                            <td data-bind="text:total"></td>
+                            <td class="align-right" data-bind="text:quantity"></td>
+                            <td class="align-right" data-bind="text:price"></td>
+                            <td class="align-right" data-bind="text:total"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -635,6 +633,22 @@
             </tr>
             </tbody>
         </table>
+        <div class="col-sm-12 form-horizontal">
+            <div class="order-input col-sm-4 float-right">
+                <label class="col-sm-4 control-label" >Total</label>
+                <div class="form-group col-sm-8">
+                    <input type="text" data-bind="value:total" disabled="disabled" class="align-right" />
+                </div>
+            </div>
+            <!-- ko if: totalNotDelivered -->
+            <div class="order-input col-sm-3">
+                <label for="input_customer_address"> Total no entregadas </label>
+                <div class="form-group">
+                    <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" class="align-right" />
+                </div>
+            </div>
+            <!-- /ko  -->
+        </div>
     </script>
 
     <script src="{% static "assets/js/shortcut.js" %}"></script>
