@@ -250,9 +250,6 @@ var PEPPERONI = PEPPERONI || {};
                 error: function (jXHR, textStatus, errorThrown) {
                     console.log('errors',jXHR.responseJSON, textStatus, errorThrown);
                     GenericViews.showNotification(jXHR.responseJSON);
-
-                    //alert(jXHR.responseJSON);
-                    //GenericViews.errorHandler(formView.fields(),jXHR,textStatus, errorThrown);
                 }
             });
         };
@@ -421,6 +418,8 @@ var PEPPERONI = PEPPERONI || {};
         function setCashierShiftEvents (){
             posSettings.cashierShiftFormView.cashierShift.subscribe(function(cashierShift){
                 self.order.cashierShift(cashierShift);
+                posSettings.finishShiftView.cashierShift(cashierShift);
+
                 self.refreshActiveOrders();
             });
 
@@ -529,6 +528,8 @@ var PEPPERONI = PEPPERONI || {};
     function FinishShiftView(settings){
         var self = this;
         self.showFinishSwiftView = ko.observable(false);
+        self.cashierShift = ko.observable();
+
         self.totalRegister = ko.observable(0).extend({numeric:2});
         self.totalActive = ko.observable(0).extend({numeric:2});
         self.totalFinished = ko.observable(0).extend({numeric:2});
@@ -541,7 +542,7 @@ var PEPPERONI = PEPPERONI || {};
         self.voidOrders = ko.observableArray();
 
         self.totalRegister.subscribe(function(){
-            self.difference(PEPPERONI.formatAsMoney(self.totalRegister()-self.totalFinished()));
+            self.difference(self.totalRegister()-self.totalFinished());
         });
 
         self.filterBy=function(matches){
@@ -603,21 +604,20 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.finishShift = function(){
-            var totalRegister = self.totalRegister();
-            if(totalRegister<=0)
-            {
+            var cashierShift = self.cashierShift();
+            cashierShift.close_balance = self.totalRegister();
 
-            }
+
             return $.ajax({
-                url: '/api/cashiershifts/' + '?format=json',
+                url: '/api/cashiershifts/'+cashierShift.id + '/?format=json',
                 type: 'PUT',
                 contentType: "application/json",
-                data: JSON.stringify(data),
+                data: JSON.stringify(cashierShift),
                 success: function (response) {
-                    console.log(reponse);
+                    location.reload()
                 },
                 error: function (jXHR, textStatus, errorThrown) {
-                    console.log(error,Thrown);
+                    GenericViews.showNotification(jXHR.responseJSON);
                 }
             });
         };
@@ -675,13 +675,13 @@ var PEPPERONI = PEPPERONI || {};
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
         pointOfSaleView.init();
 
-        shortcut.add('F2', function(){pointOfSaleView.newOrder();})
-        shortcut.add('F3', function(){pointOfSaleView.save();})
-        shortcut.add('F4', function(){pointOfSaleView.finish();})
-        shortcut.add('F5', function(){pointOfSaleView.cancel();})
-        shortcut.add('F6', function(){pointOfSaleView.print();})
-        shortcut.add('F7', function(){pointOfSaleView.showOrders();})
-        shortcut.add('F8', function(){pointOfSaleView.finishShift();})
+        shortcut.add('F2', function(){pointOfSaleView.newOrder();});
+        shortcut.add('F3', function(){pointOfSaleView.save();});
+        shortcut.add('F4', function(){pointOfSaleView.finish();});
+        shortcut.add('F5', function(){pointOfSaleView.cancel();});
+        shortcut.add('F6', function(){pointOfSaleView.print();});
+        shortcut.add('F7', function(){pointOfSaleView.showOrders();});
+        shortcut.add('F8', function(){pointOfSaleView.finishShift();});
 
     });
 })();

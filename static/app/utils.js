@@ -53,14 +53,14 @@ var PEPPERONI = PEPPERONI || {};
         if(isNaN(numberToMoney)) return;
         numberToMoney = parseFloat(numberToMoney);
         var result = parseFloat(numberToMoney.toFixed(2));
-        var moneyResult = (result).formatMoney(2)
+        var moneyResult = (result).formatMoney(2);
         return moneyResult;
     };
 
 
     PEPPERONI.longDateFormat = function(date){
        moment.locale('es');
-       return moment(date).format("dddd, D MMMM YYYY, h:mm:ss a");
+       return moment(date).format("DD/MM/YYYY h:mm a");
     };
 
 })();
