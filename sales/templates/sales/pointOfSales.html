@@ -183,7 +183,7 @@
                                             <input id="input_customer_referene" type="text" data-bind="value:order.customerReference" />
                                         </div>
                                     </div>
-                                    <div class="order-input col-sm-12" data-bind=" visible: !order.customerIsNew()">
+                                    <div class="order-input col-sm-12 update-client-status" data-bind=" visible: !order.customerIsNew()">
                                         <label class="middle">
                                             <span class="lbl align-top"> Afectar direccion para futuras ordenes</span>
                                             <input data-bind="checked:order.update_customer_entry" class="ace ace-switch" type="checkbox">

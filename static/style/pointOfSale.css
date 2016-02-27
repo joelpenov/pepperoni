@@ -10,7 +10,8 @@ html, body {
 
 
 .header {
-    margin-top: -10px;
+    margin-top: -6px;
+    margin-bottom: 0px;
 }
 .order-form input {
     width: 100%
@@ -29,6 +30,12 @@ html, body {
     overflow-y: auto;
 }
 
+.update-client-status {
+    margin-top: -6px;
+}
+.form-group {
+    margin-bottom: 5px;
+}
 
 .pay-container input, .pay-container .form-group input[disabled], .pay-container .form-group input:disabled{
     text-align: right;
