@@ -528,41 +528,51 @@
         var self = this;
         self.showFinishSwiftView = ko.observable(false);
         self.totalRegister = ko.observable(0);
-        self.totalSold = ko.observable(0);
+        self.totalActive = ko.observable(0);
+        self.totalFinished = ko.observable(0);
+        self.totalVoid = ko.observable(0);
         self.difference = ko.observable(0);
         self.totalNotDelivered = ko.observable(0);
         self.orders = ko.observableArray();
-        self.ActiveOrders = ko.observableArray();
-        self.FinishedOrders = ko.observableArray();
-        self.VoidOrders = ko.observableArray();
+        self.activeOrders = ko.observableArray();
+        self.finishedOrders = ko.observableArray();
+        self.voidOrders = ko.observableArray();
 
         self.totalRegister.subscribe(function(){
-            self.difference(self.totalRegister()-self.totalSold());
+            self.difference(self.totalRegister()-self.totalActive());
         });
 
-        self.orders.subscribe(function(){
-            var totalSold=0;
-            var totalNotDelivered= 0;
+        self.filterBy=function(matches){
+            var total = 0;
+            var filterOrders= [];
             self.orders().forEach(function(order){
-                totalSold+=order.total;
-                if(order.delivered!==true)
-                    totalNotDelivered += order.total;
+                if(matches(order)) {
+                   total += order.total;
+                    filterOrders.push(order);
+                }
             });
-            self.totalSold(totalSold);
-            self.totalNotDelivered(totalNotDelivered);
-            self.difference(self.totalRegister()-self.totalSold());
+            return {
+                total:total,
+                orders:filterOrders
+            };
+        };
 
-            self.ActiveOrders(ko.utils.arrayFilter(self.orders(),function(order){
-                return order.status ==='ACTIVE';
-            }));
+        self.orders.subscribe(function(){
+            var notDeliveredOrderFilter = self.filterBy(function(order){return order.delivered!==true});
+            self.totalNotDelivered(notDeliveredOrderFilter.total);
+            self.difference(self.totalRegister()-self.totalActive());
 
-            self.FinishedOrders(ko.utils.arrayFilter(self.orders(),function(order){
-                return order.status ==='FINISHED';
-            }));
+            var activesOrderFilter = self.filterBy(function(order){return order.status ==='ACTIVE'});
+            self.activeOrders(activesOrderFilter.orders);
+            self.totalActive(activesOrderFilter.total);
 
-            self.VoidOrders(ko.utils.arrayFilter(self.orders(),function(order){
-                return order.status ==='VOID';
-            }));
+            var finishedOrderFilter = self.filterBy(function(order){return order.status ==='FINISHED'});
+            self.finishedOrders(finishedOrderFilter.orders);
+            self.totalFinished(finishedOrderFilter.total);
+
+            var voidOrderFilter = self.filterBy(function(order){return order.status ==='VOID'});
+            self.voidOrders(voidOrderFilter.orders);
+            self.totalVoid(voidOrderFilter.total);
         });
 
         self.show=function(){
