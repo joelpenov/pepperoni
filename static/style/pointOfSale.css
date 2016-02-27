@@ -63,5 +63,14 @@ html, body {
     background-color: mintcream;
 }
 
+.detail-table-header table{
+    margin-bottom: 0;
+}
+.detail-table-body table thead {
+    display: none;
+}
 
+.footer{
+    display: none;
+}
 @media(min-width:700px) {}
