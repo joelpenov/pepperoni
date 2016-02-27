@@ -1,12 +1,10 @@
+var PEPPERONI = PEPPERONI || {};
+
 (function(){
     $(document).ready(function(){
         var table_settings = {
             url: "/api/products/",
-            dataTable: $('#dynamic-table').dataTable({
-                //"aoColumns": columns,
-                data: [],
-                language: getDatatableLanguageProperties()
-            }),
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'}),
             booleanFields: ['is_raw_material', 'show_in_menu'],
             moneyFields: ['sell_price']
         };
