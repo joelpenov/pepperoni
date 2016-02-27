@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block styling %}
     <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
-    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />
+    {#    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />#}
 {% endblock styling %}
 {% block maincontent %}
 
@@ -512,30 +512,38 @@
                 <div class="row">
                     <div>
                         <form class="finish-shift-form">
-                            <div class="order-input col-sm-3">
-                                <label for="input_total_register"> Total en caja </label>
-                                <div class="form-group">
-                                    <input id="input_total_register" type="text" data-bind="value:totalRegister" />
+                            <div class="col-sm-10">
+                                <div class="order-input col-sm-3">
+                                    <label for="input_total_register"> Total en caja </label>
+                                    <div class="form-group">
+                                        <input id="input_total_register" type="number" data-bind="value:totalRegister" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="order-input col-sm-3">
-                                <label for="input_customer_address"> Total vendidos </label>
-                                <div class="form-group">
-                                    <input id="input_customer_address" type="text" data-bind="value:totalSold" disabled="disabled" />
+                                <div class="order-input col-sm-3">
+                                    <label for="input_customer_address"> Total vendidos </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:totalSold" disabled="disabled" />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-3">
+                                    <label for="input_customer_address"> Diferencia </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-3">
+                                    <label for="input_customer_address"> Total no entregadas </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="order-input col-sm-3">
-                                <label for="input_customer_address"> Diferencia </label>
-                                <div class="form-group">
-                                    <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" />
-                                </div>
-                            </div>
 
-                            <div class="order-input col-sm-3">
-                                <label for="input_customer_address"> Total venta no entregadas </label>
+                            <div class="order-input col-sm-2">
+                                <label >  </label>
                                 <div class="form-group">
-                                    <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" />
+                                    <input type="button" class="btn btn-default" data-bind="click:finishShift" value="Terminar Turno">
                                 </div>
                             </div>
 
@@ -543,27 +551,20 @@
                     </div>
                     <div class="col-md-12">
                         <div class="col-md-12">
-                            <h1>
-                                Ordenes activas
-                            </h1>
+                            <h3 class="header smaller lighter blue">Ordenes activas</h3>
                             <!-- ko template: {name: "orders-history-template", data :{ orders:ActiveOrders, toggleDetails: $root.toggleDetails} } -->
                             <!-- /ko -->
                         </div>
                         <div class="col-md-12">
-                            <h1>
-                                Ordenes nulas
-                            </h1>
+                            <h3 class="header smaller lighter blue">Ordenes nulas</h3>
                             <!-- ko template: {name: "orders-history-template", data:{ orders:VoidOrders, toggleDetails: $root.toggleDetails }} -->
                             <!-- /ko -->
                         </div>
                         <div class="col-md-12">
-                            <h1>
-                                Ordenes terminadas
-                            </h1>
+                            <h3 class="header smaller lighter blue">Ordenes terminadas</h3>
                             <!-- ko template: {name: "orders-history-template", data:{ orders:FinishedOrders, toggleDetails: $root.toggleDetails} } -->
                             <!-- /ko -->
                         </div>
-
                     </div>
                 </div>
             </div>

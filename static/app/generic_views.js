@@ -311,6 +311,12 @@ var PEPPERONI = PEPPERONI || {};
         };
     }
 
+    GenericViews.showNotification = function(message){
+        $('.alert.alert-danger').remove();
+        var notification = $('#notification-template').html().replace('{message}', message);
+        $('.main-container').append(notification);
+    };
+
     GenericViews.DataTableView = DataTableView;
     GenericViews.FormView = FormView;
 
