@@ -331,36 +331,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 column-right ">
-                            <div class="widget-box client-history" data-bind="visible:customerHasOrdered">
-                                <div class="widget-header">
-                                    <h4 class="widget-title">Historial Cliente</h4>
-                                </div>
 
-                                <div class="widget-body">
-                                    <div class="widget-main">
-                                        <div id="accordion" class="accordion-style1 panel-group">
-                                            <div class="panel panel-default" data-bind="foreach:customerLastOrders">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" data-bind="attr:{href:'#collapse_'+id}">
-                                                            <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                            <span data-bind="text:created_date"></span>
-                                                        </a>
-                                                    </h4>
-                                                </div>
-
-                                                <div class="panel-collapse collapse"  data-bind="attr:{id:'collapse_'+id}">
-                                                    <div class="panel-body">
-                                                        <ul data-bind="foreach: details">
-                                                            <li><span data-bind="text:quantity +' x '+ product_description"></span></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="widget-box menu-widget">
                                 <div class="widget-header">
                                     <h4 class="widget-title">Menu</h4>
@@ -382,7 +353,7 @@
                                                 <tr data-bind="click:$root.order.detailModel.addItemToDetailEditor">
                                                     <td data-bind="text:id"></td>
                                                     <td data-bind="text:description"></td>
-                                                    <td data-bind="text:sell_price"></td>
+                                                    <td data-bind="text: PEPPERONI.formatAsMoney(sell_price)"></td>
 
                                                 </tr>
                                                 </tbody>
@@ -427,6 +398,36 @@
                                             </table>
                                         </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-box client-history" data-bind="visible:customerHasOrdered">
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Historial Cliente</h4>
+                                </div>
+
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <div id="accordion" class="accordion-style1 panel-group">
+                                            <div class="panel panel-default" data-bind="foreach:customerLastOrders">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" data-bind="attr:{href:'#collapse_'+id}">
+                                                            <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                                            <span data-bind="text:PEPPERONI.longDateFormat(created_date)"></span>
+                                                        </a>
+                                                    </h4>
+                                                </div>
+
+                                                <div class="panel-collapse collapse"  data-bind="attr:{id:'collapse_'+id}">
+                                                    <div class="panel-body">
+                                                        <ul data-bind="foreach: details">
+                                                            <li><span data-bind="text:quantity +' x '+ product_description"></span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -616,7 +617,7 @@
             <tbody data-bind="foreach:orders">
             <tr data-bind="click:$root.toggleDetails, css: { 'odd': ($index() % 2 !== 0) }">
                 <td data-bind="text:id"></td>
-                <td data-bind="text:created_date"></td>
+                <td data-bind="text:PEPPERONI.longDateFormat(created_date)"></td>
                 <td data-bind="text:customer_phone"></td>
                 <td data-bind="text:customer_name"></td>
                 <td class="align-right" data-bind="text:total"></td>
@@ -648,8 +649,8 @@
                             <td data-bind="text:product_id"></td>
                             <td data-bind="text:product_description"></td>
                             <td class="align-right" data-bind="text:quantity"></td>
-                            <td class="align-right" data-bind="text:price"></td>
-                            <td class="align-right" data-bind="text:total"></td>
+                            <td class="align-right" data-bind="text:PEPPERONI.formatAsMoney(price)"></td>
+                            <td class="align-right" data-bind="text:PEPPERONI.formatAsMoney(total)"></td>
                         </tr>
                         </tbody>
                     </table>

@@ -9,8 +9,8 @@ var PEPPERONI = PEPPERONI || {};
         self.priceHasError = ko.observable(false);
         self.productId = ko.observable();
         self.productDescription = ko.observable();
-        self.quantity = ko.observable();
-        self.price = ko.observable();
+        self.quantity = ko.observable().extend({numeric:2});
+        self.price = ko.observable().extend({numeric:2});
 
         self.productId.subscribe(function () {
             if(!self.productId()){
@@ -89,8 +89,8 @@ var PEPPERONI = PEPPERONI || {};
         self.delivered = ko.observable(false);
         self.salesarea = ko.observable();
 
-        self.total=ko.observable(0);
-        self.paymentAmount=ko.observable(0);
+        self.total=ko.observable(0).extend({numeric:2});
+        self.paymentAmount=ko.observable(0).extend({numeric:2});
 
         self.details= ko.observableArray();
 
@@ -650,7 +650,6 @@ var PEPPERONI = PEPPERONI || {};
             url: "/api/products/",
             dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true})
         };
-
         return new GenericViews.DataTableView(table_settings);
     }
 
