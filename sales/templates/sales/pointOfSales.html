@@ -313,7 +313,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 column-right ">
                             <div class="widget-box client-history" data-bind="visible:customerHasOrdered">
                                 <div class="widget-header">
                                     <h4 class="widget-title">Historial Cliente</h4>
@@ -512,40 +512,47 @@
                 <div class="row">
                     <div>
                         <form class="finish-shift-form">
-                            <div class="col-sm-10">
-                                <div class="order-input col-sm-3">
-                                    <label for="input_total_register"> Total en caja </label>
+                            <div class="col-sm-12">
+                                <div class="order-input col-sm-2">
+                                    <label for="input_total_register"> Total caja </label>
                                     <div class="form-group">
                                         <input id="input_total_register" type="number" data-bind="value:totalRegister" />
                                     </div>
                                 </div>
-                                <div class="order-input col-sm-3">
+                                <div class="order-input col-sm-2">
+                                    <label for="input_customer_address"> Balance inicial </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:startBalance" disabled="disabled" />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Total vendidos </label>
                                     <div class="form-group">
                                         <input id="input_customer_address" type="text" data-bind="value:totalFinished" disabled="disabled" />
                                     </div>
                                 </div>
-                                <div class="order-input col-sm-3">
+                                <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Diferencia </label>
                                     <div class="form-group">
                                         <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" />
                                     </div>
                                 </div>
-                                <div class="order-input col-sm-3">
+                                <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Total no entregadas </label>
                                     <div class="form-group">
                                         <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" />
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div class="order-input col-sm-2">
-                                <label >  </label>
-                                <div class="form-group">
-                                    <input type="button" class="btn btn-default" data-bind="click:finishShift" value="Terminar Turno">
+                                <div class="order-input col-sm-1">
+                                    <label >  </label>
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default" data-bind="click:finishShift" value="Terminar Turno">
+                                    </div>
                                 </div>
                             </div>
+
+
+
 
                         </form>
                     </div>

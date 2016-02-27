@@ -528,7 +528,7 @@ var PEPPERONI = PEPPERONI || {};
     function FinishShiftView(settings){
         var self = this;
         self.showFinishSwiftView = ko.observable(false);
-        self.cashierShift = ko.observable();
+        self.cashierShift = ko.observable({});
 
         self.totalRegister = ko.observable(0).extend({numeric:2});
         self.totalActive = ko.observable(0).extend({numeric:2});
@@ -541,8 +541,12 @@ var PEPPERONI = PEPPERONI || {};
         self.finishedOrders = ko.observableArray();
         self.voidOrders = ko.observableArray();
 
+        self.startBalance = ko.computed(function(){
+           return self.cashierShift().start_balance;
+        });
+
         self.totalRegister.subscribe(function(){
-            self.difference(self.totalRegister()-self.totalFinished());
+            self.difference(self.totalRegister()-self.startBalance()-self.totalFinished());
         });
 
         self.filterBy=function(matches){
@@ -561,7 +565,7 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.orders.subscribe(function(){
-            var notDeliveredOrderFilter = self.filterBy(function(order){return order.delivered!==true});
+            var notDeliveredOrderFilter = self.filterBy(function(order){return order.status ==='FINISHED' && order.delivered!==true});
             self.totalNotDelivered(notDeliveredOrderFilter.total);
             self.difference(self.totalRegister()-self.totalActive());
 

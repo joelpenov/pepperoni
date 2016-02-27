@@ -1,3 +1,17 @@
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.column-right {
+  height: 700px;
+  overflow: hidden;
+}
+
+
+.header {
+    margin-top: -10px;
+}
 .order-form input {
     width: 100%
 }
@@ -14,6 +28,8 @@
     height: 190px;
     overflow-y: auto;
 }
+
+
 .pay-container input, .pay-container .form-group input[disabled], .pay-container .form-group input:disabled{
     text-align: right;
     color:black!important;
