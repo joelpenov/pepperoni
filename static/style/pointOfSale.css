@@ -79,6 +79,11 @@ html, body {
     display: none;
 }
 
+.detail-table-body {
+    height: 200px;
+    overflow: auto;
+}
+
 .footer{
     display: none;
 }
