@@ -17,3 +17,12 @@
     text-align: center;
     margin: auto;
 }
+
+.alert.alert-danger {
+    position: fixed;
+    top: 89px;
+    left: 188px;
+    margin-left: auto;
+    z-index: 50;
+    width: 500px;
+}

@@ -46,7 +46,7 @@
     <div class="form-group"  data-bind="css:{'has-error':hasError}">
         <label class="col-sm-2 control-label" data-bind="text:label, attr:{ for:fieldId }"></label>
         <div class="col-sm-8">
-             <select class="form-control" data-bind="attr:{ id: fieldId, name: name},
+            <select class="form-control" data-bind="attr:{ id: fieldId, name: name},
                         options: choices,
                         optionsCaption: 'Seleccionar uno ...',
                         optionsText: 'display_name',
@@ -83,4 +83,14 @@
 <script type="text/html" id="integer-field-template">
     <!-- ko template: {name: "numeric-field-template", data:$data} -->
     <!-- /ko -->
+</script>
+
+<script type="text" id="notification-template">
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+
+        {message}
+    </div>
 </script>

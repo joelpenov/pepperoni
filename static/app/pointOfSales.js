@@ -242,12 +242,14 @@
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
-                    console.log('created order', response)
+                    console.log('created order', response);
                     if(onSuccess) onSuccess(response);
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.log('errors',jXHR.responseJSON, textStatus, errorThrown);
-                    alert(jXHR.responseJSON);
+                    GenericViews.showNotification(jXHR.responseJSON);
+
+                    //alert(jXHR.responseJSON);
                     //GenericViews.errorHandler(formView.fields(),jXHR,textStatus, errorThrown);
                 }
             });
@@ -428,7 +430,7 @@
                 GenericViews.getData("/api/orders/?format=json&cashier_shift="+self.order.cashierShift().id, function(response){
                     console.log(response);
                     response.forEach(function(order){
-                       order.showDetails = ko.observable(false);
+                        order.showDetails = ko.observable(false);
                     });
                     posSettings.finishShiftView.orders(response);
                 });
@@ -585,12 +587,27 @@
         };
 
         self.toggleDetails=function(order){
-            console.log("test");
             order.showDetails(!order.showDetails());
         };
 
         self.finishShift = function(){
-            GenericViews.save()
+            var totalRegister = self.totalRegister();
+            if(totalRegister<=0)
+            {
+
+            }
+            return $.ajax({
+                url: '/api/cashiershifts/' + '?format=json',
+                type: 'PUT',
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(reponse);
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    console.log(error,Thrown);
+                }
+            });
         };
 
         self.init=function(){
@@ -655,7 +672,7 @@
         var pointOfSaleView = new PointOfSalesView(posSettings);
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
         pointOfSaleView.init();
-        
+
         shortcut.add('F2', function(){pointOfSaleView.newOrder();})
         shortcut.add('F3', function(){pointOfSaleView.save();})
         shortcut.add('F4', function(){pointOfSaleView.finish();})
