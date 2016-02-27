@@ -1,13 +1,20 @@
 html, body {
-  height: 100%;
-  overflow: hidden;
+    height: 100%;
+    overflow: hidden;
 }
 
 .column-right {
-  height: 700px;
-  overflow: hidden;
+    height: 709px;
+    overflow: hidden;
+}
+.column-right .widget-box{
+    height: 33%;
 }
 
+.column-right .widget-box .widget-main {
+    height: 200px;
+    overflow: auto;
+}
 
 .header {
     margin-top: -6px;
@@ -32,6 +39,8 @@ html, body {
 
 .update-client-status {
     margin-top: -6px;
+    text-align: right;
+    margin-bottom: -34px;
 }
 .form-group {
     margin-bottom: 5px;

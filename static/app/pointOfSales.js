@@ -356,6 +356,11 @@ var PEPPERONI = PEPPERONI || {};
         self.refreshActiveOrders=function(){
             GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+self.order.cashierShift().id, function(response){
                 self.activeOrders(response);
+                var columnRight = $('.column-right');
+                columnRight.height(innerHeight- columnRight.offset().top-15);
+                var widgetBox =$('.widget-box');
+                var bodyHeight= widgetBox.height();
+                $('.column-right .widget-box .widget-main ').height(bodyHeight-62);
             });
         };
 
@@ -686,6 +691,8 @@ var PEPPERONI = PEPPERONI || {};
         shortcut.add('F6', function(){pointOfSaleView.print();});
         shortcut.add('F7', function(){pointOfSaleView.showOrders();});
         shortcut.add('F8', function(){pointOfSaleView.finishShift();});
+
+
 
     });
 })();
