@@ -683,13 +683,34 @@ var PEPPERONI = PEPPERONI || {};
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
         pointOfSaleView.init();
 
-        shortcut.add('F2', function(){pointOfSaleView.newOrder();});
-        shortcut.add('F3', function(){pointOfSaleView.save();});
-        shortcut.add('F4', function(){pointOfSaleView.finish();});
-        shortcut.add('F5', function(){pointOfSaleView.cancel();});
-        shortcut.add('F6', function(){pointOfSaleView.print();});
-        shortcut.add('F7', function(){pointOfSaleView.showOrders();});
-        shortcut.add('F8', function(){pointOfSaleView.finishShift();});
+        shortcut.add('F2', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.newOrder();
+        });
+        shortcut.add('F3', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.save();
+        });
+        shortcut.add('F4', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.finish();
+        });
+        shortcut.add('F5', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.cancel();
+        });
+        shortcut.add('F6', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.print();
+        });
+        shortcut.add('F7', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.showOrders();
+        });
+        shortcut.add('F8', function(){
+            if(!pointOfSaleView.showPointOfSaleView())return;
+            pointOfSaleView.finishShift();
+        });
 
 
 
