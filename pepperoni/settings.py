@@ -54,7 +54,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'crunchy.urls'
+ROOT_URLCONF = 'pepperoni.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'crunchy.wsgi.application'
+WSGI_APPLICATION = 'pepperoni.wsgi.application'
 
 
 # Database
