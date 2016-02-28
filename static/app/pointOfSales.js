@@ -333,7 +333,18 @@ var PEPPERONI = PEPPERONI || {};
             alert('printing');
         };
 
-        self.finish = function(){
+        self.isAValidAmountToFinish = function(){
+            $('.alert.alert-danger').remove();
+            var result = parseFloat(self.order.paymentAmount()) < parseFloat(self.order.total());
+            if(result) {
+                GenericViews.showNotification("Efectivo no es suficiente para finalizar esta factura.");
+                return false;
+            }
+            return true;
+        };
+
+        self.finish = function(){            
+            if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
             request.success(function(response){
                 self.order.reset();
