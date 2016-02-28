@@ -148,6 +148,17 @@ var PEPPERONI = PEPPERONI || {};
                 });
             };
 
+            self.addRowClickEvent = function(){
+                $('#search_product_modal tbody').on( 'click', 'tr', function () {
+                    var row = $(this);
+                    var itemId = row.find('td:first').html();
+                    var itemDescription = row.find('td').eq(1).html();
+                    self.productId(itemId);
+                    self.productDescription(itemDescription);
+                    $('#searchProductsModal').modal('hide');
+                });
+            };
+
             self.init = function () {
                 if (settings.dataTableView) {
                     settings.dataTableView.dataTable.on('click', '.action-buttons .fa-eye', function () {
@@ -157,7 +168,21 @@ var PEPPERONI = PEPPERONI || {};
                 }
                 ko.applyBindings(self, document.getElementById(settings.viewId));
                 self.loadForm();
+                self.addRowClickEvent();
             };
+
+            self.openProductSearch = function(){
+                settings.productSearchTable.refreshDataTable();
+                $('#searchProductsModal').modal('show')
+            };
+        }
+
+        function initializeProductSearch(){
+            var table_settings = {
+                url: "/api/products/",
+                dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true})
+            };
+            return new GenericViews.DataTableView(table_settings);
         }
 
         $(document).ready(function () {
@@ -177,14 +202,13 @@ var PEPPERONI = PEPPERONI || {};
                 viewId: "inventory-input-view",
                 form: $('#form_view'),
                 dataTableView: dataTableView,
-                includeFields:['id','warehouse', 'transaction_date', 'note']
+                includeFields:['id','warehouse', 'transaction_date', 'note'], 
+                productSearchTable: initializeProductSearch()
             };
 
             var formView = new InventoryFormView(form_settings);
             formView.init();
             dataTableView.refreshDataTable();
-
-
         });
     }
 
