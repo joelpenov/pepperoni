@@ -155,9 +155,11 @@ var PEPPERONI = PEPPERONI || {};
         });
 
         self.addNewProduct = function () {
+            debugger;
             if(self.detailModel.isValid()){
                 self.details.push(self.detailModel.getData());
                 self.detailModel.reset();
+                $('#input_product_id').focus();
             }
         };
 
@@ -738,9 +740,7 @@ var PEPPERONI = PEPPERONI || {};
         shortcut.add('F8', function(){
             if(!pointOfSaleView.showPointOfSaleView())return;
             pointOfSaleView.finishShift();
-        });
-
-
+        });       
 
     });
 })();
