@@ -244,14 +244,14 @@
 
                                         <!-- div.dataTables_borderWrap -->
                                         <div class="detail-table-header">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover  table-condensed">
                                                 <thead>
                                                 <tr>
                                                     <th class="center">Codigo</th>
                                                     <th>Descripcion</th>
                                                     <th>Cantidad</th>
-                                                    <th>Precio</th>
-                                                    <th>Total</th>
+                                                    <th class="align-right">Precio</th>
+                                                    <th class="align-right">Total</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -261,14 +261,14 @@
                                             </table>
                                         </div>
                                         <div class="detail-table-body">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover  table-condensed ">
                                                 <thead>
                                                 <tr>
                                                     <th class="center">Codigo</th>
                                                     <th>Descripcion</th>
                                                     <th>Cantidad</th>
-                                                    <th>Precio</th>
-                                                    <th>Total</th>
+                                                    <th class="align-right">Precio</th>
+                                                    <th class="align-right">Total</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -277,9 +277,9 @@
                                                 <tr >
                                                     <td data-bind="text: product_id"></td>
                                                     <td data-bind="text: product_description"></td>
-                                                    <td data-bind="text: quantity"></td>
-                                                    <td data-bind="text: price"></td>
-                                                    <td data-bind="text: total"></td>
+                                                    <td data-bind="text: quantity" class="align-right"></td>
+                                                    <td data-bind="text: PEPPERONI.formatAsMoney(price)" class="align-right"></td>
+                                                    <td data-bind="text: PEPPERONI.formatAsMoney(total)" class="align-right"></td>
                                                     <td>
                                                         <div class="action-buttons">
                                                             <a class="red" data-bind="click: $root.order.deleteProduct">
