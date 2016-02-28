@@ -45,6 +45,7 @@ html, body {
     margin-top: -6px;
     text-align: right;
     margin-bottom: -34px;
+    z-index: 20;
 }
 .form-group {
     margin-bottom: 5px;
