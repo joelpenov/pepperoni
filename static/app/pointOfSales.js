@@ -353,14 +353,28 @@ var PEPPERONI = PEPPERONI || {};
             self.order.setData(order);
         };
 
+        self.updateResponsiveLayout = function(){
+            var columnRight = $('.column-right');
+            columnRight.height(innerHeight- columnRight.offset().top-15);
+            var widgetBox =$('.widget-box');
+            var bodyHeight= widgetBox.height();
+            $('.column-right .widget-box .widget-main ').height(bodyHeight-65);
+
+            var detailHeaderTable = $('.detail-table-header');
+            var detailBodyTable = $('.detail-table-body');
+            detailBodyTable.height(innerHeight- detailHeaderTable.offset().top-$('.pay-container').height()-100);
+
+
+        };
+
+        $( window ).resize(function() {
+             self.updateResponsiveLayout();
+}       );
+
         self.refreshActiveOrders=function(){
             GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+self.order.cashierShift().id, function(response){
                 self.activeOrders(response);
-                var columnRight = $('.column-right');
-                columnRight.height(innerHeight- columnRight.offset().top-15);
-                var widgetBox =$('.widget-box');
-                var bodyHeight= widgetBox.height();
-                $('.column-right .widget-box .widget-main ').height(bodyHeight-65);
+                self.updateResponsiveLayout();
             });
         };
 
@@ -547,7 +561,7 @@ var PEPPERONI = PEPPERONI || {};
         self.voidOrders = ko.observableArray();
 
         self.startBalance = ko.computed(function(){
-           return self.cashierShift().start_balance;
+            return self.cashierShift().start_balance;
         });
 
         self.totalRegister.subscribe(function(){
@@ -559,7 +573,7 @@ var PEPPERONI = PEPPERONI || {};
             var filterOrders= [];
             self.orders().forEach(function(order){
                 if(matches(order)) {
-                   total += order.total;
+                    total += order.total;
                     filterOrders.push(order);
                 }
             });
@@ -639,7 +653,7 @@ var PEPPERONI = PEPPERONI || {};
     function initializeCustomerSearch(){
         var table_settings = {
             url: "/api/customers/",
-            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_customer_modal', keys: true})           
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_customer_modal', keys: true})
         };
 
         return new GenericViews.DataTableView(table_settings);
