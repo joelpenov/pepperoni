@@ -7,9 +7,13 @@ html, body {
     padding: 5px;
 }
 
-.column-right {
+.column-right{
     height: 709px;
     overflow: hidden;
+}
+ .order-review {
+    height: 600px;
+    overflow: auto;
 }
 .column-right .widget-box{
     height: 33%;

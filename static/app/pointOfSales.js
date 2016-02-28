@@ -364,6 +364,9 @@ var PEPPERONI = PEPPERONI || {};
             var detailBodyTable = $('.detail-table-body');
             detailBodyTable.height(innerHeight- detailHeaderTable.offset().top-$('.pay-container').height()-100);
 
+             var orderReviewContainer = $('.order-review');
+            orderReviewContainer.height(innerHeight- orderReviewContainer.offset().top-200);
+
 
         };
 
