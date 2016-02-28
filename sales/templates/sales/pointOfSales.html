@@ -247,12 +247,12 @@
                                             <table class="table table-striped table-bordered table-hover  table-condensed">
                                                 <thead>
                                                 <tr>
-                                                    <th class="center">Codigo</th>
+                                                    <th style="width: 100px;" class="center">Codigo</th>
                                                     <th>Descripcion</th>
-                                                    <th>Cantidad</th>
-                                                    <th class="align-right">Precio</th>
-                                                    <th class="align-right">Total</th>
-                                                    <th></th>
+                                                    <th style="width: 100px;" class="align-center">Cantidad</th>
+                                                    <th style="width: 100px;" class="align-right">Precio</th>
+                                                    <th style="width: 100px;" class="align-right">Total</th>
+                                                    <th style="width: 80px;"></th>
                                                 </tr>
                                                 </thead>
 
@@ -261,26 +261,26 @@
                                             </table>
                                         </div>
                                         <div class="detail-table-body">
-                                            <table class="table table-striped table-bordered table-hover  table-condensed ">
+                                            <table class="table table-striped table-hover  table-condensed ">
                                                 <thead>
                                                 <tr>
-                                                    <th class="center">Codigo</th>
+                                                    <th style="width: 100px;" class="center">Codigo</th>
                                                     <th>Descripcion</th>
-                                                    <th>Cantidad</th>
-                                                    <th class="align-right">Precio</th>
-                                                    <th class="align-right">Total</th>
-                                                    <th></th>
+                                                    <th style="width: 100px;"  >Cantidad</th>
+                                                    <th style="width: 100px;" class="align-right">Precio</th>
+                                                    <th style="width: 100px;" class="align-right">Total</th>
+                                                    <th style="width: 80px;"></th>
                                                 </tr>
                                                 </thead>
 
                                                 <tbody data-bind="foreach: order.details">
                                                 <tr >
-                                                    <td data-bind="text: product_id"></td>
+                                                    <td style="width: 100px;" data-bind="text: product_id"></td>
                                                     <td data-bind="text: product_description"></td>
-                                                    <td data-bind="text: quantity" class="align-right"></td>
-                                                    <td data-bind="text: PEPPERONI.formatAsMoney(price)" class="align-right"></td>
-                                                    <td data-bind="text: PEPPERONI.formatAsMoney(total)" class="align-right"></td>
-                                                    <td>
+                                                    <td style="width: 100px;" data-bind="text: quantity" class="align-center"></td>
+                                                    <td style="width: 100px;" data-bind="text: PEPPERONI.formatAsMoney(price)" class="align-right"></td>
+                                                    <td style="width: 100px;" data-bind="text: PEPPERONI.formatAsMoney(total)" class="align-right"></td>
+                                                    <td style="width: 80px;" >
                                                         <div class="action-buttons">
                                                             <a class="red" data-bind="click: $root.order.deleteProduct">
                                                                 <i class="ace-icon fa fa-trash-o bigger-130"></i>
