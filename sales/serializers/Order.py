@@ -87,7 +87,7 @@ class OrderSerializer(serializers.ModelSerializer):
             inventory_transaction.save()
 
             for detail in details_data:
-                TransactionDetail.objects.create(transaction=inventory_transaction,  **detail)
+                TransactionDetail.objects.create(transaction=inventory_transaction, **detail)
 
 
 

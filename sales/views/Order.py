@@ -3,13 +3,15 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
 from sales.models.Order import Order
 from sales.serializers.Order import OrderSerializer
+from main.mixin import AtomicMixin
 
 
 @login_required()
 def pointOfSales(request):
     return render(request,"sales/pointOfSales.html")
 
-class OrderList(viewsets.ModelViewSet):
+
+class OrderList(AtomicMixin, viewsets.ModelViewSet):
     permission_classes =((permissions.IsAuthenticated),)
     queryset = Order.objects.all()
     serializer_class = OrderSerializer

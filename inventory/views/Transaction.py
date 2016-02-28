@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
 from inventory.models.Transaction import Transaction
 from inventory.serializers.Transaction import TransactionSerializer
+from main.mixin import AtomicMixin
 
 
 @login_required()
@@ -17,7 +18,7 @@ def inventoryOutput(request):
 def inventoryTransfer(request):
 	return render(request,"inventory/InventoryTransfer.html")
 
-class InventoryInputList(viewsets.ModelViewSet):
+class InventoryInputList(AtomicMixin, viewsets.ModelViewSet):
 	permission_classes =((permissions.IsAuthenticated),)
 	queryset = Transaction.objects.filter(transaction_type=Transaction.INPUT)
 	serializer_class = TransactionSerializer
@@ -26,7 +27,7 @@ class InventoryInputList(viewsets.ModelViewSet):
 		return {'request': self.request, 'transaction_type':Transaction.INPUT}
 
 
-class InventoryOutputList(viewsets.ModelViewSet):
+class InventoryOutputList(AtomicMixin, viewsets.ModelViewSet):
 	permission_classes =((permissions.IsAuthenticated),)
 	queryset = Transaction.objects.filter(transaction_type=Transaction.OUTPUT)
 	serializer_class = TransactionSerializer
