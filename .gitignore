@@ -14,6 +14,7 @@ build/
 tests/report/
 db.sqlite3
 crunchyenv/
+pepperonienv/
 .idea/
 *.orig
 mysql.cnf
