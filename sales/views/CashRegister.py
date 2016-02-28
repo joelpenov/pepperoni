@@ -8,7 +8,7 @@ from main.mixin import AtomicMixin
 
 @login_required()
 def cashRegisters(request):
-    return render(request,"sales/cashRegisters.html")
+    return render(request,"sales/cashregisters.html")
 
 
 class CashRegisterList(AtomicMixin, viewsets.ModelViewSet):
