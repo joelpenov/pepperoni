@@ -425,8 +425,8 @@ var PEPPERONI = PEPPERONI || {};
 
             $('#search_product_modal tbody').on( 'click', 'tr', function () {
                 var row = $(this);
-                var codigo = row.find('td:first').html();
-                self.order.detailModel.productId(codigo);
+                var itemId = row.find('td:first').html();
+                self.order.detailModel.productId(itemId);
                 $('#searchProductsModal').modal('hide');
             });
         }
