@@ -36,18 +36,18 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ('id','warehouse', 'transaction_date','warehouse_description','transaction_type', 'details', 'note')
 
-    def saveDetails(self, move, details_data):
+    def saveDetails(self, transaction, details_data):
         for detail in details_data:
-            TransactionDetail.objects.create(inventory_move=move, **detail)
+            TransactionDetail.objects.create(transaction=transaction, **detail)
 
     def create(self, validated_data):
         details_data = validated_data.pop('details')
-        move = Transaction.objects.create(**validated_data)
-        move.transaction_type=self.context.get('transaction_type')
-        move.save()
-        self.saveDetails(move, details_data)
+        transaction = Transaction.objects.create(**validated_data)
+        transaction.transaction_type=self.context.get('transaction_type')
+        transaction.save()
+        self.saveDetails(transaction, details_data)
 
-        return move
+        return transaction
 
 
 

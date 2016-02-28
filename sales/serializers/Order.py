@@ -5,6 +5,7 @@ from sales.models.OrderNumber import OrderNumber
 from sales.models.CashierShift import CashierShift
 from sales.models.Customer import Customer
 from sales.models.SalesArea import SalesArea
+from inventory.models.Transaction import Transaction, TransactionDetail
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
@@ -78,6 +79,16 @@ class OrderSerializer(serializers.ModelSerializer):
 
         for detail in details_data:
             OrderDetail.objects.create(order=order, **detail)
+
+        if order.status == Order.FINISHED:
+            ware_house = order.cashier_shift.cash_register.warehouse
+            note = 'Venta: '+str(order.id)
+            inventory_transaction = Transaction.objects.create(warehouse=ware_house,transaction_date= order.created_date,note=note, transaction_type=Transaction.SALES_OUTPUT )
+            inventory_transaction.save()
+
+            for detail in details_data:
+                TransactionDetail.objects.create(transaction=inventory_transaction,  **detail)
+
 
 
     def setCustomer(self, order):
