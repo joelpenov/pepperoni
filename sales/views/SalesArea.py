@@ -8,7 +8,7 @@ from main.mixin import AtomicMixin
 
 @login_required()
 def salesarea(request):
-    return render(request,"sales/salesarea.html")
+    return render(request,"sales/salesArea.html")
 
 
 class SalesAreaList(AtomicMixin, viewsets.ModelViewSet):
