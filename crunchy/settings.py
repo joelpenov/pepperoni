@@ -79,16 +79,11 @@ WSGI_APPLICATION = 'crunchy.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
     'default': {
-        'NAME': 'crunchydb',
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
-        'USER': 'jorge',
-        'PASSWORD': 'ultra524',
+        'OPTIONS': {
+            'read_default_file':  os.path.join(BASE_DIR, 'mysql.cnf'),
+        },
     },
 }
 
