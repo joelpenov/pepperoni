@@ -64,8 +64,8 @@ var PEPPERONI = PEPPERONI || {};
                     product_id: id,
                     product_description: description,
                     quantity: quantity,
-                    price: PEPPERONI.formatAsMoney(price),
-                    total: PEPPERONI.formatAsMoney(total)
+                    price: price,
+                    total: total
                 });
             };
 

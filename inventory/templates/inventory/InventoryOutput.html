@@ -20,46 +20,46 @@
         </div>
         <div data-bind="visible: showDetailMode" style="display: none;">
             <div class="profile-user-info profile-user-info-striped">
-                    <div class="profile-info-row">
-                        <div class="profile-info-name"> Código </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Código </div>
 
-                        <div class="profile-info-value">
-                            <span data-bind="text: transactionId"></span>
-                        </div>
+                    <div class="profile-info-value">
+                        <span data-bind="text: transactionId"></span>
                     </div>
-                    <div class="profile-info-row">
-                        <div class="profile-info-name"> Tipo </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Tipo </div>
 
-                        <div class="profile-info-value">
-                            <span data-bind="text: inputDescription"></span>
-                        </div>
+                    <div class="profile-info-value">
+                        <span data-bind="text: inputDescription"></span>
                     </div>
+                </div>
 
-                    <div class="profile-info-row">
-                        <div class="profile-info-name"> Origen </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Origen </div>
 
-                        <div class="profile-info-value">            
-                            <span data-bind="text: warehouse"></span>
-                        </div>
+                    <div class="profile-info-value">
+                        <span data-bind="text: warehouse"></span>
                     </div>
+                </div>
 
-                    <div class="profile-info-row">
-                        <div class="profile-info-name"> Fecha </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Fecha </div>
 
-                        <div class="profile-info-value">
-                            <span data-bind="text: transactionDate"></span>
-                        </div>
+                    <div class="profile-info-value">
+                        <span data-bind="text: transactionDate"></span>
                     </div>
+                </div>
 
-                    <div class="profile-info-row">
-                        <div class="profile-info-name"> Nota </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Nota </div>
 
-                        <div class="profile-info-value">
-                            <span data-bind="text: note"></span>
-                        </div>
+                    <div class="profile-info-value">
+                        <span data-bind="text: note"></span>
                     </div>
                 </div>
             </div>
+        </div>
         <div class="row" data-bind="visible: creationMode">
             <form id="form_view" class="form-horizontal">
                 {% csrf_token %}
@@ -80,8 +80,8 @@
                         <div class="input-group" data-bind="css:{'has-error':productIdHasError}">
                             <input type="text" class="form-control search-query" data-bind="value: productId">
                             <span class="input-group-btn">
-                                <button   data-bind="click:openProductSearch" id="searchProducts" 
-                                type="button" class="btn btn-purple   btn-sm"> 
+                                <button   data-bind="click:openProductSearch" id="searchProducts"
+                                          type="button" class="btn btn-purple   btn-sm">
                                     <span class="ace-icon fa fa-search icon-on-right"></span>
                                 </button>
                             </span>
@@ -111,46 +111,45 @@
                             <input type="button" value="Agregar" class="btn btn-info order-input-buttom"  data-bind="click: addNewProduct">
                         </div>
                     </div>
-                </div>               
+                </div>
             </form>
         </div>
         <div data-bind="visible: showDetailMode() || creationMode()">
-             <div class="row">
-                    <div class="col-xs-12">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th class="center">Código</th>
-                                <th>Descripción</th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Total</th>
-                            </tr>
-                            </thead>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="center">Código</th>
+                            <th>Descripción</th>
+                            <th>Cantidad</th>
+                            <th class="align-right">Precio</th>
+                            <th class="align-right">Total</th>
+                        </tr>
+                        </thead>
 
-                            <tbody data-bind="foreach: orderDetails">
-                            <tr >
-                                <td data-bind="text: product_id"></td>
-                                <td data-bind="text: product_description"></td>
-                                <td data-bind="text: quantity"></td>
-                                <td data-bind="text: price"></td>
-                                <td data-bind="text: total"></td>
-                                
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <tbody data-bind="foreach: orderDetails">
+                        <tr >
+                            <td data-bind="text: product_id"></td>
+                            <td data-bind="text: product_description"></td>
+                            <td data-bind="text: quantity"></td>
+                            <td data-bind="text: PEPPERONI.formatAsMoney(price)" class="align-right"></td>
+                            <td data-bind="text: PEPPERONI.formatAsMoney(total)" class="align-right"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="clearfix form-actions center">
-                    <div class="col-md-offset-2 col-md-8">
-                        <button type="button" class="btn btn-info submit-button" type="button"  data-bind="click: save, visible: !showDetailMode() || creationMode() ">
+            </div>
+            <div class="clearfix form-actions center">
+                <div class="col-md-offset-2 col-md-8">
+                    <button type="button" class="btn btn-info submit-button" type="button"  data-bind="click: save, visible: !showDetailMode() || creationMode() ">
                         <i class="ace-icon fa fa-check bigger-110"></i> Guardar</button>
-                            &nbsp; &nbsp; &nbsp;
-                        <button class="btn cancel-button" type="button"  
-                        data-bind="click: cancel, text: showDetailMode() ? 'Atrás' : 'Cancelar' ">
-                            <i class="ace-icon fa fa-undo bigger-110"></i></button>
-                    </div>
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn cancel-button" type="button"
+                            data-bind="click: cancel, text: showDetailMode() ? 'Atrás' : 'Cancelar' ">
+                        <i class="ace-icon fa fa-undo bigger-110"></i></button>
                 </div>
+            </div>
         </div>
         <div class="row" data-bind="visible: showList">
             <div id="table-container" class="col-xs-12">
@@ -169,39 +168,39 @@
         </div>
     </div>
 
-<div class="modal fade" id="searchProductsModal" role="dialog" data-backdrop="static" aria-hidden="true" tabindex='-1'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only"></span>
-                </button>
-                <h4 class="modal-title">Buscar item</h4>
-            </div>
+    <div class="modal fade" id="searchProductsModal" role="dialog" data-backdrop="static" aria-hidden="true" tabindex='-1'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only"></span>
+                    </button>
+                    <h4 class="modal-title">Buscar item</h4>
+                </div>
 
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="search_product_modal">
-                    <thead>
-                    <tr>
-                        <th name="id">Codigo</th>
-                        <th name="description">Descripcion</th>
-                        <th name="sell_price">Precio</th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"> Cancelar </button>
-                <button type="button" class="btn btn-primary" style="display: none"> Agregar </button>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="search_product_modal">
+                        <thead>
+                        <tr>
+                            <th name="id">Codigo</th>
+                            <th name="description">Descripcion</th>
+                            <th name="sell_price">Precio</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> Cancelar </button>
+                    <button type="button" class="btn btn-primary" style="display: none"> Agregar </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 {% block javascript %}
