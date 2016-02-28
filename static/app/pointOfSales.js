@@ -360,7 +360,7 @@ var PEPPERONI = PEPPERONI || {};
                 columnRight.height(innerHeight- columnRight.offset().top-15);
                 var widgetBox =$('.widget-box');
                 var bodyHeight= widgetBox.height();
-                $('.column-right .widget-box .widget-main ').height(bodyHeight-62);
+                $('.column-right .widget-box .widget-main ').height(bodyHeight-65);
             });
         };
 

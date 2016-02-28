@@ -219,19 +219,19 @@
                                     <div class="order-input col-sm-2">
                                         <label for="input_product_quantity"> Cantidad </label>
                                         <div class="form-group"  data-bind="css:{'has-error':order.detailModel.quantityHasError}">
-                                            <input id="input_product_quantity" type="number"  data-bind="value: order.detailModel.quantity" >
+                                            <input id="input_product_quantity" type="number"  data-bind="value: order.detailModel.quantity" class="align-right" >
                                         </div>
                                     </div>
                                     <div class="order-input col-sm-2" >
                                         <label for="input_product_price"> Precio </label>
                                         <div class="form-group" data-bind="css:{'has-error':order.detailModel.priceHasError}">
-                                            <input id="input_product_price" type="number"  data-bind="value:order.detailModel.price" disabled="disabled">
+                                            <input id="input_product_price" type="number"  data-bind="value:order.detailModel.price" disabled="disabled"  class="align-right">
                                         </div>
                                     </div>
                                     <div class="order-input col-sm-2">
                                         <label> </label>
                                         <div class="form-group">
-                                            <input type="button" value="Agregar" class="btn btn-info order-input-buttom"  data-bind="click: order.addNewProduct">
+                                            <input type="button" value="Agregar" class="btn btn-info order-input-buttom"  data-bind="click: order.addNewProduct"  class="align-right">
                                         </div>
                                     </div>
                                 </div>
@@ -340,12 +340,12 @@
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div>
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover table-condensed ">
                                                 <thead>
                                                 <tr>
                                                     <th class="center">Codigo</th>
                                                     <th>Descripcion</th>
-                                                    <th>Precio</th>
+                                                    <th  class="align-right">Precio</th>
                                                 </tr>
                                                 </thead>
 
@@ -353,7 +353,7 @@
                                                 <tr data-bind="click:$root.order.detailModel.addItemToDetailEditor">
                                                     <td data-bind="text:id"></td>
                                                     <td data-bind="text:description"></td>
-                                                    <td data-bind="text: PEPPERONI.formatAsMoney(sell_price)"></td>
+                                                    <td data-bind="text: PEPPERONI.formatAsMoney(sell_price)"  class="align-right"></td>
 
                                                 </tr>
                                                 </tbody>
@@ -371,12 +371,12 @@
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div>
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-striped table-bordered table-hover table-condensed ">
                                                 <thead>
                                                 <tr>
                                                     <th>Codigo</th>
                                                     <th>Turno</th>
-                                                    <th>Total</th>
+                                                    <th  class="align-right">Total</th>
                                                     <th>Mesa</th>
                                                     <th></th>
                                                 </tr>
@@ -386,7 +386,7 @@
                                                 <tr>
                                                     <td data-bind="text:id"></td>
                                                     <td data-bind="text:number"></td>
-                                                    <td data-bind="text:total"></td>
+                                                    <td data-bind="text:PEPPERONI.formatAsMoney(total) "  class="align-right"></td>
                                                     <td data-bind="text:sales_area_name"></td>
                                                     <td>
                                                         <a class="blue" data-bind="click: $root.editActiveOrder">
@@ -602,7 +602,7 @@
 
     <script type="text/html" id="orders-history-template">
         <h3 class="header smaller lighter blue" data-bind="text:title"></h3>
-        <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover order-review-table">
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover order-review-table table-condensed ">
             <thead>
             <tr>
                 <th>Codigo</th>
