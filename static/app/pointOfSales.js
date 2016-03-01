@@ -154,8 +154,7 @@ var PEPPERONI = PEPPERONI || {};
             self.total(total);
         });
 
-        self.addNewProduct = function () {
-            debugger;
+        self.addNewProduct = function () {            
             if(self.detailModel.isValid()){
                 self.details.push(self.detailModel.getData());
                 self.detailModel.reset();
