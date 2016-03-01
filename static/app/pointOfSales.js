@@ -701,6 +701,13 @@ var PEPPERONI = PEPPERONI || {};
         return cashierShiftFormView;
     }
 
+    function initializeSelectAmuntOnClick(){
+        var amountInputFieldElement = $('#input_order_cash');
+        amountInputFieldElement.click(function(){
+            amountInputFieldElement.select();
+        });
+    }
+
     $(document).ready(function(){
         var posSettings = {
             customerSearchTable: initializeCustomerSearch(),
@@ -740,7 +747,9 @@ var PEPPERONI = PEPPERONI || {};
         shortcut.add('F8', function(){
             if(!pointOfSaleView.showPointOfSaleView())return;
             pointOfSaleView.finishShift();
-        });       
+        });     
+
+        initializeSelectAmuntOnClick();  
 
     });
 })();
