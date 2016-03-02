@@ -159,7 +159,6 @@ var PEPPERONI = PEPPERONI || {};
         });
     };
     GenericViews.getData = function(url,callback){
-        console.log("getting data for ", url);
         return $.ajax({
             url: url,
             type: "get",
@@ -210,7 +209,6 @@ var PEPPERONI = PEPPERONI || {};
                             }
                             else if(settings.dateFields.indexOf(column_name)>-1){
                                 row.push( self.setDateFormat(item[column_name]));
-                                console.log(column_name);
                             }
                             else if (item[column_name]) {
                                 row.push(item[column_name]);
@@ -229,10 +227,6 @@ var PEPPERONI = PEPPERONI || {};
                     if(data_source.length===0) return;
 
                     settings.dataTable.fnAddData(data_source);
-
-                    //$($.fn.dataTable.tables(true)).DataTable()
-                    //    .columns.adjust();
-                   //  settings.dataTable.fnAdjustColumnSizing();
 
                 },
                 error: function (jXHR, textStatus, errorThrown) {
