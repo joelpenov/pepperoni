@@ -1,8 +1,6 @@
 #Fuente: https://github.com/simonluijk/django-invoice/tree/a16a10f728d47b70993856bad6929ff4bf23fee6
 #documentacion report lab: http://pydoc.net/Python/reportlab/3.1.8/
 from reportlab.pdfgen.canvas import Canvas
-from reportlab.platypus import Table
-from reportlab.lib.pagesizes import B2, ELEVENSEVENTEEN, A4, B1, B3, B4, B5, A1
 from reportlab.lib.units import cm
 import os
 import calendar
@@ -12,24 +10,29 @@ import time
 root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MARGIN_LEFT = 0.1
-TOP_MARGIN = 13
+TOP_MARGIN = 0
 FONT_SIZE = 10
+FONT_NAME = 'Helvetica'
 
-def draw_header(canvas):
-	canvas.setFont('Helvetica', FONT_SIZE)
+def draw_header(canvas):	
+	global TOP_MARGIN	
+	canvas.setFont(FONT_NAME, FONT_SIZE + 2)
 	canvas.drawString((MARGIN_LEFT + 2.7) * cm, TOP_MARGIN * cm, 'Crunchy Pizza')
 	canvas.drawString((MARGIN_LEFT + 3) * cm, (TOP_MARGIN - 0.5) * cm, "¡Es mejor!")
+	canvas.setFont(FONT_NAME, FONT_SIZE)
+
 	canvas.drawString((MARGIN_LEFT + 0.2) * cm, (TOP_MARGIN - 0.9) * cm, 'Ctra. Duarte, próximo a Coraasan, Licey, Stgo')
-	canvas.drawString((MARGIN_LEFT + 3) * cm, (TOP_MARGIN - 1.3) * cm, '(809) 580-7673')
+	canvas.drawString((MARGIN_LEFT + 2.5) * cm, (TOP_MARGIN - 1.3) * cm, '(809) 580-7673')
 	canvas.line(0 , (TOP_MARGIN - 1.5) * cm, (MARGIN_LEFT + 8) * cm, (TOP_MARGIN - 1.5) * cm)
 
 
 def draw_business_info(canvas, invoice):	
+	global TOP_MARGIN
 
 	if 'invoice_area' in invoice and invoice['invoice_area']:
-		canvas.setFont('Helvetica', FONT_SIZE + 4)
+		canvas.setFont(FONT_NAME, FONT_SIZE + 4)
 		canvas.drawString((MARGIN_LEFT + 3) * cm, (TOP_MARGIN - 2.5) * cm, 'Mesa: ' + invoice['invoice_area'])
-		canvas.setFont('Helvetica', FONT_SIZE)
+		canvas.setFont(FONT_NAME, FONT_SIZE)
 
 	current_top = TOP_MARGIN - 3	
 	canvas.drawString((MARGIN_LEFT + 0.2) * cm, current_top * cm, 'Factura: ' + invoice['invoice_number'])
@@ -39,21 +42,30 @@ def draw_business_info(canvas, invoice):
 	canvas.line(0 , (TOP_MARGIN - 4) * cm, (MARGIN_LEFT + 8) * cm, (TOP_MARGIN - 4) * cm)
 
 
-def draw_customer_info(canvas, invoice):
+def draw_customer_info(canvas, invoice, depth):
+	global TOP_MARGIN
+
 	business_details = (        
 		u'Cliente: ' + invoice['contact_name'],
 		u'Teléfono: '  + invoice['contact_phone'],
 		u'Dirección: '  + invoice['address'],
 		u'Referencia: '  + invoice['reference'],
 	)
-	canvas.setFont('Helvetica', 18)
-	textobject = canvas.beginText(MARGIN_LEFT * cm, -4 * cm)
+	canvas.setFont(FONT_NAME, FONT_SIZE + 2)
+	textobject = canvas.beginText((MARGIN_LEFT + 0.3) * cm, (depth - 1) * cm)
 	for line in business_details:
 		textobject.textLine(line)
 	canvas.drawText(textobject)
 
+	canvas.setFont(FONT_NAME, FONT_SIZE)
+
+	canvas.drawString((MARGIN_LEFT + 2) * cm, (depth - 4) * cm, '¡Gracias por preferirnos!')
+
+
 
 def draw_invoice_detail(canvas, invoice):
+	global TOP_MARGIN
+
 	details = invoice['details']
 	depth = TOP_MARGIN - 4.5
 
@@ -69,7 +81,7 @@ def draw_invoice_detail(canvas, invoice):
 	detail_depth = TOP_MARGIN-5
 	for line in details:
 		canvas.drawString(quantity_margin * cm, detail_depth * cm, str(line['quantity']))
-		canvas.drawString(description_margin * cm, detail_depth * cm, str(line['description'])[:24])
+		canvas.drawString(description_margin * cm, detail_depth * cm, str(line['description'])[:26])
 		canvas.drawString((MARGIN_LEFT + 6) * cm, detail_depth * cm, str(line['amount']))
 		detail_depth -= 0.5
 
@@ -78,7 +90,11 @@ def draw_invoice_detail(canvas, invoice):
 	canvas.drawString((MARGIN_LEFT + 5) * cm, (detail_depth - 0.2) * cm, 'Neto: ')
 	canvas.drawString((MARGIN_LEFT + 6)* cm, (detail_depth - 0.2) * cm, str(invoice['total']))
 
-	canvas.line(5 * cm, (detail_depth - 0.3) * cm, (MARGIN_LEFT + 7) * cm, (detail_depth - 0.3) * cm)
+	detail_depth = detail_depth - 0.3
+
+	canvas.line(5 * cm, detail_depth * cm, (MARGIN_LEFT + 7) * cm, detail_depth * cm)
+
+	return detail_depth - 0.5
 
 
 	# for line in details:
@@ -106,9 +122,18 @@ def draw_invoice_detail(canvas, invoice):
 
 
 def draw_pdf(buffer, invoice):
+	global TOP_MARGIN
 	file_name = root_directory+u'\invoices\\'+str(calendar.timegm(time.gmtime()))+'_factura.pdf'
-	canvas = Canvas(file_name, pagesize=(8 * cm, 15 * cm))
-	canvas.setFont('Helvetica', FONT_SIZE)
+
+	DETAIL_COEFFICIENT = 0.5 * len(invoice['details'])
+	TOP_MARGIN = 11 + DETAIL_COEFFICIENT
+	PAGE_HEIGHT = 12 + DETAIL_COEFFICIENT
+
+	print("*************************PAGE_HEIGHT :" + str(PAGE_HEIGHT))
+
+
+	canvas = Canvas(file_name, pagesize=(8 * cm, PAGE_HEIGHT * cm))
+	canvas.setFont(FONT_NAME, FONT_SIZE)
 
 	canvas.saveState()
 	draw_header(canvas)
@@ -119,11 +144,11 @@ def draw_pdf(buffer, invoice):
 	canvas.restoreState()
 
 	canvas.saveState()
-	draw_customer_info(canvas, invoice)
+	current_depth = draw_invoice_detail(canvas, invoice)
 	canvas.restoreState()
 
 	canvas.saveState()
-	draw_invoice_detail(canvas, invoice)
+	draw_customer_info(canvas, invoice, current_depth)
 	canvas.restoreState()
 
 	textobject = canvas.beginText(MARGIN_LEFT * cm, -2.5 * cm)

@@ -10,7 +10,9 @@ from sales.invoice_canvas import draw_pdf
 from sales.pdfprinter import print_pdf
 from django.http import JsonResponse
 
-FAKE_INVOICE = {'contact_name':'Joel Pena', 
+#TODO: remove this fake implementation_____________________
+
+FAKE_INVOICE = {'contact_name':'Joel Peña', 
         'address': 'Carretera Duarte, Km 9.5', 
         'contact_phone': '809-736-0987', 
         'reference':'Entrada del nueve',
@@ -19,15 +21,14 @@ FAKE_INVOICE = {'contact_name':'Joel Pena',
         'invoice_hour': '10:43 PM',
         'invoice_area': '#1',
         'username':'jpena',
-        'details': [{'quantity': 2, 'description': 'Pizza Grande de Peperoni', 'amount': 400.00},
-                    {'quantity': 1, 'description': 'Refresco 20 oz', 'amount': 20.00}],
+        'details': [
+                    {'quantity': 2, 'description': 'Pizza Grande de Pepperoni marca Adme', 'amount': 400.00},
+                   ],
         'total': 420.00,
 
         }
 
-@login_required()
-def pointOfSales(request):
-    return render(request,"sales/pointOfSales.html")
+
 
 def print_invoice(request):
     file_buffer = BytesIO()
@@ -35,6 +36,12 @@ def print_invoice(request):
     #success_printing = print_pdf(file_path)
     return JsonResponse({'status': True})
 
+#TODO: remove this fake implementation_____________________
+
+
+@login_required()
+def pointOfSales(request):
+    return render(request,"sales/pointOfSales.html")
 
 class OrderList(AtomicMixin, viewsets.ModelViewSet):
     permission_classes =((permissions.IsAuthenticated),)
