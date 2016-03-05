@@ -244,7 +244,6 @@ var PEPPERONI = PEPPERONI || {};
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
-                    console.log('created order', response);
                     if(onSuccess) onSuccess(response);
                 },
                 error: function (jXHR, textStatus, errorThrown) {
@@ -311,7 +310,6 @@ var PEPPERONI = PEPPERONI || {};
         self.save = function(callback){
             var request = self.order.save('save');
             request.success(function(response){
-                debugger;
                 if(callback)callback(response.id);
 
                 self.order.setData(response);
@@ -336,7 +334,6 @@ var PEPPERONI = PEPPERONI || {};
 
             var saveCallback = function(id){
                 GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
-                    console.log("aMJASIAS: "+response)
                     if(response.success_printing)
                         GenericViews.showNotification("Imprimiendo...");
                     else 
