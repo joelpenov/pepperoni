@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
-from sales.models.Order import Order
+from sales.models.Order import Order, OrderDetail
 from sales.serializers.Order import OrderSerializer
 from main.mixin import AtomicMixin
 from rest_framework.views import APIView
 
 from io import BytesIO
-from sales.invoice_canvas import InvoicePrinter
+from sales.invoice_canvas import PdfGenerator
 from sales.pdfprinter import print_pdf
 from django.http import JsonResponse
 
@@ -17,20 +17,21 @@ def pointOfSales(request):
     return render(request,"sales/pointOfSales.html")
 
 
-class OrderPrinter(APIView):
-    def get(self, request, *args, **kw):
-        permission_classes =((permissions.IsAuthenticated),)
-        invoice_id = request.GET.get('invoiceid', None)
-        if not invoice_id and not invoice_id.isdigit():
-            return JsonResponse({'success_printing': False})
+@login_required
+def print_invoice(request):
+    invoice_id = request.GET.get('invoiceid', None)
+    if not invoice_id and not invoice_id.isdigit():
+        return JsonResponse({'success_printing': False})
 
-        invoice_id = int(invoice_id)
+    invoice_id = int(invoice_id)
 
-        order = Order.objects.get(pk= invoice_id)
-
-        file_path = InvoicePrinter.draw_pdf(BytesIO(), order)
-        success_printing = print_pdf(file_path)
-        return JsonResponse({'success_printing': success_printing})
+    order = Order.objects.get(pk= invoice_id)
+    details = OrderDetail.objects.filter(order__pk=invoice_id)    
+    
+    pdfgenerator = PdfGenerator()
+    file_path = pdfgenerator.draw_pdf(BytesIO(), order, details)
+    success_printing = print_pdf(file_path)
+    return JsonResponse({'success_printing': success_printing})
         
 
 class OrderList(AtomicMixin, viewsets.ModelViewSet):

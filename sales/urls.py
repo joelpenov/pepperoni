@@ -12,12 +12,13 @@ def registerApiUrls(router):
 	router.register(r'orders', Order.OrderList)
 	router.register(r'toporders', Order.TopOrderList)
 	router.register(r'salesarea', SalesArea.SalesAreaList)
-	router.register(r'printinvoice', Order.OrderPrinter, "printinvoice")
-
+	
 urlpatterns=[
 		url(r'cashregisters', CashRegister.cashRegisters),
 		url(r'pointofsales', Order.pointOfSales),
 		url(r'customers', Customer.customers),
 		url(r'cashiershifts', CashierShift.cashiershifts),
-		url(r'salesarea', SalesArea.salesarea)
+		url(r'cashiershifts', CashierShift.cashiershifts),
+		url(r'salesarea', SalesArea.salesarea),
+		url(r'printinvoice', Order.print_invoice)
 	]

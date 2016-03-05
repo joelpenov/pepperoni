@@ -329,8 +329,9 @@ var PEPPERONI = PEPPERONI || {};
             });
         };
 
-        self.print = function(){            
-            GenericViews.getData("/api/printinvoice/?format=json&invoiceid="+3, function(response){
+        self.print = function(){      
+            self.save();
+            GenericViews.getData("/sales/printinvoice/?format=json&invoiceid="+self.order.id(), function(response){
                 debugger;
             });
         };
