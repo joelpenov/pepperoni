@@ -33,12 +33,12 @@ class PdfGenerator(object):
 
 		if invoice.sales_area:
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-			canvas.drawString((self.MARGIN_LEFT + 2) * cm, (self.TOP_MARGIN - 2.5) * cm, 'Mesa: ' + invoice.sales_area.name)
+			canvas.drawString((self.MARGIN_LEFT + 1) * cm, (self.TOP_MARGIN - 2.5) * cm, 'Mesa: ' + invoice.sales_area.name)
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
 
 		current_top = self.TOP_MARGIN - 3	
 		canvas.drawString((self.MARGIN_LEFT + 0.2) * cm, current_top * cm, 'Factura: ' + str(invoice.number))
-		canvas.drawString((self.MARGIN_LEFT + 2) * cm, current_top * cm, 'Cajero: ' + invoice.cashier_shift.user.username)
+		canvas.drawString((self.MARGIN_LEFT + 3) * cm, current_top * cm, 'Cajero: ' + invoice.cashier_shift.user.username)
 		canvas.drawString((self.MARGIN_LEFT + 0.2) * cm, (current_top - 0.5) * cm, str(invoice.created_date.strftime("%Y-%m-%d %H:%M:%S")))		
 		canvas.line(0 , (self.TOP_MARGIN - 4) * cm, (self.MARGIN_LEFT + 8) * cm, (self.TOP_MARGIN - 4) * cm)
 
