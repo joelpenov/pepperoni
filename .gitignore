@@ -18,3 +18,4 @@ pepperonienv/
 .idea/
 *.orig
 mysql.cnf
+invoices/*.pdf
