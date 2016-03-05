@@ -308,9 +308,12 @@ var PEPPERONI = PEPPERONI || {};
             self.order.reset();
         };
 
-        self.save = function(){
+        self.save = function(callback){
             var request = self.order.save('save');
             request.success(function(response){
+                debugger;
+                if(callback)callback(response.id);
+
                 self.order.setData(response);
                 self.refreshActiveOrders();
             });
@@ -329,11 +332,18 @@ var PEPPERONI = PEPPERONI || {};
             });
         };
 
-        self.print = function(){      
-            self.save();
-            GenericViews.getData("/sales/printinvoice/?format=json&invoiceid="+self.order.id(), function(response){
-                debugger;
-            });
+        self.print = function(){           
+
+            var saveCallback = function(id){
+                GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
+                    console.log("aMJASIAS: "+response)
+                    if(response.success_printing)
+                        GenericViews.showNotification("Imprimiendo...");
+                    else 
+                        GenericViews.showNotification("No se pudo imprimir la factura.");
+                });
+            };
+            self.save(saveCallback);
         };
 
         self.isAValidAmountToFinish = function(){
@@ -535,8 +545,8 @@ var PEPPERONI = PEPPERONI || {};
 
         self.save = function () {
             var request = GenericViews.saveData(self,settings.form.serializeJSON());
-            request.success(function(result){
-                createdEvent(result);
+                request.success(function(result){                
+                createdEvent(result);                
             });
         };
 

@@ -26,6 +26,9 @@ def print_invoice(request):
     invoice_id = int(invoice_id)
 
     order = Order.objects.get(pk= invoice_id)
+    if not order:
+        return JsonResponse({'success_printing': False})
+        
     details = OrderDetail.objects.filter(order__pk=invoice_id)    
     
     pdfgenerator = PdfGenerator()
