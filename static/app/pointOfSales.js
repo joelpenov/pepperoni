@@ -232,7 +232,6 @@ var PEPPERONI = PEPPERONI || {};
             data.action = action;
             var method = "post";
             var link = settings.url;
-            //formView.resetErrors();
 
             if (self.isEditing()) {
                 method = "put";
@@ -330,8 +329,10 @@ var PEPPERONI = PEPPERONI || {};
             });
         };
 
-        self.print = function(){
-            alert('printing');
+        self.print = function(){            
+            GenericViews.getData("/api/printinvoice/?format=json&invoiceid="+3, function(response){
+                debugger;
+            });
         };
 
         self.isAValidAmountToFinish = function(){

@@ -4,44 +4,34 @@ from rest_framework import viewsets, permissions, filters
 from sales.models.Order import Order
 from sales.serializers.Order import OrderSerializer
 from main.mixin import AtomicMixin
+from rest_framework.views import APIView
 
 from io import BytesIO
-from sales.invoice_canvas import draw_pdf
+from sales.invoice_canvas import InvoicePrinter
 from sales.pdfprinter import print_pdf
 from django.http import JsonResponse
-
-#TODO: remove this fake implementation_____________________
-
-FAKE_INVOICE = {'contact_name':'Joel Peña', 
-        'address': 'Carretera Duarte, Km 9.5', 
-        'contact_phone': '809-736-0987', 
-        'reference':'Entrada del nueve',
-        'invoice_number':'AS0834M49',
-        'invoice_date':'23/02/2016',
-        'invoice_hour': '10:43 PM',
-        'invoice_area': '#1',
-        'username':'jpena',
-        'details': [
-                    {'quantity': 2, 'description': 'Pizza Grande de Pepperoni marca Adme', 'amount': 400.00},
-                   ],
-        'total': 420.00,
-
-        }
-
-
-
-def print_invoice(request):
-    file_buffer = BytesIO()
-    file_path = draw_pdf(file_buffer, FAKE_INVOICE)
-    #success_printing = print_pdf(file_path)
-    return JsonResponse({'status': True})
-
-#TODO: remove this fake implementation_____________________
 
 
 @login_required()
 def pointOfSales(request):
     return render(request,"sales/pointOfSales.html")
+
+
+class OrderPrinter(APIView):
+    def get(self, request, *args, **kw):
+        permission_classes =((permissions.IsAuthenticated),)
+        invoice_id = request.GET.get('invoiceid', None)
+        if not invoice_id and not invoice_id.isdigit():
+            return JsonResponse({'success_printing': False})
+
+        invoice_id = int(invoice_id)
+
+        order = Order.objects.get(pk= invoice_id)
+
+        file_path = InvoicePrinter.draw_pdf(BytesIO(), order)
+        success_printing = print_pdf(file_path)
+        return JsonResponse({'success_printing': success_printing})
+        
 
 class OrderList(AtomicMixin, viewsets.ModelViewSet):
     permission_classes =((permissions.IsAuthenticated),)
