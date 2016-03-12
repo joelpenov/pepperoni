@@ -120,8 +120,8 @@ class PdfGenerator(object):
 
 
 	def draw_pdf(self, buffer, invoice, details):
-		file_name = root_directory+u'\invoices\\'+str(calendar.timegm(time.gmtime()))+'_'+str(invoice.number)+'_'+'_invoice.pdf'
 
+		file_name = os.path.join(root_directory,"invoices",str(calendar.timegm(time.gmtime()))+'_'+str(invoice.number)+'_'+'_invoice.pdf')
 		DETAIL_COEFFICIENT = 0.5 * len(details)
 		self.TOP_MARGIN = 11 + DETAIL_COEFFICIENT
 		PAGE_HEIGHT = 12 + DETAIL_COEFFICIENT

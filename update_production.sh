@@ -1,4 +1,4 @@
 #!/bin/bash
-git pull && \
-python manage.py migrate && \
-sudo service apache2 restart 
+echo "Getting changes" && git pull && \
+echo "migration" && python manage.py migrate && \
+echo "restart server" && sudo service apache2 restart 
