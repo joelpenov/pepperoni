@@ -80,7 +80,7 @@ class PdfGenerator(object):
 		for line in details:
 			canvas.drawString(quantity_margin * cm, detail_depth * cm, str(line.quantity))
 			canvas.drawString(description_margin * cm, detail_depth * cm, str(line.product.description)[:26])
-			canvas.drawString((self.MARGIN_LEFT + 6) * cm, detail_depth * cm, str(line.total))
+			canvas.drawString((self.MARGIN_LEFT + 6) * cm, de         h * cm, str(line.total))
 			detail_depth -= 0.5
 
 		canvas.line(0 , (detail_depth + 0.3) * cm, (self.MARGIN_LEFT + 8) * cm, (detail_depth + 0.3) * cm)

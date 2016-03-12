@@ -7,3 +7,4 @@ pyodbc==3.0.10
 pypiwin32==219
 wheel==0.24.0
 reportlab==3.2.0
+pycups==1.9.73
