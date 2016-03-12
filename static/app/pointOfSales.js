@@ -166,6 +166,7 @@ var PEPPERONI = PEPPERONI || {};
             self.details.remove(product);
         };
         self.reset=function(){
+            $('.alert.alert-danger').remove();
             self.setData({
                 id:0,
                 update_customer_entry:false,
@@ -310,8 +311,7 @@ var PEPPERONI = PEPPERONI || {};
         self.save = function(callback){
             var request = self.order.save('save');
             request.success(function(response){
-                if(callback)callback(response.id);
-
+                if(typeof callback === 'function')callback(response.id);
                 self.order.setData(response);
                 self.refreshActiveOrders();
             });
@@ -331,7 +331,7 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.print = function(){           
-
+            $('.alert.alert-danger').remove();
             var saveCallback = function(id){
                 GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                     if(response.success_printing)
@@ -341,6 +341,18 @@ var PEPPERONI = PEPPERONI || {};
                 });
             };
             self.save(saveCallback);
+        };
+
+        self.printAfterFinish = function(id){     
+            if(!id) return;      
+            $('.alert.alert-danger').remove();           
+            GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
+                if(response.success_printing)
+                    GenericViews.showNotification("Imprimiendo...");
+                else 
+                    GenericViews.showNotification("No se pudo imprimir la factura.");
+            });          
+           
         };
 
         self.isAValidAmountToFinish = function(){
@@ -356,9 +368,12 @@ var PEPPERONI = PEPPERONI || {};
         self.finish = function(){
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
+            
             request.success(function(response){
+                self.printAfterFinish(response.id);
                 self.order.reset();
-                self.refreshActiveOrders();
+                self.refreshActiveOrders();  
+                $('.alert.alert-danger').remove();                  
             });
         };
 
@@ -730,6 +745,13 @@ var PEPPERONI = PEPPERONI || {};
         var amountInputFieldElement = $('#input_order_cash');
         amountInputFieldElement.click(function(){
             amountInputFieldElement.select();
+        });
+    }
+
+    function initializeSelectProductQuantityOnClick(){
+        var productQuantityElement = $('#input_product_quantity');
+        productQuantityElement.click(function(){
+            productQuantityElement.select();
         });
     }
 
