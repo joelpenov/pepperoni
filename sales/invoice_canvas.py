@@ -6,6 +6,7 @@ import os
 import calendar
 from datetime import datetime
 import time
+import re
 
 root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,7 +16,39 @@ class PdfGenerator(object):
 		self.MARGIN_LEFT = 0
 		self.TOP_MARGIN = 0
 		self.FONT_SIZE = 8
-		self.FONT_NAME = 'Helvetica'        
+		self.FONT_NAME = 'Helvetica'
+
+	def cut_at_last_space(self, message):
+	    reverse_message = message[::-1]
+	    counter = 0
+	    for letter in reverse_message:
+	        counter += 1
+	        if letter == " ":
+	            return message[:-counter - 1], counter
+	    return message, 0
+
+	def smart_cut(self, text):
+	    if not text or not (len(text) > 0):
+	        return "", 0
+	    if text[-1] == " ":
+	        return text, 0
+	    return self.cut_at_last_space(text)    
+
+
+	def format_addres(self,message):
+		MAX_CHARACTERS= 48
+		result = []
+		message = re.sub(' +',' ', message).replace('\n', '').replace('#', 'no.')    
+		current_start_position = 0
+		while len(message[current_start_position:]) > MAX_CHARACTERS:
+			line_to_add = message[current_start_position:current_start_position + MAX_CHARACTERS]
+			line_to_add, characters_before = self.smart_cut(line_to_add)
+			result += [line_to_add]
+			current_start_position += (MAX_CHARACTERS - characters_before)
+
+		result += [message[current_start_position:]]
+		
+		return result
 		
 	def draw_line(self, canvas, depth, dashed=False):
 		if dashed:	
@@ -72,29 +105,44 @@ class PdfGenerator(object):
 		self.draw_line(canvas,(self.TOP_MARGIN - 4), dashed=True)
 
 
-	def draw_customer_info(self, canvas, invoice, depth):	
-
-		line_depth = 0.4
+	def draw_customer_info(self, canvas, invoice, depth):
+		line_depth = 0.4		
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-		if invoice.customer_name:
+
+		if invoice.customer_name:			
 			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, u'Cliente: ' + invoice.customer_name)
 			depth -= line_depth
+			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, "")
+			depth -= line_depth
+
 		if invoice.customer_address:
+			reference_as_list = self.format_addres(invoice.customer_address)			
 			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, u'Dirección: ')
 			depth -= line_depth			
-			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, invoice.customer_address)			
+			for line in reference_as_list:
+				canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, line)
+				depth -= line_depth
+			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, "")
 			depth -= line_depth
+
 		if invoice.customer_reference:
+			reference_as_list = self.format_addres(invoice.customer_reference)			
 			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, u'Referencia: ')
 			depth -= line_depth			
-			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, invoice.customer_reference)
+			for line in reference_as_list:
+				canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, line)
+				depth -= line_depth
+			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, "")
 			depth -= line_depth
+
 		if invoice.customer_phone:
 			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, u'Teléfono: '  + invoice.customer_phone)
 			depth -= line_depth
+			canvas.drawString((self.MARGIN_LEFT + 0.3) * cm, depth * cm, "")
+			depth -= line_depth
 		
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
-		canvas.drawString((self.MARGIN_LEFT + 2) * cm, (depth - 1.5) * cm, '¡Gracias por preferirnos!')
+		canvas.drawString((self.MARGIN_LEFT + 2) * cm, (depth - 0.7) * cm, '¡Gracias por preferirnos!')
 
 
 
@@ -132,7 +180,7 @@ class PdfGenerator(object):
 		canvas.line(4 * cm , detail_depth * cm, (self.MARGIN_LEFT + 7) * cm, detail_depth * cm)
 		canvas.setDash()
 
-
+		
 		return detail_depth - 0.6
 
 
