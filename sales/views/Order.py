@@ -29,11 +29,16 @@ def print_invoice(request):
     if not order:
         return JsonResponse({'success_printing': False})
         
-    details = OrderDetail.objects.filter(order__pk=invoice_id)    
+    details = OrderDetail.objects.filter(order__pk=invoice_id)
     
     pdfgenerator = PdfGenerator()
     file_path = pdfgenerator.draw_pdf(BytesIO(), order, details)
     success_printing = print_pdf(file_path)
+
+    if success_printing:
+        order.printed = True
+        order.save()
+
     return JsonResponse({'success_printing': success_printing})
         
 

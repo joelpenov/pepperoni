@@ -184,6 +184,7 @@ class PdfGenerator(object):
 		canvas.drawString((self.MARGIN_LEFT + 3.5) * cm, (detail_depth - 1.8) * cm, 'Devuelto: RD$ ')
 		canvas.drawString((self.MARGIN_LEFT + 5.9)* cm, (detail_depth - 1.8) * cm, self.format_as_number(invoice.customer_change))
 		
+		self.draw_line(canvas,(detail_depth - 2), dashed=False)
 				
 		return detail_depth - 3
 
@@ -194,6 +195,14 @@ class PdfGenerator(object):
 		return 12 + detail_coefficient + (0.5 * customer_lines)
 		
 
+	def add_water_mark(self, canvas, message):
+		canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 50)
+		canvas.setFillGray(0.5,0.5)
+		canvas.translate(240,120)
+		canvas.rotate(45)		
+		canvas.drawCentredString(0, 150, message)
+
+
 	def draw_pdf(self, buffer, invoice, details):
 
 		file_name = os.path.join(root_directory,"invoices",str(calendar.timegm(time.gmtime()))+'_'+str(invoice.number)+'_'+'_invoice.pdf')
@@ -203,6 +212,12 @@ class PdfGenerator(object):
 
 		canvas = Canvas(file_name, pagesize=(8 * cm, PAGE_HEIGHT * cm))
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+		canvas.setTitle("Pepperonni System")
+
+		if invoice.printed:
+			canvas.saveState()
+			self.add_water_mark(canvas, "NO HACER")
+			canvas.restoreState()
 
 		canvas.saveState()
 		self.draw_header(canvas)

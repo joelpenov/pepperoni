@@ -38,6 +38,7 @@ class Order(models.Model):
 	total = models.FloatField()
 	cash = models.FloatField()
 	customer_change = models.FloatField()
+	printed = models.FloatField(default=False)
 
 	#class Meta:
 		#unique_together = (('slug','category'),)
