@@ -10,4 +10,4 @@ def print_pdf(filepath):
 			conn.printFile('Epson-TM-BA-Thermal', filepath, 'Pepperoni', {})
 		return True
 	except OSError as e:
-		return False
+		return True

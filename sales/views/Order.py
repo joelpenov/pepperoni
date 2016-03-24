@@ -5,10 +5,10 @@ from sales.models.Order import Order, OrderDetail
 from sales.serializers.Order import OrderSerializer
 from main.mixin import AtomicMixin
 from rest_framework.views import APIView
+from inventory.models.Transaction import Transaction, TransactionDetail
 
-from io import BytesIO
-from sales.invoice_canvas import PdfGenerator
-from sales.pdfprinter import print_pdf
+from sales.invoice_generation.invoice_canvas import PdfGenerator
+from sales.invoice_generation.pdfprinter import print_pdf
 from django.http import JsonResponse
 
 
@@ -32,7 +32,7 @@ def print_invoice(request):
     details = OrderDetail.objects.filter(order__pk=invoice_id)
     
     pdfgenerator = PdfGenerator()
-    file_path = pdfgenerator.draw_pdf(BytesIO(), order, details)
+    file_path = pdfgenerator.draw_pdf(order, details)
     success_printing = print_pdf(file_path)
 
     if success_printing:
