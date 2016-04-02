@@ -43,7 +43,7 @@ class PdfGenerator(object):
 
 	def draw_business_info(self, canvas, invoice):	
 		if invoice.status != 'FINISHED':
-			canvas.drawString((self.MARGIN_LEFT + 1.5) * cm, (self.TOP_MARGIN + 0.5) * cm, '--FACTURA NO FINALIZADA--')
+			canvas.drawString((self.MARGIN_LEFT + 1.5) * cm, (self.TOP_MARGIN + 0.5) * cm, '--ESTO NO ES UNA FACTURA--')
 
 		if invoice.sales_area:
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
@@ -57,7 +57,7 @@ class PdfGenerator(object):
 
 		elif invoice.to_pickup:
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-			canvas.drawString((self.MARGIN_LEFT + 5) * cm, (self.TOP_MARGIN - 2.5) * cm, '*Comer aquí')
+			canvas.drawString((self.MARGIN_LEFT + 5) * cm, (self.TOP_MARGIN - 2.5) * cm, '*Para recoger')
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
 
 		current_top = self.TOP_MARGIN - 3	
