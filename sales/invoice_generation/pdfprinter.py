@@ -9,7 +9,6 @@ def print_pdf(filepath):
 			print('printed')
 			os.startfile(filepath, "print")
 		else:
-			conn=
 			conn=cups.Connection()
 			conn.printFile('Epson-TM-BA-Thermal', filepath, 'Pepperoni', {})
 		return True

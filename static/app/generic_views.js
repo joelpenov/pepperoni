@@ -189,9 +189,10 @@ var PEPPERONI = PEPPERONI || {};
         settings.actionRender = settings.actionRender || function(item){
                 return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
             };
-        self.refreshDataTable = function () {
+        self.refreshDataTable = function (overRideUrl) {
+            var url = overRideUrl || settings.url + '?format=json';
             $.ajax({
-                url: settings.url + '?format=json',
+                url: url,
                 type: "get",
                 data: {},
                 success: function (response) {

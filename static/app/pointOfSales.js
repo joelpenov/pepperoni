@@ -330,29 +330,29 @@ var PEPPERONI = PEPPERONI || {};
             });
         };
 
-        self.print = function(){           
+        self.print = function(){
             $('.alert.alert-danger').remove();
             var saveCallback = function(id){
                 GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                     if(response.success_printing)
                         GenericViews.showNotification("Imprimiendo...");
-                    else 
+                    else
                         GenericViews.showNotification("No se pudo imprimir la factura.");
                 });
             };
             self.save(saveCallback);
         };
 
-        self.printAfterFinish = function(id){     
-            if(!id) return;      
-            $('.alert.alert-danger').remove();           
+        self.printAfterFinish = function(id){
+            if(!id) return;
+            $('.alert.alert-danger').remove();
             GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                 if(response.success_printing)
                     GenericViews.showNotification("Imprimiendo...");
-                else 
+                else
                     GenericViews.showNotification("No se pudo imprimir la factura.");
-            });          
-           
+            });
+
         };
 
         self.isAValidAmountToFinish = function(){
@@ -367,17 +367,17 @@ var PEPPERONI = PEPPERONI || {};
 
         self.finish = function(){
             if(!self.isAValidAmountToFinish()) return;
-            var request =self.order.save('finish');            
+            var request =self.order.save('finish');
             request.success(function(response){
                 self.printAfterFinish(response.id);
                 self.order.reset();
-                self.refreshActiveOrders();  
-                $('.alert.alert-danger').remove();                  
+                self.refreshActiveOrders();
+                $('.alert.alert-danger').remove();
             });
         };
 
         self.showOrders = function(){
-            alert('order list');
+            self.openOrderSearch();
         };
 
         self.finishShift = function(){
@@ -422,7 +422,13 @@ var PEPPERONI = PEPPERONI || {};
 
         self.openProductSearch = function(){
             posSettings.productSearchTable.refreshDataTable();
-            $('#searchProductsModal').modal('show')
+            $('#searchProductsModal').modal('show');
+        };
+
+        self.openOrderSearch = function(){
+            posSettings.orderSearchTable.refreshDataTable("/api/orders/?format=json&cashier_shift="+self.order.cashierShift().id);
+            $('#searchOrderModal').modal('show');
+
         };
 
         self.continueOrCreateShift= function(){
@@ -451,6 +457,15 @@ var PEPPERONI = PEPPERONI || {};
                 self.order.detailModel.productId(itemId);
                 $('#searchProductsModal').modal('hide');
             });
+
+            posSettings.orderSearchTable.dataTable.on('click', '.action-buttons .view', function(){
+                var id = $(this).data("item-id");
+                GenericViews.getData("/api/orders/"+id+"?format=json", function(response){
+                    self.order.setData(response);
+                    $('#searchOrderModal').modal('hide');
+                });
+            });
+
         }
         function setShowHideViewEvents(){
 
@@ -557,8 +572,8 @@ var PEPPERONI = PEPPERONI || {};
 
         self.save = function () {
             var request = GenericViews.saveData(self,settings.form.serializeJSON());
-                request.success(function(result){                
-                createdEvent(result);                
+            request.success(function(result){
+                createdEvent(result);
             });
         };
 
@@ -718,11 +733,26 @@ var PEPPERONI = PEPPERONI || {};
     function initializeProductSearch(){
         var table_settings = {
             url: "/api/products/",
-            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true})
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true}),
         };
         return new GenericViews.DataTableView(table_settings);
     }
 
+    function initializeOrderSearch(){
+        var table_settings = {
+            url: "/api/orders/",
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_order_modal', keys: true}),
+            dateFields:['created_date'],
+            moneyFields: ['total'],
+            booleanFields: ['to_go','delivered'],
+            actionRender: function(item){
+                return '<div class="action-buttons"> <a class="view blue" data-item-id="' + item.id + '"><i '+
+                    'class="ace-icon fa fa-eye bigger-130" ></i></a> </div>';
+            }
+
+        };
+        return new GenericViews.DataTableView(table_settings);
+    }
     function initializeFinishShiftView(){
         var finishShiftView = new FinishShiftView({});
         finishShiftView.init();
@@ -761,7 +791,7 @@ var PEPPERONI = PEPPERONI || {};
             {
                 viewModel.order.addNewProduct();
             }
-        });   
+        });
     }
 
 
@@ -769,6 +799,7 @@ var PEPPERONI = PEPPERONI || {};
         var posSettings = {
             customerSearchTable: initializeCustomerSearch(),
             productSearchTable: initializeProductSearch(),
+            orderSearchTable: initializeOrderSearch(),
             finishShiftView: initializeFinishShiftView(),
             cashierShiftFormView: initializeCashierShiftFormView()
         };
