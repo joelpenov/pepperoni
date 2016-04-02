@@ -368,7 +368,8 @@ var PEPPERONI = PEPPERONI || {};
         self.finish = function(){
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');            
-            request.success(function(response){                
+            request.success(function(response){
+                self.printAfterFinish(response.id);
                 self.order.reset();
                 self.refreshActiveOrders();  
                 $('.alert.alert-danger').remove();                  

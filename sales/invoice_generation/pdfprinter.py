@@ -1,13 +1,18 @@
 import os, sys
-import cups
+#import cups
 
 def print_pdf(filepath):
-	try: 
-		if sys.platform == "win32":
-			os.startfile(filename, "print")
+	try:
+		print('Plataform blah')
+		print( sys.platform=='win32')
+		if sys.platform == 'win32':
+			print('printed')
+			os.startfile(filepath, "print")
 		else:
+			conn=
 			conn=cups.Connection()
 			conn.printFile('Epson-TM-BA-Thermal', filepath, 'Pepperoni', {})
 		return True
 	except OSError as e:
+		print(e)
 		return True
