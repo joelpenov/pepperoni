@@ -1,5 +1,9 @@
 {% extends "menu-layout.html" %}
 {% load staticfiles %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
+    {#    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />#}
+{% endblock styling %}
 {% block content %}
     <div id="cashier-shift-view" data-bind="visible: showShiftList">
         <div class="page-header">
@@ -39,7 +43,7 @@
             <div class="clearfix">
                 <div class="col-md-6">
                     <h1>
-                        Finalizar turno
+                        Reporte Turno
                     </h1>
                 </div>
             </div>
@@ -54,43 +58,41 @@
                                 <div class="order-input col-sm-2">
                                     <label for="input_total_register"> Total caja </label>
                                     <div class="form-group">
-                                        <input id="input_total_register" type="number" data-bind="value:totalRegister" />
+                                        <input id="input_total_register" type="text" data-bind="value:totalRegister" disabled="disabled" class="align-right"  />
                                     </div>
                                 </div>
                                 <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Balance inicial </label>
                                     <div class="form-group">
-                                        <input id="input_customer_address" type="text" data-bind="value:startBalance" disabled="disabled" />
+                                        <input id="input_customer_address" type="text" data-bind="value:startBalance" disabled="disabled" class="align-right"  />
                                     </div>
                                 </div>
                                 <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Total vendidos </label>
                                     <div class="form-group">
-                                        <input id="input_customer_address" type="text" data-bind="value:totalFinished" disabled="disabled" />
+                                        <input id="input_customer_address" type="text" data-bind="value:totalFinished" disabled="disabled" class="align-right"  />
                                     </div>
                                 </div>
                                 <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Diferencia </label>
                                     <div class="form-group">
-                                        <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" />
+                                        <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" class="align-right"  />
                                     </div>
                                 </div>
                                 <div class="order-input col-sm-2">
                                     <label for="input_customer_address"> Total no entregadas </label>
                                     <div class="form-group">
-                                        <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" />
+                                        <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" class="align-right"  />
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="order-input col-sm-4">
+                                <div class="order-input col-sm-2">
                                     <label >  </label>
                                     <div class="form-group">
                                         <input type="button" class="btn btn-grey" data-bind="click:cancel" value="Back">
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                     <div class="col-md-12 order-review">

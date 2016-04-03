@@ -38,7 +38,6 @@ var PEPPERONI = PEPPERONI || {};
         self.showFinishSwiftView = ko.observable(false);
         self.cashierShift = ko.observable({});
 
-        self.totalRegister = ko.observable(0).extend({numeric:2});
         self.totalActive = ko.observable(0).extend({numeric:2});
         self.totalFinished = ko.observable(0).extend({numeric:2});
         self.totalVoid = ko.observable(0).extend({numeric:2});
@@ -49,13 +48,8 @@ var PEPPERONI = PEPPERONI || {};
         self.finishedOrders = ko.observableArray();
         self.voidOrders = ko.observableArray();
 
-        self.startBalance = ko.computed(function(){
-            return self.cashierShift().start_balance;
-        });
-
-        self.totalRegister.subscribe(function(){
-            self.difference(self.totalRegister()-self.startBalance()-self.totalFinished());
-        });
+        self.totalRegister=ko.observable();
+        self.startBalance=ko.observable();
 
         self.filterBy=function(matches){
             var total = 0;
@@ -88,6 +82,10 @@ var PEPPERONI = PEPPERONI || {};
             var voidOrderFilter = self.filterBy(function(order){return order.status ==='VOID'});
             self.voidOrders(voidOrderFilter.orders);
             self.totalVoid(voidOrderFilter.total);
+
+            self.startBalance(PEPPERONI.formatAsMoney(self.cashierShift().start_balance));
+            self.totalRegister(PEPPERONI.formatAsMoney(self.cashierShift().close_balance));
+            self.difference(PEPPERONI.formatAsMoney(self.totalRegister()-self.startBalance()-self.totalFinished()));
         });
 
         self.updateLayout = function(){
