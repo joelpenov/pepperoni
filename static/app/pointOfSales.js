@@ -742,14 +742,6 @@ var PEPPERONI = PEPPERONI || {};
         var table_settings = {
             url: "/api/orders/",
             dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_order_modal', keys: true}),
-            dateFields:['created_date'],
-            moneyFields: ['total'],
-            booleanFields: ['to_go','delivered'],
-            actionRender: function(item){
-                return '<div class="action-buttons"> <a class="view blue" data-item-id="' + item.id + '"><i '+
-                    'class="ace-icon fa fa-eye bigger-130" ></i></a> </div>';
-            }
-
         };
         return new GenericViews.DataTableView(table_settings);
     }

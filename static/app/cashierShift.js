@@ -5,15 +5,7 @@ var PEPPERONI = PEPPERONI || {};
     $(document).ready(function(){
         var table_settings = {
             url: "/api/cashiershifts/",
-            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'}),
-            actionRender: function(item){
-                return '<div class="action-buttons">'+
-                    '<a class="view blue" data-item-id="' + item.id + '"><i class="ace-icon fa fa-eye bigger-130"></i></a>' +
-                    '</div>';
-            },
-            dateFields: ['start_date', 'close_date'],
-            moneyFields: ['start_balance','close_balance']
-
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'})
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);

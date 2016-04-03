@@ -177,18 +177,38 @@ var PEPPERONI = PEPPERONI || {};
         return GenericViews.getData(link,callback);
     };
 
+    var status = {
+        'ACTIVE':'Activo',
+        'CLOSE':'Cerrado',
+        'FINISHED':'Terminado',
+        'VOID':'Nulo',
+    }
+
+    GenericViews.tableRenders = {
+        'edit-action': function ( data, type, row ) {
+            return '<div class="action-buttons"><a class="edit green" data-item-id="' + data + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
+        },
+        'view-action': function ( data, type, row ) {
+            return '<div class="action-buttons"> <a class="view blue" data-item-id="' + data + '"><i class="ace-icon fa fa-eye bigger-130" ></i></a> </div>';
+        },
+        'boolean': function ( data, type, row ) {
+            return data === true? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': ''
+        },
+        'money':  function ( data, type, row ) {
+            return PEPPERONI.formatAsMoney(data);
+        },
+        'datetime':function ( data, type, row ) {
+            return PEPPERONI.longDateFormat(data);
+        },
+        'status':function ( data, type, row ) {
+            return status[data];
+        },
+    };
+
     function DataTableView(settings) {
         var self = this;
-        var data_source = [];
-
-        settings.booleanFields=settings.booleanFields||[];
-        settings.moneyFields=settings.moneyFields||[];
-        settings.dateFields=settings.dateFields||[];
         self.dataTable= settings.dataTable;
 
-        settings.actionRender = settings.actionRender || function(item){
-                return '<div class="action-buttons"><a class="edit green" data-item-id="' + item.id + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a></div>';
-            };
         self.refreshDataTable = function (overRideUrl) {
             var url = overRideUrl || settings.url + '?format=json';
             $.ajax({
@@ -196,58 +216,16 @@ var PEPPERONI = PEPPERONI || {};
                 type: "get",
                 data: {},
                 success: function (response) {
-                    var data_source = [];
-                    response.forEach(function (item) {
-                        var theaders = settings.dataTable.find('thead tr th');
-                        var row = [];
-                        theaders.each(function (index, thcell) {
-                            var column_name = $(thcell).attr("name");
-                            if(settings.booleanFields.indexOf(column_name)>-1){
-                                row.push( self.setBooleanIcon(item[column_name]));
-                            }
-                            else if(settings.moneyFields.indexOf(column_name)>-1){
-                                row.push( self.setMoneyFormat(item[column_name]));
-                            }
-                            else if(settings.dateFields.indexOf(column_name)>-1){
-                                row.push( self.setDateFormat(item[column_name]));
-                            }
-                            else if (item[column_name]) {
-                                row.push(item[column_name]);
-                            }
-                            else if (column_name == "actions") {
-                                row.push(settings.actionRender(item));
-                            }
-                            else {
-                                row.push("");
-                            }       
-                        });
-
-                        data_source.push(row);
-                        settings.dataTable.fnClearTable();
-                    });
-                    if(data_source.length===0) return;
-
-                    settings.dataTable.fnAddData(data_source);
-
+                    settings.dataTable.fnClearTable();
+                    if(response.length> 0){
+                        settings.dataTable.fnAddData(response);
+                    }
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.error(errorThrown);
                 }
             });
         };
-
-        self.setBooleanIcon = function(value){
-            return value === true? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': '';
-        };
-
-        self.setMoneyFormat = function(value){
-            return PEPPERONI.formatAsMoney(value);
-        };       
-
-        self.setDateFormat = function(date){
-            return PEPPERONI.longDateFormat(date);
-        };
-        
 
         self.reset  =function(){
             settings.dataTable.fnDestroy();

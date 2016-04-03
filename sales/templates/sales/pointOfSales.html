@@ -496,7 +496,7 @@
                                 <tr>
                                     <th name="id">Codigo</th>
                                     <th name="description">Descripcion</th>
-                                    <th name="sell_price">Precio</th>
+                                    <th name="sell_price" data-type="money" class="align-right">Precio</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -527,14 +527,14 @@
                                 <thead>
                                 <tr>
                                     <th name="id">Codigo</th>
-                                    <th name="created_date">Fecha</th>
-                                    <th name="status">Estado</th>
+                                    <th name="created_date" data-type="datetime">Fecha</th>
+                                    <th name="status" data-type="status">Estado</th>
                                     <th name="customer_phone">Telefono</th>
                                     <th name="customer_name">Cliente</th>
-                                    <th name="total" class="align-right">Total</th>
-                                    <th name="to_go" class="align-center">LLevar</th>
-                                    <th name="delivered" class="align-center">Entregada</th>
-                                    <th name="actions"></th>
+                                    <th name="total"  data-type="money" class="align-right">Total</th>
+                                    <th name="to_go"  data-type="boolean" class="align-center">LLevar</th>
+                                    <th name="delivered" data-type="boolean" class="align-center">Entregada</th>
+                                    <th name="id" data-type="view-action"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
