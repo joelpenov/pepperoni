@@ -10,6 +10,7 @@ def registerApiUrls(router):
 	router.register(r'cashregisters', CashRegister.CashRegisterList)
 	router.register(r'cashiershifts', CashierShift.CashierShiftList)
 	router.register(r'orders', Order.OrderList)
+	router.register(r'orderdelivered', Order.SetOrderDeliverStatusView)
 	router.register(r'toporders', Order.TopOrderList)
 	router.register(r'salesarea', SalesArea.SalesAreaList)
 	

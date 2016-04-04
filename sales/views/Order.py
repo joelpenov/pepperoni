@@ -2,10 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
 from sales.models.Order import Order, OrderDetail
-from sales.serializers.Order import OrderSerializer
+from sales.serializers.Order import OrderSerializer, SetOrderDeliverStatusSerializer
 from main.mixin import AtomicMixin
-from rest_framework.views import APIView
-from inventory.models.Transaction import Transaction, TransactionDetail
 
 from sales.invoice_generation.invoice_canvas import PdfGenerator
 from sales.invoice_generation.pdfprinter import print_pdf
@@ -60,3 +58,10 @@ class TopOrderList(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
         query = super(TopOrderList, self).filter_queryset(queryset)
         return query[:10]
+
+
+class SetOrderDeliverStatusView(AtomicMixin, viewsets.ModelViewSet):
+    permission_classes =((permissions.IsAuthenticated),)
+    queryset = Order.objects.all()
+    http_method_names = ['put']
+    serializer_class = SetOrderDeliverStatusSerializer

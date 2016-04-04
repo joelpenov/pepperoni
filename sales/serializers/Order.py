@@ -23,6 +23,26 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         fields = ('id','product_id', 'quantity', 'price','product_description', 'total')
 
 
+class SetOrderDeliverStatusSerializer(serializers.ModelSerializer):
+    delivered= serializers.NullBooleanField(required=False, label="Entregado")
+    class Meta:
+        model = Order
+        fields = ('id','delivered')
+
+    def update(self,instance, validated_data):
+        delivered = validated_data.pop('delivered')
+        instance.delivered = delivered
+        instance.save()
+        print('delivered')
+        print(delivered)
+        return instance
+
+    def create(self, validated_data):
+        raise serializers.ValidationError("No se puede crear")
+
+    def delete(self, validated_data):
+        raise serializers.ValidationError("No se puede borrar")
+
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
 

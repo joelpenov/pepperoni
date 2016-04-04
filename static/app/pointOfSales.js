@@ -796,6 +796,27 @@ var PEPPERONI = PEPPERONI || {};
             cashierShiftFormView: initializeCashierShiftFormView()
         };
 
+        posSettings.orderSearchTable.dataTable.on( 'draw.dt', function () {
+            posSettings.orderSearchTable.dataTable.find(':checkbox').change(function() {
+                var orderid =$(this).parents('tr').find('.view').data('item-id');
+                var data = {
+                    delivered:$(this).is(':checked')
+                };
+                $.ajax({
+                    url: '/api/orderdelivered/'+orderid + '/?format=json',
+                    type: 'put',
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                    }
+                });
+
+            });
+        });
+
+
         var pointOfSaleView = new PointOfSalesView(posSettings);
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
         pointOfSaleView.init();

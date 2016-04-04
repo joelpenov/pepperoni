@@ -194,6 +194,18 @@ var PEPPERONI = PEPPERONI || {};
         'boolean': function ( data, type, row ) {
             return data === true? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': ''
         },
+        'check-switch': function ( data, type, row ) {
+            var checked =  data === true? 'checked="checked"' : '';
+            return '<div class="checkbox">'+
+            '<label>'+
+                '<input type="checkbox" value="True" class="ace ace-switch" data-unchecked-value="false" '+checked+' />'+
+                '<span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>'+
+                '<span class="help-block" data-bind="foreach:errors">'+
+                '     <span data-bind="text: $data"></span>'+
+                '</span>'+
+            '</label>'+
+        '</div>';
+        },
         'money':  function ( data, type, row ) {
             return PEPPERONI.formatAsMoney(data);
         },
