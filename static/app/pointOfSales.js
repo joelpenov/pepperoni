@@ -79,6 +79,7 @@ var PEPPERONI = PEPPERONI || {};
         self.update_customer_entry=ko.observable();
         self.isDBcustomer = ko.observable(false);
         self.dbcustomerPhone = ko.observable();
+        self.status = ko.observable();
 
         self.id = ko.observable(0);
         self.created_date = ko.observable();
@@ -176,10 +177,12 @@ var PEPPERONI = PEPPERONI || {};
                 total:0,
                 cash:0,
                 sales_area:undefined,
-                details:[]
+                details:[],
+                status: ""
             });
         };
         self.setData=function(data){
+            
             self.customerPhone(data.customer_phone);
             self.customerName(data.customer_name);
             self.customerAddress(data.customer_address);
@@ -205,9 +208,11 @@ var PEPPERONI = PEPPERONI || {};
 
             self.total(data.total);
             self.paymentAmount(data.cash);
+            self.status(data.status);
 
             self.detailModel.reset();
             self.details(data.details);
+
         };
         self.getData=function(){
             return {
@@ -331,13 +336,12 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.print = function(){           
-            $('.alert.alert-danger').remove();
+            
             var saveCallback = function(id){
-                GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
+                GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){                    
+                    GenericViews.showNotification("Imprimiendo...", 'success');
                     if(response.success_printing)
-                        GenericViews.showNotification("Imprimiendo...");
-                    else 
-                        GenericViews.showNotification("No se pudo imprimir la factura.");
+                        setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
                 });
             };
             self.save(saveCallback);
@@ -368,7 +372,8 @@ var PEPPERONI = PEPPERONI || {};
         self.finish = function(){
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');            
-            request.success(function(response){                
+            request.success(function(response){
+                self.printAfterFinish(response.id);
                 self.order.reset();
                 self.refreshActiveOrders();  
                 $('.alert.alert-danger').remove();                  

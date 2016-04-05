@@ -41,9 +41,15 @@ class PdfGenerator(object):
 		self.draw_line(canvas,(self.TOP_MARGIN - 1.4), dashed=False)
 
 
+	def print_label(self, canvas, message):
+		canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
+		canvas.drawString((self.MARGIN_LEFT + 4) * cm, (self.TOP_MARGIN - 2.5) * cm, '*' + message)
+		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+
+
 	def draw_business_info(self, canvas, invoice):	
 		if invoice.status != 'FINISHED':
-			canvas.drawString((self.MARGIN_LEFT + 1.5) * cm, (self.TOP_MARGIN + 0.5) * cm, '--ESTO NO ES UNA FACTURA--')
+			canvas.drawString((self.MARGIN_LEFT + 1.5) * cm, (self.TOP_MARGIN + 0.5) * cm, '--NO ES UNA FACTURA--')
 
 		if invoice.sales_area:
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
@@ -51,14 +57,13 @@ class PdfGenerator(object):
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
 
 		if invoice.to_go:
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-			canvas.drawString((self.MARGIN_LEFT + 3) * cm, (self.TOP_MARGIN - 2.5) * cm, '*Para llevar')
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+			self.print_label(canvas, "PARA LLEVAR")
 
 		elif invoice.to_pickup:
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-			canvas.drawString((self.MARGIN_LEFT + 5) * cm, (self.TOP_MARGIN - 2.5) * cm, '*Para recoger')
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+			self.print_label(canvas, "PARA RECOGER")
+
+		else:
+			self.print_label(canvas, "PARA COMER AQUI")
 
 		current_top = self.TOP_MARGIN - 3	
 		canvas.drawString((self.MARGIN_LEFT + 0.2) * cm, current_top * cm, 'Num. factura: ' + str(invoice.number))
@@ -170,7 +175,7 @@ class PdfGenerator(object):
 
 	def draw_pdf(self, invoice, details):
 
-		file_name = os.path.join(root_directory,"../invoices",str(calendar.timegm(time.gmtime()))+'_'+str(invoice.number)+'_'+'_invoice.pdf')
+		file_name = os.path.join(root_directory,"..","invoices",str(calendar.timegm(time.gmtime()))+'_'+str(invoice.number)+'_'+'_invoice.pdf')
 
 		PAGE_HEIGHT	= self.get_document_height(invoice,details)
 		self.TOP_MARGIN = PAGE_HEIGHT - 1

@@ -33,13 +33,13 @@ def print_invoice(request):
     
     pdfgenerator = PdfGenerator()
     file_path = pdfgenerator.draw_pdf(order, details)
-    success_printing = print_pdf(file_path)
+    print_pdf(file_path)
 
-    if success_printing:
+    if True:#TODO: Confirm with Juan Carlos why they need print an invoice without to finish.
         order.printed = True
         order.save()
 
-    return JsonResponse({'success_printing': success_printing})
+    return JsonResponse({'success_printing': True})
         
 
 class OrderList(AtomicMixin, viewsets.ModelViewSet):

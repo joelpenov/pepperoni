@@ -305,10 +305,13 @@ var PEPPERONI = PEPPERONI || {};
         };
     }
 
-    GenericViews.showNotification = function(message){
-        $('.alert.alert-danger').remove();
+    GenericViews.showNotification = function(message, alertType){
+        $('.alert').remove();
+        alertType = alertType ? 'alert-' + alertType : 'alert-danger';        
         var notification = $('#notification-template').html().replace('{message}', message);
         $('.main-container').append(notification);
+        $('.alert').addClass(alertType);
+        
     };
 
     GenericViews.DataTableView = DataTableView;
