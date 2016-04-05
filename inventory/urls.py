@@ -10,6 +10,7 @@ def registerApiUrls(router):
 	router.register(r'warehouses', Warehouse.WarehouseList)
 	router.register(r'inventoryinputs', Transaction.InventoryInputList)
 	router.register(r'inventoryoutputs', Transaction.InventoryOutputList)
+	router.register(r'inventorytransfers', Transaction.InventoryTransferList)
 	router.register(r'products', Product.ProductList)
 	router.register(r'stocks', Stock.WerehouseStockList)
 
@@ -19,5 +20,5 @@ urlpatterns=[
 		url(r'^outputs/', Transaction.inventoryOutput),
 		url(r'^products/', Product.product),
 		url(r'^stock/', Stock.stock),
-		url(r'^transfer/', Transaction.inventoryTransfer)
+		url(r'^transfers/', Transaction.inventoryTransfer)
 	]

@@ -34,3 +34,12 @@ class InventoryOutputList(AtomicMixin, viewsets.ModelViewSet):
 
 	def get_serializer_context(self):
 		return {'request': self.request, 'transaction_type':Transaction.OUTPUT}
+
+
+class InventoryTransferList(AtomicMixin, viewsets.ModelViewSet):
+	permission_classes =((permissions.IsAuthenticated),)
+	queryset = Transaction.objects.filter(transaction_type=Transaction.TRANSFER)
+	serializer_class = TransactionSerializer
+
+	def get_serializer_context(self):
+		return {'request': self.request, 'transaction_type':Transaction.TRANSFER}
