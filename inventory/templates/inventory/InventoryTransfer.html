@@ -44,6 +44,14 @@
                 </div>
 
                 <div class="profile-info-row">
+                    <div class="profile-info-name"> Destino </div>
+
+                    <div class="profile-info-value">
+                        <span data-bind="text: warehouse_transfer_description"></span>
+                    </div>
+                </div>
+
+                <div class="profile-info-row">
                     <div class="profile-info-name"> Fecha </div>
 
                     <div class="profile-info-value">
@@ -157,7 +165,8 @@
                     <thead>
                     <tr>
                         <th name="id">Código</th>
-                        <th name="warehouse_description">Almacen</th>
+                        <th name="warehouse_description">Desde Almacen</th>
+                        <th name="warehouse_transfer_description">Hasta Almacen</th>
                         <th name="transaction_date" type="datetime">Fecha</th>
                         <th name="id" data-type="view-action">Acción</th>
                     </tr>

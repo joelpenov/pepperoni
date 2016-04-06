@@ -22,6 +22,7 @@ var PEPPERONI = PEPPERONI || {};
             self.inputDescription = ko.observable("");
             self.note = ko.observable("");
             self.warehouse = ko.observable("");
+            self.warehouse_transfer_description = ko.observable("");
             self.transactionDate = ko.observable("");
             self.transactionId = ko.observable(0);
 
@@ -120,6 +121,7 @@ var PEPPERONI = PEPPERONI || {};
                 self.inputDescription("Transferencia");
                 self.transactionId(response.id);
                 self.warehouse(response.warehouse_description);
+                self.warehouse_transfer_description(response.warehouse_transfer_description);
                 self.note(response.note);
                 self.transactionDate(response.transaction_date);
             };
@@ -197,7 +199,7 @@ var PEPPERONI = PEPPERONI || {};
                 viewId: "inventory-input-view",
                 form: $('#form_view'),
                 dataTableView: dataTableView,
-                includeFields:['id','warehouse', 'transaction_date', 'note'],
+                includeFields:['id','warehouse','transfer_to_warehouse', 'transaction_date', 'note'],
                 productSearchTable: initializeProductSearch()
             };
 

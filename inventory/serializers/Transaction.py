@@ -50,4 +50,15 @@ class TransactionSerializer(serializers.ModelSerializer):
         return transaction
 
 
+class TransactionTransferSerializer(TransactionSerializer):
 
+     warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all(), label='Desde Almacen')
+     transfer_to_warehouse = serializers.PrimaryKeyRelatedField(queryset = Warehouse.objects.all(), label='Transferir a')
+     warehouse_transfer_description = serializers.SerializerMethodField('get_warehousetransferdescription')
+
+     def get_warehousetransferdescription(self, obj):
+        return obj.transfer_to_warehouse.name
+
+     class Meta:
+        model = Transaction
+        fields = ('id','warehouse','transfer_to_warehouse', 'transaction_date','warehouse_description','warehouse_transfer_description','transaction_type', 'details', 'note')
