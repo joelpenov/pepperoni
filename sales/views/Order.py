@@ -33,9 +33,10 @@ def print_invoice(request):
     
     pdfgenerator = PdfGenerator()
     file_path = pdfgenerator.draw_pdf(order, details)
-    print_pdf(file_path)
+    
+    print(order.status)
 
-    if True:#TODO: Confirm with Juan Carlos why they need print an invoice without to finish.
+    if order.status is not "FINISHED" and not order.printed:
         order.printed = True
         order.save()
 

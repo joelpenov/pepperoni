@@ -36,7 +36,7 @@ class PdfGenerator(object):
 		canvas.drawString((self.MARGIN_LEFT + 3.1) * cm, (self.TOP_MARGIN - 0.5) * cm, "¡Es mejor!")
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
 
-		canvas.drawString((self.MARGIN_LEFT + 0.4) * cm, (self.TOP_MARGIN - 0.9) * cm, 'Ctra. Duarte, próximo a Coraasan, Licey, Stgo')
+		canvas.drawString((self.MARGIN_LEFT + 0.9) * cm, (self.TOP_MARGIN - 0.9) * cm, 'Ctra. Duarte, próximo a Coraasan, Licey, Stgo')
 		canvas.drawString((self.MARGIN_LEFT + 2.8) * cm, (self.TOP_MARGIN - 1.3) * cm, '(809) 580-7673')
 		self.draw_line(canvas,(self.TOP_MARGIN - 1.4), dashed=False)
 
@@ -49,7 +49,7 @@ class PdfGenerator(object):
 
 	def draw_business_info(self, canvas, invoice):	
 		if invoice.status != 'FINISHED':
-			canvas.drawString((self.MARGIN_LEFT + 1.5) * cm, (self.TOP_MARGIN + 0.5) * cm, '--NO ES UNA FACTURA--')
+			canvas.drawString((self.MARGIN_LEFT + 2.2) * cm, (self.TOP_MARGIN + 0.5) * cm, '--NO ES UNA FACTURA--')
 
 		if invoice.sales_area:
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
