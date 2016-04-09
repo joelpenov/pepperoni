@@ -763,8 +763,9 @@ var PEPPERONI = PEPPERONI || {};
     }
 
     function initializeSingleSelectCheckboxes(){
-        $('.singleSelect input:checkbox').click(function() {
-            $('.singleSelect input:checkbox').not(this).prop('checked', false);
+        var targetElements = $('.singleSelect input:checkbox');
+        targetElements.click(function() {
+            targetElements.not(this).prop('checked', false);
         });  
     };
 
