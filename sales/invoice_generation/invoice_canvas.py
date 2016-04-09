@@ -36,14 +36,20 @@ class PdfGenerator(object):
 		canvas.drawString((self.MARGIN_LEFT + 3.1) * cm, (self.TOP_MARGIN - 0.5) * cm, "¡Es mejor!")
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
 
-		canvas.drawString((self.MARGIN_LEFT + 0.4) * cm, (self.TOP_MARGIN - 0.9) * cm, 'Ctra. Duarte, próximo a Coraasan, Licey, Stgo')
+		canvas.drawString((self.MARGIN_LEFT + 0.9) * cm, (self.TOP_MARGIN - 0.9) * cm, 'Ctra. Duarte, próximo a Coraasan, Licey, Stgo')
 		canvas.drawString((self.MARGIN_LEFT + 2.8) * cm, (self.TOP_MARGIN - 1.3) * cm, '(809) 580-7673')
 		self.draw_line(canvas,(self.TOP_MARGIN - 1.4), dashed=False)
 
 
+	def print_label(self, canvas, message):
+		canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
+		canvas.drawString((self.MARGIN_LEFT + 4) * cm, (self.TOP_MARGIN - 2.5) * cm, '*' + message)
+		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+
+
 	def draw_business_info(self, canvas, invoice):	
 		if invoice.status != 'FINISHED':
-			canvas.drawString((self.MARGIN_LEFT + 1.5) * cm, (self.TOP_MARGIN + 0.5) * cm, '--FACTURA NO FINALIZADA--')
+			canvas.drawString((self.MARGIN_LEFT + 2.2) * cm, (self.TOP_MARGIN + 0.5) * cm, '--NO ES UNA FACTURA--')
 
 		if invoice.sales_area:
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
@@ -51,14 +57,13 @@ class PdfGenerator(object):
 			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
 
 		if invoice.to_go:
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-			canvas.drawString((self.MARGIN_LEFT + 3) * cm, (self.TOP_MARGIN - 2.5) * cm, '*Para llevar')
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+			self.print_label(canvas, "PARA LLEVAR")
 
 		elif invoice.to_pickup:
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
-			canvas.drawString((self.MARGIN_LEFT + 5) * cm, (self.TOP_MARGIN - 2.5) * cm, '*Comer aquí')
-			canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+			self.print_label(canvas, "PARA RECOGER")
+
+		else:
+			self.print_label(canvas, "PARA COMER AQUI")
 
 		current_top = self.TOP_MARGIN - 3	
 		canvas.drawString((self.MARGIN_LEFT + 0.2) * cm, current_top * cm, 'Num. factura: ' + str(invoice.number))

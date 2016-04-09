@@ -111,46 +111,41 @@
                                                 "></select>
                                         </div>
                                     </div>
+	                                <div class="singleSelect">
+		                                    <div class="order-input col-sm-3 center">
+		                                        <label> Llevar </label>
+		                                        <div class="form-group">
+		                                            <label>
+		                                                <input data-bind="checked:order.to_go"  class="ace ace-switch" type="checkbox">
+		                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+		                                            </label>
+		                                        </div>
+		                                    </div>
 
-                                    <div class="order-input col-sm-3 center">
-                                        <label> Llevar </label>
-                                        <div class="form-group">
-                                            <label>
-                                                <input data-bind="checked:order.to_go" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
-                                            </label>
-                                        </div>
-                                    </div>
+		                                    <div class="order-input col-sm-3 center">
+		                                        <label> Para recoger</label>
+		                                        <div class="form-group">
+		                                            <label>
+		                                                <input data-bind="checked:order.to_pickup"   class="ace ace-switch" type="checkbox">
+		                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+		                                            </label>
+		                                        </div>
+		                                    </div>
+		                            </div>
 
-                                    <div class="order-input col-sm-3 center">
-                                        <label> Comer aquí </label>
-                                        <div class="form-group">
-                                            <label>
-                                                <input data-bind="checked:order.to_pickup" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="order-input col-sm-3 center">
-                                        <label> Entregada </label>
-                                        <div class="form-group">
-                                            <label>
-                                                <input data-bind="checked:order.delivered" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-
+		                                    <div class="order-input col-sm-3 center">
+		                                        <label> Entregada </label>
+		                                        <div class="form-group">
+		                                            <label>
+		                                                <input data-bind="checked:order.delivered"  class="ace ace-switch" type="checkbox">
+		                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+		                                            </label>
+		                                        </div>
+		                                    </div>
+									
 
                                 </form>
                             </div>
-
-                            {#                            <div class="row">#}
-                            {#                                <div class="col-sm-12">#}
-                            {#                                    <h3 class="header smaller lighter blue">Cliente</h3>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
                             <div class="row">
 
                                 <form class="order-form">

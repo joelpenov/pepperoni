@@ -79,6 +79,7 @@ var PEPPERONI = PEPPERONI || {};
         self.update_customer_entry=ko.observable();
         self.isDBcustomer = ko.observable(false);
         self.dbcustomerPhone = ko.observable();
+        self.status = ko.observable();
 
         self.id = ko.observable(0);
         self.created_date = ko.observable();
@@ -176,10 +177,12 @@ var PEPPERONI = PEPPERONI || {};
                 total:0,
                 cash:0,
                 sales_area:undefined,
-                details:[]
+                details:[],
+                status: ""
             });
         };
         self.setData=function(data){
+            
             self.customerPhone(data.customer_phone);
             self.customerName(data.customer_name);
             self.customerAddress(data.customer_address);
@@ -205,9 +208,11 @@ var PEPPERONI = PEPPERONI || {};
 
             self.total(data.total);
             self.paymentAmount(data.cash);
+            self.status(data.status);
 
             self.detailModel.reset();
             self.details(data.details);
+
         };
         self.getData=function(){
             return {
@@ -331,16 +336,17 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.print = function(){
-            $('.alert.alert-danger').remove();
-            var saveCallback = function(id){
+            
+            var printCallback = function(id){
                 GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                     if(response.success_printing)
-                        GenericViews.showNotification("Imprimiendo...");
-                    else
-                        GenericViews.showNotification("No se pudo imprimir la factura.");
+                        self.showSuccessPrint();
                 });
             };
-            self.save(saveCallback);
+            if(self.order.status() !== "FINISHED")
+                self.save(printCallback);
+            else
+                printCallback(self.order.id());
         };
 
         self.printAfterFinish = function(id){
@@ -348,11 +354,16 @@ var PEPPERONI = PEPPERONI || {};
             $('.alert.alert-danger').remove();
             GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                 if(response.success_printing)
-                    GenericViews.showNotification("Imprimiendo...");
+                    self.showSuccessPrint();
                 else
                     GenericViews.showNotification("No se pudo imprimir la factura.");
             });
+           
+        };
 
+        self.showSuccessPrint = function(){
+            GenericViews.showNotification("Imprimiendo...", 'success');
+            setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
         };
 
         self.isAValidAmountToFinish = function(){
@@ -409,7 +420,8 @@ var PEPPERONI = PEPPERONI || {};
         });
 
         self.refreshActiveOrders=function(){
-            GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+self.order.cashierShift().id, function(response){
+            GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="
+                + self.order.cashierShift().id, function(response){
                 self.activeOrders(response);
                 self.updateResponsiveLayout();
             });
@@ -638,7 +650,9 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.orders.subscribe(function(){
-            var notDeliveredOrderFilter = self.filterBy(function(order){return order.status ==='FINISHED' && order.delivered!==true});
+            var notDeliveredOrderFilter = self.filterBy(function(order){
+                    return order.status ==='FINISHED' && order.delivered!==true
+                });
             self.totalNotDelivered(notDeliveredOrderFilter.total);
             self.difference(self.totalRegister()-self.totalActive());
 
@@ -770,6 +784,13 @@ var PEPPERONI = PEPPERONI || {};
         });
     }
 
+    function initializeSingleSelectCheckboxes(){
+        var targetElements = $('.singleSelect input:checkbox');
+        targetElements.click(function() {
+            targetElements.not(this).prop('checked', false);
+        });  
+    };
+
     function initializeSelectProductQuantityOnClick(viewModel){
         var productQuantityElement = $('#input_product_quantity');
         productQuantityElement.click(function(){
@@ -852,6 +873,8 @@ var PEPPERONI = PEPPERONI || {};
 
         initializeSelectAmuntOnClick();
         initializeSelectProductQuantityOnClick(pointOfSaleView);
+        initializeSingleSelectCheckboxes();
 
+        
     });
 })();
