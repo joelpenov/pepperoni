@@ -4,9 +4,7 @@ var PEPPERONI = PEPPERONI || {};
     $(document).ready(function(){
         var table_settings = {
             url: "/api/products/",
-            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'}),
-            booleanFields: ['is_raw_material', 'show_in_menu'],
-            moneyFields: ['sell_price']
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#dynamic-table'})
         };
 
         var dataTableView = new GenericViews.DataTableView(table_settings);
