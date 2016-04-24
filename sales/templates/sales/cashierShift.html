@@ -1,7 +1,11 @@
 {% extends "menu-layout.html" %}
 {% load staticfiles %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
+    {#    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />#}
+{% endblock styling %}
 {% block content %}
-    <div id="cashier-shift-view">
+    <div id="cashier-shift-view" data-bind="visible: showShiftList">
         <div class="page-header">
             <div class="clearfix">
                 <div class="col-md-6">
@@ -20,12 +24,12 @@
                         <th name="id">Codigo</th>
                         <th name="user_name">Usuario</th>
                         <th name="cash_register_name">Caja</th>
-                        <th name="status">Estado</th>
-                        <th name="start_date">Fecha inicio</th>
-                        <th name="start_balance">Balance Inicial</th>
-                        <th name="close_date">Fecha cierre</th>
-                        <th name="close_balance">Balance cierre</th>
-                        <th name="actions"></th>
+                        <th name="status" data-type="status">Estado</th>
+                        <th name="start_date" data-type="datetime">Fecha inicio</th>
+                        <th name="start_balance" data-type="money" class="align-right">Balance Inicial</th>
+                        <th name="close_date" data-type="datetime">Fecha cierre</th>
+                        <th name="close_balance" data-type="money" class="align-right">Balance cierre</th>
+                        <th name="id" data-type="view-action"></th>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -33,7 +37,161 @@
             </div>
         </div>
     </div>
+
+    <div id="finish-shift-view" data-bind="visible: showFinishSwiftView" style="display: none">
+        <div class="page-header">
+            <div class="clearfix">
+                <div class="col-md-6">
+                    <h1>
+                        Reporte Turno
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content-inner">
+            <div class="page-content">
+                <div class="row">
+                    <div>
+                        <form class="finish-shift-form">
+                            <div class="col-sm-12">
+                                <div class="order-input col-sm-2">
+                                    <label for="input_total_register"> Total caja </label>
+                                    <div class="form-group">
+                                        <input id="input_total_register" type="text" data-bind="value:totalRegister" disabled="disabled" class="align-right"  />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-2">
+                                    <label for="input_customer_address"> Balance inicial </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:startBalance" disabled="disabled" class="align-right"  />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-2">
+                                    <label for="input_customer_address"> Total vendidos </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:totalFinished" disabled="disabled" class="align-right"  />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-2">
+                                    <label for="input_customer_address"> Diferencia </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:difference" disabled="disabled" class="align-right"  />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-2">
+                                    <label for="input_customer_address"> Total no entregadas </label>
+                                    <div class="form-group">
+                                        <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" class="align-right"  />
+                                    </div>
+                                </div>
+                                <div class="order-input col-sm-2">
+                                    <label >  </label>
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-grey" data-bind="click:cancel" value="Back">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="col-md-12 order-review">
+                        <div class="col-md-12">
+                            <!-- ko template: {name: "orders-history-template", data :{ title:"Ordenes activas", total: totalActive,totalNotDelivered: false,  orders:activeOrders, toggleDetails: $root.toggleDetails} } -->
+                            <!-- /ko -->
+                        </div>
+                        <div class="col-md-12">
+                            <!-- ko template: {name: "orders-history-template", data:{ title:"Ordenes nulas", total: totalVoid,totalNotDelivered: false, orders:voidOrders, toggleDetails: $root.toggleDetails }} -->
+                            <!-- /ko -->
+                        </div>
+                        <div class="col-md-12">
+                            <!-- ko template: {name: "orders-history-template", data:{ title:"Ordenes terminadas", total: totalFinished, totalNotDelivered: false, orders:finishedOrders, toggleDetails: $root.toggleDetails} } -->
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
 {% block javascript %}
+
+    <script type="text/html" id="orders-history-template">
+        <h3 class="header smaller lighter blue" data-bind="text:title"></h3>
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover order-review-table table-condensed ">
+            <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Fecha</th>
+                <th>Telefono</th>
+                <th>Cliente</th>
+                <th class="align-right">Total</th>
+                <th class="align-center">LLevar</th>
+                <th class="align-center">Entregada</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach:orders">
+            <tr data-bind="click:$root.toggleDetails, css: { 'odd': ($index() % 2 !== 0) }">
+                <td data-bind="text:id"></td>
+                <td data-bind="text:PEPPERONI.longDateFormat(created_date)"></td>
+                <td data-bind="text:customer_phone"></td>
+                <td data-bind="text:customer_name"></td>
+                <td class="align-right" data-bind="text:total"></td>
+                <td>
+                    <!-- ko if: to_go -->
+                    <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
+                    <!-- /ko  -->
+                </td>
+                <td>
+                    <!-- ko if: delivered -->
+                    <div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>
+                    <!-- /ko  -->
+                </td>
+            </tr>
+            <tr class="detail-container" style="display: none" data-bind="visible:showDetails">
+                <td colspan="7" >
+                    <table cellpadding="0" cellspacing="0" border="0" class="table table-condensed detail-table">
+                        <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th class="align-right">Cantidad</th>
+                            <th class="align-right">Precio</th>
+                            <th class="align-right">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody data-bind="foreach:details">
+                        <tr>
+                            <td data-bind="text:product_id"></td>
+                            <td data-bind="text:product_description"></td>
+                            <td class="align-right" data-bind="text:quantity"></td>
+                            <td class="align-right" data-bind="text:PEPPERONI.formatAsMoney(price)"></td>
+                            <td class="align-right" data-bind="text:PEPPERONI.formatAsMoney(total)"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-12 form-horizontal">
+            <div class="order-input col-sm-4 float-right">
+                <label class="col-sm-4 control-label" >Total</label>
+                <div class="form-group col-sm-8">
+                    <input type="text" data-bind="value:total" disabled="disabled" class="align-right" />
+                </div>
+            </div>
+            <!-- ko if: totalNotDelivered -->
+            <div class="order-input col-sm-3">
+                <label for="input_customer_address"> Total no entregadas </label>
+                <div class="form-group">
+                    <input id="input_customer_address" type="text" data-bind="value:totalNotDelivered" disabled="disabled" class="align-right" />
+                </div>
+            </div>
+            <!-- /ko  -->
+        </div>
+    </script>
+
     <script src="{% static "app/cashierShift.js" %}"></script>
 {% endblock javascript %}

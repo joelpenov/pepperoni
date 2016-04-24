@@ -111,53 +111,48 @@
                                                 "></select>
                                         </div>
                                     </div>
+	                                <div class="singleSelect">
+		                                    <div class="order-input col-sm-3 center">
+		                                        <label> Llevar </label>
+		                                        <div class="form-group">
+		                                            <label>
+		                                                <input data-bind="checked:order.to_go"  class="ace ace-switch" type="checkbox">
+		                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+		                                            </label>
+		                                        </div>
+		                                    </div>
 
-                                    <div class="order-input col-sm-3 center">
-                                        <label> Llevar </label>
-                                        <div class="form-group">
-                                            <label>
-                                                <input data-bind="checked:order.to_go" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
-                                            </label>
-                                        </div>
-                                    </div>
+		                                    <div class="order-input col-sm-3 center">
+		                                        <label> Para recoger</label>
+		                                        <div class="form-group">
+		                                            <label>
+		                                                <input data-bind="checked:order.to_pickup"   class="ace ace-switch" type="checkbox">
+		                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+		                                            </label>
+		                                        </div>
+		                                    </div>
+		                            </div>
 
-                                    <div class="order-input col-sm-3 center">
-                                        <label> Recoger </label>
-                                        <div class="form-group">
-                                            <label>
-                                                <input data-bind="checked:order.to_pickup" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="order-input col-sm-3 center">
-                                        <label> Entregada </label>
-                                        <div class="form-group">
-                                            <label>
-                                                <input data-bind="checked:order.delivered" class="ace ace-switch" type="checkbox">
-                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-
+		                                    <div class="order-input col-sm-3 center">
+		                                        <label> Entregada </label>
+		                                        <div class="form-group">
+		                                            <label>
+		                                                <input data-bind="checked:order.delivered"  class="ace ace-switch" type="checkbox">
+		                                                <span class="lbl" data-lbl="SI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO"></span>
+		                                            </label>
+		                                        </div>
+		                                    </div>
+									
 
                                 </form>
                             </div>
-
-                            {#                            <div class="row">#}
-                            {#                                <div class="col-sm-12">#}
-                            {#                                    <h3 class="header smaller lighter blue">Cliente</h3>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
                             <div class="row">
 
                                 <form class="order-form">
                                     <div class="order-input col-sm-2">
                                         <label for="input_phone"> Telefono </label>
                                         <div class="input-group">
-                                            <input id="input_phone" data-bind="value:order.customerPhone"  type="text" class="form-control search-query">
+                                            <input id="input_phone"  data-bind="value:order.customerPhone"  type="text" class="form-control search-query ">
                                                                 <span class="input-group-btn">
                                                                     <button type="button"  class="btn btn-purple btn-sm" data-bind="click:openCustomerSearch">
                                                                         <span class="ace-icon fa fa-search icon-on-right"></span>
@@ -444,7 +439,7 @@
         </div>
         <div id="search-dialog">
             <div class="modal fade" id="searchClientsModal" role="dialog" data-backdrop="static" aria-hidden="true" tabindex='-1'>
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
@@ -478,7 +473,7 @@
                 </div>
             </div>
             <div class="modal fade" id="searchProductsModal" role="dialog" data-backdrop="static" aria-hidden="true" tabindex='-1'>
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
@@ -496,10 +491,50 @@
                                 <tr>
                                     <th name="id">Codigo</th>
                                     <th name="description">Descripcion</th>
-                                    <th name="sell_price">Precio</th>
+                                    <th name="sell_price" data-type="money" class="align-right">Precio</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
+                            </table>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"> Cancelar </button>
+                            <button type="button" class="btn btn-primary" style="display: none"> Agregar </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="searchOrderModal" role="dialog" data-backdrop="static" aria-hidden="true" tabindex='-1'>
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only"></span>
+                            </button>
+                            <h4 class="modal-title">Buscar Orden</h4>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="search_order_modal">
+                                <thead>
+                                <tr>
+                                    <th name="id">Codigo</th>
+                                    <th name="created_date" data-type="datetime">Fecha</th>
+                                    <th name="status" data-type="status">Estado</th>
+                                    <th name="customer_phone">Telefono</th>
+                                    <th name="customer_name">Cliente</th>
+                                    <th name="total"  data-type="money" class="align-right">Total</th>
+                                    <th name="to_go"  data-type="boolean" class="align-center">LLevar</th>
+                                    <th name="delivered" data-type="check-switch" class="align-center">Entregada</th>
+                                    <th name="id" data-type="view-action"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+
                             </table>
                         </div>
                         <!-- Modal Footer -->

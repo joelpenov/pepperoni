@@ -18,7 +18,7 @@
     margin: auto;
 }
 
-.alert.alert-danger {
+.alert {
     position: fixed;
     top: 89px;
     left: 188px;

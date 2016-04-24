@@ -2,13 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
 from sales.models.Order import Order, OrderDetail
-from sales.serializers.Order import OrderSerializer
+from sales.serializers.Order import OrderSerializer, SetOrderDeliverStatusSerializer
 from main.mixin import AtomicMixin
-from rest_framework.views import APIView
 
-from io import BytesIO
-from sales.invoice_canvas import PdfGenerator
-from sales.pdfprinter import print_pdf
+from sales.invoice_generation.invoice_canvas import PdfGenerator
+from sales.invoice_generation.pdfprinter import print_pdf
 from django.http import JsonResponse
 
 
@@ -29,12 +27,17 @@ def print_invoice(request):
     if not order:
         return JsonResponse({'success_printing': False})
         
-    details = OrderDetail.objects.filter(order__pk=invoice_id)    
+    details = OrderDetail.objects.filter(order__pk=invoice_id)
     
     pdfgenerator = PdfGenerator()
-    file_path = pdfgenerator.draw_pdf(BytesIO(), order, details)
-    success_printing = print_pdf(file_path)
-    return JsonResponse({'success_printing': success_printing})
+    file_path = pdfgenerator.draw_pdf(order, details)
+    print_pdf(file_path)
+
+    if order.status is not "FINISHED" and not order.printed:
+        order.printed = True
+        order.save()
+
+    return JsonResponse({'success_printing': True})
         
 
 class OrderList(AtomicMixin, viewsets.ModelViewSet):
@@ -55,3 +58,10 @@ class TopOrderList(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
         query = super(TopOrderList, self).filter_queryset(queryset)
         return query[:10]
+
+
+class SetOrderDeliverStatusView(AtomicMixin, viewsets.ModelViewSet):
+    permission_classes =((permissions.IsAuthenticated),)
+    queryset = Order.objects.all()
+    http_method_names = ['put']
+    serializer_class = SetOrderDeliverStatusSerializer

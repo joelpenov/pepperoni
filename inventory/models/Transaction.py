@@ -7,7 +7,7 @@ from inventory.models.Product import Product
 class Transaction(models.Model):
 	INPUT = 'INPUT'
 	OUTPUT = 'OUTPUT'
-	TRANSFER = 'TRANSFER',
+	TRANSFER = 'TRANSFER'
 	SALES_OUTPUT='SALES_OUTPUT'
 	MOVE_TYPE_CHOICES = (
 		(INPUT, 'Entrada'),
@@ -17,10 +17,10 @@ class Transaction(models.Model):
 	)
 
 	warehouse = models.ForeignKey(Warehouse, related_name="inventory_moves")
+	transfer_to_warehouse = models.ForeignKey(Warehouse, related_name="inventory_transfer_moves", blank=True, null=True)
 	transaction_type = models.CharField(max_length=20, choices=MOVE_TYPE_CHOICES, null=False, blank=False)
 	transaction_date = models.DateField()
 	note = models.CharField(max_length=320, null=True, blank=True)
-	#transaction_id = models.UUIDField()
 
 
 class TransactionDetail(models.Model):
@@ -43,8 +43,12 @@ class TransactionDetail(models.Model):
 		else:
 			stock.quantity = stock.quantity - self.quantity
 
-		#if(move.transaction_type==InventoryMove.TRANSFER):
-			#stock.quantity = stock.quantity + self.quantity sumar al otro
+		if(transaction.transaction_type==Transaction.TRANSFER):
+			to_stock = Stock.objects.filter(product_id=self.product_id).filter(warehouse_id=transaction.transfer_to_warehouse_id).first()
+			if(to_stock==None):
+				to_stock = Stock.objects.create(product_id=self.product_id, warehouse_id  = transaction.transfer_to_warehouse_id, quantity = 0)
+			to_stock.quantity = to_stock.quantity + self.quantity #sumar al otro
+			to_stock.save()
 
 		stock.save()
 

@@ -79,6 +79,7 @@ var PEPPERONI = PEPPERONI || {};
         self.update_customer_entry=ko.observable();
         self.isDBcustomer = ko.observable(false);
         self.dbcustomerPhone = ko.observable();
+        self.status = ko.observable();
 
         self.id = ko.observable(0);
         self.created_date = ko.observable();
@@ -176,10 +177,12 @@ var PEPPERONI = PEPPERONI || {};
                 total:0,
                 cash:0,
                 sales_area:undefined,
-                details:[]
+                details:[],
+                status: ""
             });
         };
         self.setData=function(data){
+            
             self.customerPhone(data.customer_phone);
             self.customerName(data.customer_name);
             self.customerAddress(data.customer_address);
@@ -205,9 +208,11 @@ var PEPPERONI = PEPPERONI || {};
 
             self.total(data.total);
             self.paymentAmount(data.cash);
+            self.status(data.status);
 
             self.detailModel.reset();
             self.details(data.details);
+
         };
         self.getData=function(){
             return {
@@ -330,29 +335,35 @@ var PEPPERONI = PEPPERONI || {};
             });
         };
 
-        self.print = function(){           
-            $('.alert.alert-danger').remove();
-            var saveCallback = function(id){
+        self.print = function(){
+            
+            var printCallback = function(id){
                 GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                     if(response.success_printing)
-                        GenericViews.showNotification("Imprimiendo...");
-                    else 
-                        GenericViews.showNotification("No se pudo imprimir la factura.");
+                        self.showSuccessPrint();
                 });
             };
-            self.save(saveCallback);
+            if(self.order.status() !== "FINISHED")
+                self.save(printCallback);
+            else
+                printCallback(self.order.id());
         };
 
-        self.printAfterFinish = function(id){     
-            if(!id) return;      
-            $('.alert.alert-danger').remove();           
+        self.printAfterFinish = function(id){
+            if(!id) return;
+            $('.alert.alert-danger').remove();
             GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                 if(response.success_printing)
-                    GenericViews.showNotification("Imprimiendo...");
-                else 
+                    self.showSuccessPrint();
+                else
                     GenericViews.showNotification("No se pudo imprimir la factura.");
-            });          
+            });
            
+        };
+
+        self.showSuccessPrint = function(){
+            GenericViews.showNotification("Imprimiendo...", 'success');
+            setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
         };
 
         self.isAValidAmountToFinish = function(){
@@ -368,20 +379,20 @@ var PEPPERONI = PEPPERONI || {};
         self.finish = function(){
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
-            
             request.success(function(response){
                 self.printAfterFinish(response.id);
                 self.order.reset();
-                self.refreshActiveOrders();  
-                $('.alert.alert-danger').remove();                  
+                self.refreshActiveOrders();
+                $('.alert.alert-danger').remove();
             });
         };
 
         self.showOrders = function(){
-            alert('order list');
+            self.openOrderSearch();
         };
 
         self.finishShift = function(){
+            $('.alert.alert-danger').remove();
             posSettings.finishShiftView.show();
         };
 
@@ -409,7 +420,8 @@ var PEPPERONI = PEPPERONI || {};
         });
 
         self.refreshActiveOrders=function(){
-            GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="+self.order.cashierShift().id, function(response){
+            GenericViews.getData("/api/orders/?format=json&status=ACTIVE&cashier_shift="
+                + self.order.cashierShift().id, function(response){
                 self.activeOrders(response);
                 self.updateResponsiveLayout();
             });
@@ -422,7 +434,13 @@ var PEPPERONI = PEPPERONI || {};
 
         self.openProductSearch = function(){
             posSettings.productSearchTable.refreshDataTable();
-            $('#searchProductsModal').modal('show')
+            $('#searchProductsModal').modal('show');
+        };
+
+        self.openOrderSearch = function(){
+            posSettings.orderSearchTable.refreshDataTable("/api/orders/?format=json&cashier_shift="+self.order.cashierShift().id);
+            $('#searchOrderModal').modal('show');
+
         };
 
         self.continueOrCreateShift= function(){
@@ -451,6 +469,15 @@ var PEPPERONI = PEPPERONI || {};
                 self.order.detailModel.productId(itemId);
                 $('#searchProductsModal').modal('hide');
             });
+
+            posSettings.orderSearchTable.dataTable.on('click', '.action-buttons .view', function(){
+                var id = $(this).data("item-id");
+                GenericViews.getData("/api/orders/"+id+"?format=json", function(response){
+                    self.order.setData(response);
+                    $('#searchOrderModal').modal('hide');
+                });
+            });
+
         }
         function setShowHideViewEvents(){
 
@@ -557,8 +584,8 @@ var PEPPERONI = PEPPERONI || {};
 
         self.save = function () {
             var request = GenericViews.saveData(self,settings.form.serializeJSON());
-                request.success(function(result){                
-                createdEvent(result);                
+            request.success(function(result){
+                createdEvent(result);
             });
         };
 
@@ -623,7 +650,9 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.orders.subscribe(function(){
-            var notDeliveredOrderFilter = self.filterBy(function(order){return order.status ==='FINISHED' && order.delivered!==true});
+            var notDeliveredOrderFilter = self.filterBy(function(order){
+                    return order.status ==='FINISHED' && order.delivered!==true
+                });
             self.totalNotDelivered(notDeliveredOrderFilter.total);
             self.difference(self.totalRegister()-self.totalActive());
 
@@ -718,11 +747,18 @@ var PEPPERONI = PEPPERONI || {};
     function initializeProductSearch(){
         var table_settings = {
             url: "/api/products/",
-            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true})
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_product_modal', keys: true}),
         };
         return new GenericViews.DataTableView(table_settings);
     }
 
+    function initializeOrderSearch(){
+        var table_settings = {
+            url: "/api/orders/",
+            dataTable: PEPPERONI.createDatatableInstance({tableId: '#search_order_modal', keys: true}),
+        };
+        return new GenericViews.DataTableView(table_settings);
+    }
     function initializeFinishShiftView(){
         var finishShiftView = new FinishShiftView({});
         finishShiftView.init();
@@ -748,20 +784,59 @@ var PEPPERONI = PEPPERONI || {};
         });
     }
 
-    function initializeSelectProductQuantityOnClick(){
+    function initializeSingleSelectCheckboxes(){
+        var targetElements = $('.singleSelect input:checkbox');
+        targetElements.click(function() {
+            targetElements.not(this).prop('checked', false);
+        });  
+    };
+
+    function initializeSelectProductQuantityOnClick(viewModel){
         var productQuantityElement = $('#input_product_quantity');
         productQuantityElement.click(function(){
             productQuantityElement.select();
         });
+
+        productQuantityElement.keypress(function (e) {
+            var key = e.which;
+            var enterCodeKey = 13;
+            if(key == enterCodeKey)
+            {
+                viewModel.order.addNewProduct();
+            }
+        });
     }
+
 
     $(document).ready(function(){
         var posSettings = {
             customerSearchTable: initializeCustomerSearch(),
             productSearchTable: initializeProductSearch(),
+            orderSearchTable: initializeOrderSearch(),
             finishShiftView: initializeFinishShiftView(),
             cashierShiftFormView: initializeCashierShiftFormView()
         };
+
+        posSettings.orderSearchTable.dataTable.on( 'draw.dt', function () {
+            posSettings.orderSearchTable.dataTable.find(':checkbox').change(function() {
+                var orderid =$(this).parents('tr').find('.view').data('item-id');
+                var data = {
+                    delivered:$(this).is(':checked')
+                };
+                $.ajax({
+                    url: '/api/orderdelivered/'+orderid + '/?format=json',
+                    type: 'put',
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                    }
+                });
+
+            });
+        });
+
 
         var pointOfSaleView = new PointOfSalesView(posSettings);
         ko.applyBindings(pointOfSaleView,document.getElementById('point-of-sales-page'));
@@ -797,6 +872,9 @@ var PEPPERONI = PEPPERONI || {};
         });
 
         initializeSelectAmuntOnClick();
+        initializeSelectProductQuantityOnClick(pointOfSaleView);
+        initializeSingleSelectCheckboxes();
 
+        
     });
 })();
