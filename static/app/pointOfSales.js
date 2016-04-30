@@ -533,6 +533,15 @@ var PEPPERONI = PEPPERONI || {};
             });
 
             $('#input_phone').mask('999-999-9999');
+
+
+            $('#input_product_id').bind('keypress', function(e)
+{
+                 if(e.keyCode == 13 || e.keyCode == 9)
+                 {
+                     $('#input_product_quantity').select()
+                 }
+            });
         }
 
         self.init = function(){
