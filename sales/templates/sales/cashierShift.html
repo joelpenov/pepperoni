@@ -1,9 +1,5 @@
 {% extends "menu-layout.html" %}
 {% load staticfiles %}
-{% block styling %}
-    <link rel="stylesheet" href="{% static "style/pointOfSale.css" %}" />
-    {#    <link rel="stylesheet" href="{% static "assets/css/ui.jqgrid.min.css" %}" />#}
-{% endblock styling %}
 {% block content %}
     <div id="cashier-shift-view" data-bind="visible: showShiftList">
         <div class="page-header">
