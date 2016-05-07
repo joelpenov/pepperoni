@@ -54,7 +54,7 @@ var PEPPERONI = PEPPERONI || {};
 
                 if(self.productIdHasError() || self.quantityHasError() || self.priceHasError()) return;
 
-                self.addDetail(self.productId(), self.productDescription(), self.quantity(), self.price(), self.quantity());
+                self.addDetail(self.productId(), self.productDescription(), self.quantity(), self.price(), self.quantity() * self.price());
                 self.cleanDetails();
             };
 
