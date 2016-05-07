@@ -9,4 +9,4 @@ class DataFormatter(object):
 		return result[:pointIndex]
 
 	def format_as_date(self, date):
-		return str(date.strftime("%Y-%m-%d %H:%M:%S"))
+		return str(date.strftime("%d-%m-%Y %H:%M:%S"))
