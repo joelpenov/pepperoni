@@ -3,6 +3,10 @@ html, body {
     overflow: hidden;
 }
 
+#finishOrderModal .modal-dialog{
+    top:125px;
+}
+
 .page-content{
     padding: 5px;
 }

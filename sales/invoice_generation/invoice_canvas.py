@@ -81,7 +81,7 @@ class PdfGenerator(object):
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 2)
 
 		if invoice.customer_name:
-			canvas.drawString((self.MARGIN_LEFT + move_to_right) * cm, depth * cm, u'Cliente: ' + invoice.customer_name)
+			canvas.drawString((self.MARGIN_LEFT + move_to_right) * cm, depth * cm, u'Cliente: ' + invoice.customer_name.capitalize())
 			depth -= line_depth
 			canvas.drawString((self.MARGIN_LEFT + move_to_right) * cm, depth * cm, "")
 			depth -= line_depth
@@ -135,7 +135,7 @@ class PdfGenerator(object):
 		detail_depth = self.TOP_MARGIN-5
 		for line in details:
 			canvas.drawString((quantity_margin - 0.2)* cm, detail_depth * cm, self.formatter.format_as_number(line.quantity))
-			canvas.drawString(description_margin * cm, detail_depth * cm, line.product.description[:26])
+			canvas.drawString(description_margin * cm, detail_depth * cm, line.product.description.lower().capitalize()[:26])
 			canvas.drawString((description_margin + 4) * cm, detail_depth * cm, self.formatter.format_as_number(line.price))
 			canvas.drawString((self.MARGIN_LEFT + 5.9) * cm, detail_depth * cm, self.formatter.format_as_number(line.total))
 			detail_depth -= 0.5
