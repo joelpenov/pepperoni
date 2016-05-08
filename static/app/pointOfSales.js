@@ -69,6 +69,20 @@ var PEPPERONI = PEPPERONI || {};
 
     }
 
+    function MoneyModel(){
+        var self = this;
+        self.count = ko.observable(0).extend({numeric:2});
+        self.value = ko.observable(0).extend({numeric:2});
+        self.total = ko.computed(function(){
+            return PEPPERONI.formatAsMoney(self.count() * self.total());
+        });
+
+        self.setData = function(data){
+            self.count(data.count);
+            self.value(data.value);
+        };
+    }
+
     function OrderModel(settings){
         var loading = false;
         var self = this;
@@ -94,6 +108,7 @@ var PEPPERONI = PEPPERONI || {};
         self.paymentAmount=ko.observable(0).extend({numeric:2});
 
         self.details= ko.observableArray();
+        self.moneyDetails= ko.observableArray();
 
         self.detailModel = new OrderDetailModel();
         self.cashierShift=ko.observable();
@@ -178,6 +193,19 @@ var PEPPERONI = PEPPERONI || {};
                 cash:0,
                 sales_area:undefined,
                 details:[],
+                moneyDetails:[
+                    {value:2000, count:0},
+                    {value:1000, count:0},
+                    {value:500, count:0},
+                    {value:200, count:0},
+                    {value:100, count:0},
+                    {value:50, count:0},
+                    {value:25, count:0},
+                    {value:20, count:0},
+                    {value:10, count:0},
+                    {value:5, count:0},
+                    {value:1, count:0}
+                ],
                 status: ""
             });
         };
@@ -212,6 +240,12 @@ var PEPPERONI = PEPPERONI || {};
 
             self.detailModel.reset();
             self.details(data.details);
+            var tempMoney=[];
+            data.moneyDatails = data.moneyDatails || [];
+            data.moneyDatails.forEach(function(item){
+                tempMoney.push(new MoneyModel().setData(item));
+            });
+            self.moneyDetails(tempMoney);
 
         };
         self.getData=function(){
