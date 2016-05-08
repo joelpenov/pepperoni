@@ -210,7 +210,8 @@ var PEPPERONI = PEPPERONI || {};
             return PEPPERONI.formatAsMoney(data);
         },
         'datetime':function ( data, type, row ) {
-            return PEPPERONI.longDateFormat(data);
+            if(data) return PEPPERONI.longDateFormat(data);
+            return "";
         },
         'status':function ( data, type, row ) {
             return status[data];

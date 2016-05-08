@@ -8,3 +8,4 @@ pypiwin32==219
 wheel==0.24.0
 reportlab==3.2.0
 pycups==1.9.73
+python-dateutil==2.5.3

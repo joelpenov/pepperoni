@@ -5,7 +5,6 @@ from sales.models.Customer import Customer
 from sales.serializers.Customer import CustomerSerializer
 from main.mixin import AtomicMixin
 
-
 @login_required()
 def customers(request):
     return render(request,"sales/customer.html")
