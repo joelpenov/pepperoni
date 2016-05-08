@@ -69,12 +69,17 @@ var PEPPERONI = PEPPERONI || {};
         return $(settings.tableId).dataTable(settings);
     };
 
-    PEPPERONI.formatAsMoney = function(numberToMoney){
+    PEPPERONI.formatAsMoney = function(numberToMoney, precision){
+        var precision =precision===undefined? 2 : precision;
         if(isNaN(numberToMoney)) return;
         numberToMoney = parseFloat(numberToMoney);
-        var result = parseFloat(numberToMoney.toFixed(2));
-        var moneyResult = (result).formatMoney(2);
+        var result = parseFloat(numberToMoney.toFixed(precision));
+        var moneyResult = (result).formatMoney(precision);
         return moneyResult;
+    };
+
+    PEPPERONI.parseFloat = function(stringValue){
+        return parseFloat(stringValue.replace(",",""));
     };
 
 
