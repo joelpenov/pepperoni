@@ -71,15 +71,22 @@ var PEPPERONI = PEPPERONI || {};
 
     function MoneyModel(){
         var self = this;
-        self.count = ko.observable(0).extend({numeric:2});
-        self.value = ko.observable(0).extend({numeric:2});
+        self.count = ko.observable(0);
+        self.value = ko.observable(0);
         self.total = ko.computed(function(){
-            return PEPPERONI.formatAsMoney(self.count() * self.total());
+            return PEPPERONI.formatAsMoney(self.count() * self.value(),0);
         });
 
         self.setData = function(data){
             self.count(data.count);
             self.value(data.value);
+            return self;
+        };
+        self.getData = function(){
+            return {
+                count: self.count(),
+                value: self.value()
+            };
         };
     }
 
@@ -108,7 +115,6 @@ var PEPPERONI = PEPPERONI || {};
         self.paymentAmount=ko.observable(0).extend({numeric:2});
 
         self.details= ko.observableArray();
-        self.moneyDetails= ko.observableArray();
 
         self.detailModel = new OrderDetailModel();
         self.cashierShift=ko.observable();
@@ -193,22 +199,10 @@ var PEPPERONI = PEPPERONI || {};
                 cash:0,
                 sales_area:undefined,
                 details:[],
-                moneyDetails:[
-                    {value:2000, count:0},
-                    {value:1000, count:0},
-                    {value:500, count:0},
-                    {value:200, count:0},
-                    {value:100, count:0},
-                    {value:50, count:0},
-                    {value:25, count:0},
-                    {value:20, count:0},
-                    {value:10, count:0},
-                    {value:5, count:0},
-                    {value:1, count:0}
-                ],
                 status: ""
             });
         };
+
         self.setData=function(data){
 
             self.customerPhone(data.customer_phone);
@@ -240,13 +234,6 @@ var PEPPERONI = PEPPERONI || {};
 
             self.detailModel.reset();
             self.details(data.details);
-            var tempMoney=[];
-            data.moneyDatails = data.moneyDatails || [];
-            data.moneyDatails.forEach(function(item){
-                tempMoney.push(new MoneyModel().setData(item));
-            });
-            self.moneyDetails(tempMoney);
-
         };
         self.getData=function(){
             return {
@@ -686,6 +673,7 @@ var PEPPERONI = PEPPERONI || {};
         self.cashierShift = ko.observable({});
 
         self.totalRegister = ko.observable(0).extend({numeric:2});
+        self.tempTotalRegister = ko.observable(0);
         self.totalActive = ko.observable(0).extend({numeric:2});
         self.totalFinished = ko.observable(0).extend({numeric:2});
         self.totalVoid = ko.observable(0).extend({numeric:2});
@@ -695,6 +683,7 @@ var PEPPERONI = PEPPERONI || {};
         self.activeOrders = ko.observableArray();
         self.finishedOrders = ko.observableArray();
         self.voidOrders = ko.observableArray();
+        self.moneyDetails= ko.observableArray();
 
         self.startBalance = ko.computed(function(){
             return self.cashierShift().start_balance;
@@ -703,6 +692,15 @@ var PEPPERONI = PEPPERONI || {};
         self.totalRegister.subscribe(function(){
             self.difference(self.totalRegister()-self.startBalance()-self.totalFinished());
         });
+
+        self.updateTotalRegister = function(){
+            self.totalRegister(PEPPERONI.parseFloat(self.tempTotalRegister()));
+            $('#moneyModal').modal('hide');
+        };
+
+        self.openUpdateTotalRegisterModal = function(){
+            $('#moneyModal').modal('show');
+        };
 
         self.filterBy=function(matches){
             var total = 0;
@@ -784,7 +782,11 @@ var PEPPERONI = PEPPERONI || {};
         self.finishShift = function(){
             var cashierShift = self.cashierShift();
             cashierShift.close_balance = self.totalRegister();
+            cashierShift.cashier_shift_money = [];
 
+            self.moneyDetails().forEach(function(item){
+                cashierShift.cashier_shift_money.push(item.getData());
+            });
 
             return $.ajax({
                 url: '/api/cashiershifts/'+cashierShift.id + '/?format=json',
@@ -801,6 +803,33 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.init=function(){
+
+            var moneyDetails=[
+                {value:2000, count:0},
+                {value:1000, count:0},
+                {value:500, count:0},
+                {value:200, count:0},
+                {value:100, count:0},
+                {value:50, count:0},
+                {value:25, count:0},
+                {value:20, count:0},
+                {value:10, count:0},
+                {value:5, count:0},
+                {value:1, count:0}
+            ];
+            var tempMoney=[];
+            moneyDetails.forEach(function(item){
+                var money = new MoneyModel().setData(item)
+                money.total.subscribe(function(){
+                    var tempTotalRegister = 0;
+                    self.moneyDetails().forEach(function(item){
+                        tempTotalRegister += PEPPERONI.parseFloat(item.total());
+                    });
+                    self.tempTotalRegister(PEPPERONI.formatAsMoney(tempTotalRegister));
+                });
+                tempMoney.push(money);
+            });
+            self.moneyDetails(tempMoney);
             ko.applyBindings(self,document.getElementById('finish-shift-view'));
         };
     }

@@ -17,3 +17,9 @@ class CashierShift(models.Model):
 	start_balance = models.FloatField()
 	close_balance = models.FloatField(null=True)
 	status = models.CharField(max_length=15, choices=SHIFT_STATUS)
+
+
+class CashierShiftMoneyDetail(models.Model):
+	cashier_shift = models.ForeignKey(CashierShift, related_name='cashier_shift_money')
+	count = models.FloatField()
+	value = models.FloatField()
