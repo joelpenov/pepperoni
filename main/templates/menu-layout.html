@@ -15,7 +15,7 @@
 
                 <b class="arrow"></b>
             </li>
-
+{% if perms.add_warehouse.can_write  %}
             <li class="">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-calendar-o"></i>
@@ -82,7 +82,7 @@
                     </li>
                 </ul>
             </li>
-
+{% endif %}
             <li class="">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-money"></i>
@@ -92,7 +92,6 @@
                 </a>
 
                 <b class="arrow"></b>
-
                 <ul class="submenu">
                     <li class="">
                         <a href="/sales/customers/">
@@ -102,6 +101,7 @@
 
                         <b class="arrow"></b>
                     </li>
+                    {% if perms.add_warehouse.can_write  %}
                       <li class="">
                         <a href="/sales/salesarea/">
                             <i class="menu-icon fa fa-caret-right"></i>
@@ -126,6 +126,7 @@
 
                         <b class="arrow"></b>
                     </li>
+                    {% endif %}
                     <li class="">
                         <a href="/sales/pointofsales/">
                             <i class="menu-icon fa fa-caret-right"></i>
