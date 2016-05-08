@@ -358,7 +358,7 @@ var PEPPERONI = PEPPERONI || {};
 
         self.printAfterFinish = function(id){
             if(!id) return;
-            $('.alert.alert-dangcer').remove();
+            $('.alert.alert-danger').remove();
             GenericViews.getData("/sales/printinvoice/?format=json&invoiceid=" + id, function(response){
                 if(response.success_printing)
                     self.showSuccessPrint();
