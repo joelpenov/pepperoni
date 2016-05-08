@@ -4,8 +4,11 @@ from rest_framework import viewsets, permissions, filters
 from sales.models.CashierShift import CashierShift
 from sales.serializers.CashierShift import CashierShiftSerializer
 from main.mixin import AtomicMixin
+from django.contrib.auth.decorators import permission_required
+
 
 @login_required()
+@permission_required('add_warehouse')
 def cashiershifts(request):
     return render(request,"sales/cashierShift.html")
 

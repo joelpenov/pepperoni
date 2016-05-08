@@ -4,8 +4,10 @@ from rest_framework import viewsets, permissions, filters
 from inventory.models.Warehouse import Warehouse
 from inventory.serializers.Warehouse import WarehouseSerializer
 from main.mixin import AtomicMixin
+from django.contrib.auth.decorators import permission_required
 
 @login_required()
+@permission_required('add_warehouse')
 def warehouse(request):
 	return render(request,"inventory/warehouse.html")
 

@@ -4,17 +4,20 @@ from rest_framework import viewsets, permissions, filters
 from inventory.models.Transaction import Transaction
 from inventory.serializers.Transaction import TransactionSerializer, TransactionTransferSerializer
 from main.mixin import AtomicMixin
-
+from django.contrib.auth.decorators import permission_required
 
 @login_required()
+@permission_required('admin_user')
 def inventoryInput(request):
 	return render(request,"inventory/InventoryInput.html")
 
 @login_required()
+@permission_required('admin_user')
 def inventoryOutput(request):
 	return render(request,"inventory/InventoryOutput.html")
 
 @login_required()
+@permission_required('admin_user')
 def inventoryTransfer(request):
 	return render(request,"inventory/InventoryTransfer.html")
 
