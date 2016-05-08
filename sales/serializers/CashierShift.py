@@ -12,7 +12,7 @@ class CashierShiftSerializer(serializers.ModelSerializer):
     status = serializers.CharField(label='Estado', read_only=True)
     start_date= serializers.DateTimeField(read_only=True,label='Fecha inicio')
     start_balance = serializers.FloatField(required=True, label='Balance de inicial')
-    close_date= serializers.DateTimeField(read_only=True,label='Fecha cierre', allow_null=True)
+    end_date= serializers.DateTimeField(read_only=True,label='Fecha cierre', allow_null=True)
     close_balance = serializers.FloatField(required=False, label='Balance de cierre', default=0)
 
     def get_cashregistername(self, obj):
@@ -23,7 +23,7 @@ class CashierShiftSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashierShift
-        fields = ('id','cash_register','cash_register_name','user_name','start_balance','status','start_date','close_date', 'close_balance')
+        fields = ('id','cash_register','cash_register_name','user_name','start_balance','status','start_date','end_date', 'close_balance')
 
 
     def create(self, validated_data):
