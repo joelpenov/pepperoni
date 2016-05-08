@@ -387,9 +387,11 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.finish = function(){
+            debugger;
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
             request.success(function(response){
+                $('#finishOrderModal').modal('toggle');
                 self.printAfterFinish(response.id);
                 $('.alert.alert-danger').remove();
                 self.showFinishButton(false);
