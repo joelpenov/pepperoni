@@ -47,6 +47,7 @@ class OrderList(AtomicMixin, viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('cashier_shift','status',)
 
+
 class TopOrderList(viewsets.ModelViewSet):
     permission_classes =((permissions.IsAuthenticated),)
     queryset = Order.objects.filter(status=Order.FINISHED).order_by('-created_date')
