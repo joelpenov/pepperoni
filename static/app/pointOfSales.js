@@ -411,8 +411,7 @@ var PEPPERONI = PEPPERONI || {};
             debugger;
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
-            request.success(function(response){
-                $('#finishOrderModal').modal('toggle');
+            request.success(function(response){                
                 self.printAfterFinish(response.id);
                 $('.alert.alert-danger').remove();
                 self.showFinishButton(false);
@@ -711,6 +710,9 @@ var PEPPERONI = PEPPERONI || {};
 
         self.openUpdateTotalRegisterModal = function(){
             $('#moneyModal').modal('show');
+            setTimeout(function(){
+                $('#moneyModal .money-details input:first').select();
+            },500);
         };
 
         self.filterBy=function(matches){

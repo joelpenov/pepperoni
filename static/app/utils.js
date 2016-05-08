@@ -79,7 +79,8 @@ var PEPPERONI = PEPPERONI || {};
     };
 
     PEPPERONI.parseFloat = function(stringValue){
-        return parseFloat(stringValue.replace(",",""));
+
+        return parseFloat(stringValue ? stringValue.replace(",","") : 0);
     };
 
 
