@@ -22,12 +22,12 @@
                         <th>Cantidad Usada</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody data-bind="foreach:productUsages">
 
                     <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>001</td>
-                        <td>Tomate</td>
+                        <td><input type="checkbox" data-bind="checked:included" /></td>
+                        <td data-bind="text:itemId"></td>
+                        <td data-bind="text:itemName"></td>
                         <td>Libra</td>
                         <td class="align-right">10.00</td>
                         <td class="align-right"><input type="number" value="7.00"/></td>
