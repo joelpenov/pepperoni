@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from inventory.views import Warehouse
+from inventory.views import FinishProduct
 from inventory.views import Transaction
 from inventory.views import Product
 from inventory.views import Stock
@@ -20,5 +21,6 @@ urlpatterns=[
 		url(r'^outputs/', Transaction.inventoryOutput),
 		url(r'^products/', Product.product),
 		url(r'^stock/', Stock.stock),
-		url(r'^transfers/', Transaction.inventoryTransfer)
+		url(r'^transfers/', Transaction.inventoryTransfer),
+		url(r'^finishproducts/', FinishProduct.finishProduct)
 	]

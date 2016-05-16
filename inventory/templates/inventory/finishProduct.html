@@ -1,0 +1,45 @@
+{% extends "menu-layout.html" %}
+{% load staticfiles %}
+{% block content %}
+    <div class="page-header">
+        <h1>
+            Processar Productos Terminados
+        </h1>
+    </div>
+
+    <div id="product-usages-view">
+        <div class="row">
+            <div id="table-container" class="col-xs-12">
+                <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Incluir</th>
+                        <th>Codigo</th>
+                        <th>Item</th>
+                        <th>Unidad</th>
+                        <th>Ultima Existencia</th>
+                        <th>Nueva Existencia</th>
+                        <th>Cantidad Usada</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>001</td>
+                        <td>Tomate</td>
+                        <td>Libra</td>
+                        <td class="align-right">10.00</td>
+                        <td class="align-right"><input type="number" value="7.00"/></td>
+                        <td class="align-right">3.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript %}
+    <script src="{% static "app/finishProduct.js" %}"></script>
+{% endblock javascript %}
