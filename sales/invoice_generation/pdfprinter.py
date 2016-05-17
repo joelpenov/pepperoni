@@ -1,5 +1,5 @@
 import os, sys
-import cups
+# import cups
 
 def print_pdf(filepath):	 
 
