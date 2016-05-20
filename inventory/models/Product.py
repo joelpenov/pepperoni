@@ -6,7 +6,9 @@ class Product(models.Model):
 	sell_price = models.FloatField(default=0)
 	show_in_menu= models.BooleanField()
 	is_raw_material= models.BooleanField()
-	unit_of_measure = models.ForeignKey(UnitOfMeasure,"product_units")
+	is_finish_product= models.BooleanField(default=0)
+	unit_of_measure = models.ForeignKey(UnitOfMeasure, related_name= 'product_units', null=True)
+	unit_quantity= models.FloatField(default=1)
 
 	def __str__(self):
 		return self.description

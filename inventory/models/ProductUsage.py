@@ -4,9 +4,9 @@ from inventory.models.Product import Product
 
 
 class ProductUsage(models.Model):
-    includedInOutput =  models.BooleanField()
-    unit_of_measure = models.ForeignKey(UnitOfMeasure,"product_usage_units")
-    product = models.ForeignKey(Product,"product_usages")
+    included_in_output =  models.BooleanField()
+    unit_of_measure = models.ForeignKey(UnitOfMeasure,related_name= "product_usage_units")
+    product = models.ForeignKey(Product,related_name= "product_usages")
     old_stock = models.FloatField()
     new_stock = models.FloatField()
     stock_usage = models.FloatField()
