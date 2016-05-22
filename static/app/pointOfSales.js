@@ -407,8 +407,7 @@ var PEPPERONI = PEPPERONI || {};
             return true;
         };
 
-        self.finish = function(){
-            debugger;
+        self.finish = function(){            
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
             request.success(function(response){                

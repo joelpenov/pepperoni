@@ -3,8 +3,6 @@ from inventory.models.Warehouse import Warehouse
 from inventory.models.Transaction import Transaction, TransactionDetail
 
 
-
-
 class TransactionDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
     product_id= serializers.IntegerField(label='Producto')

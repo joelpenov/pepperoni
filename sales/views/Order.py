@@ -4,7 +4,6 @@ from rest_framework import viewsets, permissions, filters
 from sales.models.Order import Order, OrderDetail
 from sales.serializers.Order import OrderSerializer, SetOrderDeliverStatusSerializer
 from main.mixin import AtomicMixin
-
 from sales.invoice_generation.invoice_canvas import PdfGenerator
 from sales.invoice_generation.pdfprinter import print_pdf
 from django.http import JsonResponse
@@ -30,7 +29,7 @@ def print_invoice(request):
     details = OrderDetail.objects.filter(order__pk=invoice_id)
     
     pdfgenerator = PdfGenerator()
-    file_path = pdfgenerator.draw_pdf(order, details)
+    file_path = pdfgenerator.draw_invoice_pdf(order, details)
     print_pdf(file_path)
 
     if order.status is not "FINISHED" and not order.printed:
