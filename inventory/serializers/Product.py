@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from inventory.models.Product import Product
+from inventory.models.UnitOfMeasure import UnitOfMeasure
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -8,7 +9,12 @@ class ProductSerializer(serializers.ModelSerializer):
     sell_price=serializers.FloatField(label='Precio de venta')
     show_in_menu=serializers.BooleanField(label='Mostrar en Menu')
     is_raw_material=serializers.BooleanField(label='Es Materia Prima')
+    unit_of_measure = serializers.PrimaryKeyRelatedField(queryset=UnitOfMeasure.objects.all(), label='Unidad de Medida')
+    unit_of_measure_description = serializers.SerializerMethodField('get_unit_of_measuredescription')
+
+    def get_unit_of_measuredescription(self, obj):
+        return obj.unit_of_measure.description
 
     class Meta:
         model = Product
-        fields = ('id','description','sell_price','show_in_menu', 'is_raw_material')
+        fields = ('id','description','unit_of_measure','sell_price','show_in_menu', 'is_raw_material','unit_of_measure_description')

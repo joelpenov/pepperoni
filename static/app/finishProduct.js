@@ -1,4 +1,4 @@
-(function(){
+it (function(){
     function ProductUsageModel() {
         var factory= this;
         factory.included = ko.observable(true);
