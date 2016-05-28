@@ -234,12 +234,7 @@ class PdfGenerator(object):
 			canvas.drawString((quantity_margin + 6)* cm, detail_depth * cm, str(line.quantity))
 			detail_depth -= 0.4
 
-		print("\n********* POR AQUI **********\n")
-
-
-		detail_depth = detail_depth + 0.3	
-		
-		
+		detail_depth = detail_depth + 0.3			
 				
 		return detail_depth - 3
 
