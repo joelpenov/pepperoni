@@ -3,8 +3,10 @@ import os, sys
 
 def print_pdf(filepath):	 
 
-	#if sys.platform == "win32":
+	if sys.platform == "win32":
+		return True
 		os.startfile(filepath, "print")
-	#else:
-	#	conn = cups.Connection()
-	#	conn.printFile('Epson-TM-BA-Thermal', filepath, 'Pepperoni', {})
+
+	else:
+		conn = cups.Connection()
+		conn.printFile('Epson-TM-BA-Thermal', filepath, 'Pepperoni', {})
