@@ -7,6 +7,7 @@ from sales.models.Customer import Customer
 from sales.models.SalesArea import SalesArea
 from inventory.models.Transaction import Transaction, TransactionDetail
 
+
 class OrderDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
     product_id= serializers.IntegerField(label='Producto')

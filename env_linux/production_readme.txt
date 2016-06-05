@@ -3,8 +3,6 @@ virtualenv pepperonienv -p /usr/bin/python3.4 && \
 source pepperonienv/bin/activate && \
 pip install -r requirements_prod.txt 
 
-
-
 sudo apt-get update
 sudo apt-get install build-essential
 sudo apt-get install pip
@@ -16,7 +14,6 @@ pip install setuptools --upgrade
 sudo apt-get install libffi-dev
 sudo apt-get install python-dev
 sudo apt-get install python3-dev
-
 
 # install libjpeg-dev with apt
 sudo apt-get install libjpeg-dev
