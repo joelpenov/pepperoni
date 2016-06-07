@@ -2,6 +2,7 @@ from django.db import models
 from inventory.models.Warehouse import Warehouse
 from inventory.models.Stock import Stock
 from inventory.models.Product import Product
+from inventory.models.UnitOfMeasure import UnitOfMeasure
 
 
 class Transaction(models.Model):
@@ -26,6 +27,8 @@ class Transaction(models.Model):
 class TransactionDetail(models.Model):
     transaction = models.ForeignKey(Transaction, related_name="details")
     product = models.ForeignKey(Product, related_name="inventory_move_details")
+    unit_quantity = models.FloatField(default=1)
+    unit_of_measure = models.ForeignKey(UnitOfMeasure, related_name="product_transaction_units", blank=True, null=True)
     quantity = models.FloatField()
     price = models.FloatField()
     total = models.FloatField()
@@ -36,11 +39,13 @@ class TransactionDetail(models.Model):
         if (stock == None):
             stock = Stock.objects.create(product_id=self.product_id, warehouse_id=transaction.warehouse_id, quantity=0)
 
+
+        stock_quantity = self.unit_quantity * self.quantity
         if (transaction.transaction_type == Transaction.INPUT):
-            stock.quantity = stock.quantity + self.quantity
+            stock.quantity = stock.quantity + stock_quantity
 
         else:
-            stock.quantity = stock.quantity - self.quantity
+            stock.quantity = stock.quantity - stock_quantity
 
         if (transaction.transaction_type == Transaction.TRANSFER):
             to_stock = Stock.objects.filter(product_id=self.product_id).filter(
@@ -48,7 +53,7 @@ class TransactionDetail(models.Model):
             if (to_stock == None):
                 to_stock = Stock.objects.create(product_id=self.product_id,
                                                 warehouse_id=transaction.transfer_to_warehouse_id, quantity=0)
-            to_stock.quantity = to_stock.quantity + self.quantity  # sumar al otro
+            to_stock.quantity = to_stock.quantity + stock_quantity  # sumar al otro
             to_stock.save()
 
         stock.save()
