@@ -4,6 +4,7 @@ from sales.views import CashRegister
 from sales.views import CashierShift
 from sales.views import Order
 from sales.views import SalesArea
+from sales.views import Reports
 
 def registerApiUrls(router):
 	router.register(r'customers', Customer.CustomerList)
@@ -21,5 +22,6 @@ urlpatterns=[
 		url(r'cashiershifts', CashierShift.cashiershifts),
 		url(r'cashiershifts', CashierShift.cashiershifts),
 		url(r'salesarea', SalesArea.salesarea),
-		url(r'printinvoice', Order.print_invoice)
+		url(r'printinvoice', Order.print_invoice),
+		url(r'salesreport', Reports.sales_report)
 	]

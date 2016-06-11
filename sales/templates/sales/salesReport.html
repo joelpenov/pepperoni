@@ -1,0 +1,55 @@
+{% extends "menu-layout.html" %}
+{% load staticfiles %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "assets/css/jquery-ui.min.css" %}" />
+    <link rel="stylesheet" href="{% static "assets/css/bootstrap-multiselect.min.css" %}" /> 
+    <link rel="stylesheet" href="{% static "assets/css/jquery.tokenize.css" %}" />     
+    <link rel="stylesheet" href="{% static "style/salesReport.css" %}" />     
+{% endblock styling %}
+{% block content %}
+    <div class="page-header">
+        <h1>        
+            Reporte Ventas
+        </h1>
+    </div>
+<section id="sales-report-content">
+        <div class="row">
+            <div class="col-xs-2">
+                <label>Desde</label>
+                <div class="input-group input-group-sm">
+                    <input type="text" id="start-datepicker" class="form-control" />
+                    <span class="input-group-addon">
+                        <i class="ace-icon fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <label>Hasta</label>
+                <div class="input-group input-group-sm">
+                    <input type="text" id="end-datepicker" class="form-control" />
+                    <span class="input-group-addon">
+                        <i class="ace-icon fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-8">
+            <label>Productos</label>
+                
+                 <select id="product-selection" data-bind="options: productList, 
+                                                           optionsText: 'description', 
+                                                           optionsValue: 'id',
+                                                           optionsCaption: ''"></select>
+ 
+            </div>
+    </div>
+
+    <div class="row">
+
+    </div>
+</section>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static "assets/js/jquery-ui.min.js" %}"></script>
+    <script src="{% static "assets/js/jquery.tokenize.js" %}"></script>
+    <script src="{% static "app/salesReport.js" %}"></script>
+{% endblock javascript %}
