@@ -8,12 +8,12 @@ from inventory.models.Stock import Stock
 class ProductUsageDetailSerializer(serializers.ModelSerializer):
     id=serializers.IntegerField(read_only=True, label='Codigo')
     included_in_output = serializers.BooleanField(label='Incluir')
-    unit_quantity = serializers.IntegerField()
-    unit_of_measure_id = serializers.IntegerField()
+    unit_quantity = serializers.IntegerField(read_only=True)
+    unit_of_measure_id = serializers.IntegerField(read_only=True)
     unit_of_measure_description = serializers.SerializerMethodField('get_unit_of_measuredescription')
-    product_id = serializers.IntegerField(label='Producto')
+    product_id = serializers.IntegerField(read_only=True, label='Producto')
     product_description = serializers.SerializerMethodField('get_productdescription')
-    old_stock = serializers.FloatField(label='Ultima Existencia')
+    old_stock = serializers.FloatField(read_only=True, label='Ultima Existencia')
     new_stock = serializers.FloatField(label='Existencia actual')
     stock_usage = serializers.FloatField(label='Usada')
 
