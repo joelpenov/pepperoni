@@ -2,6 +2,7 @@ from rest_framework import serializers
 from inventory.models.ProductUsage import ProductUsage, ProductUsageDetail
 from inventory.models.Transaction import Transaction, TransactionDetail
 from inventory.models.Warehouse import Warehouse
+from inventory.models.Stock import Stock
 
 
 class ProductUsageDetailSerializer(serializers.ModelSerializer):
@@ -44,13 +45,26 @@ class ProductUsageSerializer(serializers.ModelSerializer):
         model = ProductUsage
         fields = ('id', 'warehouse','created_date','status', 'warehouse_description','details')
 
+    def createDetails(self, product_usage):
+        details = Stock.objects.filter(product__is_raw_material=True, warehouse_id= product_usage.warehouse_id)
+        for detail in details:
+            ProductUsageDetail.objects.create(product_usage=product_usage,
+                                              included_in_output=True,
+                                              unit_quantity=detail.product.unit_quantity,
+                                              unit_of_measure=detail.product.unit_of_measure,
+                                              product=detail.product,
+                                              old_stock=detail.quantity,
+                                              new_stock =0,
+                                              stock_usage =0)
+
+
     def updateDetails(self, product_usage, details_data):
         #todo: instead merge the new one or delete it
         for detail in product_usage.details.all():
             detail.delete()
 
         for detail in details_data:
-            ProductUsageDetail.objects.create(ProductUsage=product_usage, **detail)
+            ProductUsageDetail.objects.create(product_usage=product_usage, **detail)
 
         if product_usage.status == ProductUsage.FINISHED:
             ware_house = product_usage.warehouse
@@ -70,6 +84,7 @@ class ProductUsageSerializer(serializers.ModelSerializer):
         user_id = request.user.id
         product_usage = ProductUsage.objects.create(user_id=user_id,status=ProductUsage.ACTIVE, **validated_data)
         product_usage.save()
+        self.createDetails(product_usage)
         return product_usage
 
 
