@@ -33,14 +33,16 @@ class ProductUsageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Codigo')
     warehouse = serializers.PrimaryKeyRelatedField(queryset=Warehouse.objects.all(), label='Almacen')
     warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
-    details = ProductUsageDetailSerializer(many=True, required=True)
+    created_date = serializers.DateTimeField(read_only=True, label='Fecha de Creación')
+    status = serializers.CharField(read_only=True, label='Estado')
+    details = ProductUsageDetailSerializer(many=True, required=False)
 
     def get_warehousedescription(self, obj):
         return obj.warehouse.name
 
     class Meta:
         model = ProductUsage
-        fields = ('id', 'warehouse', 'warehouse_description','details')
+        fields = ('id', 'warehouse','created_date','status', 'warehouse_description','details')
 
     def updateDetails(self, product_usage, details_data):
         #todo: instead merge the new one or delete it
@@ -53,22 +55,29 @@ class ProductUsageSerializer(serializers.ModelSerializer):
         if product_usage.status == ProductUsage.FINISHED:
             ware_house = product_usage.warehouse
             note = 'Productos Terminados: '+str(product_usage.id)
-            inventory_transaction = Transaction.objects.create(warehouse=ware_house,transaction_date= product_usage.created_date,note=note, transaction_type=Transaction.SALES_OUTPUT )
+            inventory_transaction = Transaction.objects.create(warehouse=ware_house,transaction_date= product_usage.created_date,
+                                                               note=note, transaction_type=Transaction.SALES_OUTPUT )
             inventory_transaction.save()
 
-            for detail in details_data:
-                TransactionDetail.objects.create(transaction=inventory_transaction, product = product_usage.product, quantity=product_usage.stock_usage, price = product_usage.product.sell_price)
+            for detail in product_usage.details:
+                TransactionDetail.objects.create(transaction=inventory_transaction, product=detail.product,
+                                                 quantity=detail.stock_usage, price=detail.product.sell_price)
 
 
 
     def create(self, validated_data):
+        request = self.context.get('request')
+        user_id = request.user.id
+        product_usage = ProductUsage.objects.create(user_id=user_id,status=ProductUsage.ACTIVE, **validated_data)
+        product_usage.save()
+        return product_usage
+
+
+    def update(self, product_usage, validated_data):
         details_data = validated_data.pop('details')
 
         if (len(details_data) == 0):
             raise serializers.ValidationError("Debe agregar por lo menos una entrada para processar los productos terminados.")
 
-        request = self.context.get('request')
-        user_id = request.user.id
-        product_usage = ProductUsage.objects.create(user_id=user_id, **validated_data)
-        product_usage.save()
+        product_usage.status = ProductUsage.FINISHED
         self.updateDetails(product_usage, details_data)

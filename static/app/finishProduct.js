@@ -21,10 +21,45 @@
         settings.afterRender = settings.afterRender || function(){};
         self.afterRender = settings.afterRender;
         self.productUsages = ko.observableArray();
+        self.finishProduct = ko.observable();
 
 
-        self.save = function () {
-            GenericViews.saveData(self,settings.form.serializeJSON());
+        self.showEntries = ko.observable(false);
+        self.showCreateForm = ko.observable(false);
+        self.showUpdateStockView = ko.observable(false);
+
+        self.continueEditing = function(){
+            GenericViews.getData("/api/finishproduct/?format=json&status=ACTIVE", function(response){
+                if(response && response.length>0){
+                   self.continueWithStock(response[0])
+                }else{
+                   self.refreshEntries()
+                }
+             });
+        };
+
+        self.refreshEntries = function(){
+            self.showEntries(false);
+            self.showCreateForm(false);
+            GenericViews.getData("/api/finishproduct/?format=json&status=FINISH", function(response){
+                if(response && response.length>0){
+                   self.showEntries(true);
+                }else{
+                    self.showCreateForm(true);
+                }
+             });
+        };
+
+        self.continueWithStock = function(finishProduct){
+            self.showCreateForm(false);
+            self.showUpdateStockView(true);
+            self.finishProduct(finishProduct);
+        };
+
+
+        self.createProductUsageEntry = function () {
+           var request =  GenericViews.saveData(self,settings.form.serializeJSON());
+           request.success(self.continueWithStock)
         };
 
         self.resetErrors = function(){
@@ -69,13 +104,15 @@
         var formView = new FormView(form_settings);
         formView.init();
 
-        GenericViews.getData("/api/products/?format=json&is_raw_material=True", function(response){
-            var tempItems = [];
-            response.forEach(function(data){
-                tempItems.push(new ProductUsageModel().setData(data));
-            });
-            formView.productUsages(tempItems);
-        });
+        formView.continueEditing()
+
+//        GenericViews.getData("/api/products/?format=json&is_raw_material=True", function(response){
+//            var tempItems = [];
+//            response.forEach(function(data){
+//                tempItems.push(new ProductUsageModel().setData(data));
+//            });
+//            formView.productUsages(tempItems);
+//        });
 
 
     });
