@@ -85,6 +85,7 @@
             var data = {
                 id: finishProduct.id,
                 warehouse: finishProduct.warehouse,
+                action:'finish',
                 details: finishProduct.details.map(function(item){
                     return {
                         id:item.id,
@@ -95,7 +96,25 @@
                 })
             };
             var request =  GenericViews.saveData(self,data);
-            request.success(self.continueWithStock)
+            request.success(self.refreshEntries)
+        };
+
+        self.cancelEditionProductUsage = function(){
+            var finishProduct = self.finishProduct();
+            self.isEditMode = true;
+            self.currentItemId = finishProduct.id;
+            var data = {
+                id: finishProduct.id,
+                action:'cancel',
+                warehouse: finishProduct.warehouse,
+                details: []
+            };
+            var request =  GenericViews.saveData(self,data);
+            request.success(function(){
+                self.productUsages([]);
+                self.cancelAddNewEntry();
+                 self.refreshEntries();
+            });
         };
 
         self.resetErrors = function(){
@@ -107,6 +126,7 @@
             self.isEditMode = false;
             self.currentItemId = 0;
             self.resetErrors();
+            self.finishProduct(undefined);
         };
 
         self.loadForm = function () {

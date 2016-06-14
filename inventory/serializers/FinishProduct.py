@@ -37,13 +37,14 @@ class ProductUsageSerializer(serializers.ModelSerializer):
     created_date = serializers.DateTimeField(read_only=True, label='Fecha de Creación')
     status = serializers.CharField(read_only=True, label='Estado')
     details = ProductUsageDetailSerializer(many=True, required=False)
+    action = serializers.ChoiceField(choices=['save', 'finish', 'cancel'], write_only=True, required=False)
 
     def get_warehousedescription(self, obj):
         return obj.warehouse.name
 
     class Meta:
         model = ProductUsage
-        fields = ('id', 'warehouse','created_date','status', 'warehouse_description','details')
+        fields = ('id', 'warehouse','created_date','status', 'warehouse_description','details','action')
 
     def createDetails(self, product_usage):
         details = Stock.objects.filter(product__is_raw_material=True, warehouse_id= product_usage.warehouse_id)
@@ -91,12 +92,24 @@ class ProductUsageSerializer(serializers.ModelSerializer):
 
 
     def update(self, product_usage, validated_data):
+        if product_usage.status == ProductUsage.VOID:
+            raise serializers.ValidationError("Este registro fue anulado no puede editarse.")
+
+        if product_usage.status == ProductUsage.FINISHED:
+            raise serializers.ValidationError("Este registro fue finalizado no puede editarse.")
+
         details_data = validated_data.pop('details')
 
-        if (len(details_data) == 0):
-            raise serializers.ValidationError("Debe agregar por lo menos una entrada para processar los productos terminados.")
+        action = validated_data.pop('action')
 
-        product_usage.status = ProductUsage.FINISHED
-        self.updateDetails(product_usage, details_data)
+        if action == 'cancel':
+            product_usage.status = ProductUsage.VOID
+        else:
+            if len(details_data) == 0:
+                raise serializers.ValidationError("Debe agregar por lo menos una entrada para processar los productos terminados.")
+
+            product_usage.status = ProductUsage.FINISHED
+            self.updateDetails(product_usage, details_data)
+
         product_usage.save()
         return product_usage
