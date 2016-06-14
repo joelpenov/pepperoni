@@ -17,12 +17,23 @@
         self.showCreateForm = ko.observable(false);
         self.showUpdateStockView = ko.observable(false);
 
+        self.addNewEntry = function(){
+            self.showEntries(false);
+            self.showCreateForm(true);
+        };
+
+        self.cancelAddNewEntry = function(){
+            self.showEntries(true);
+            self.showCreateForm(false);
+            self.cancel();
+        };
+
         self.continueEditing = function(){
             GenericViews.getData("/api/finishproduct/?format=json&status=ACTIVE", function(response){
                 if(response && response.length>0){
-                   self.continueWithStock(response[0])
+                   self.continueWithStock(response[0]);
                 }else{
-                   self.refreshEntries()
+                   self.refreshEntries();
                 }
              });
         };
@@ -30,11 +41,15 @@
         self.refreshEntries = function(){
             self.showEntries(false);
             self.showCreateForm(false);
-            GenericViews.getData("/api/finishproduct/?format=json&status=FINISH", function(response){
+            GenericViews.getData("/api/finishproduct/?format=json&status=FINISHED", function(response){
                 if(response && response.length>0){
-                   self.showEntries(true);
+                    response.forEach(function(item){
+                        item.included = ko.observable(false);
+                    });
+                    self.productUsages(response);
+                    self.showEntries(true );
                 }else{
-                    self.showCreateForm(true);
+                    self.addNewEntry();
                 }
              });
         };
