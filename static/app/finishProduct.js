@@ -1,15 +1,4 @@
 (function(){
-    function ProductUsageModel() {
-        var factory= this;
-        factory.included = ko.observable(true);
-        factory.itemId = ko.observable();
-        factory.itemName = ko.observable();
-        factory.setData = function(data){
-            factory.itemId (data.id);
-            factory.itemName (data.description);
-            return factory;
-        };
-    }
 
     function FormView(settings) {
         var self = this;
@@ -53,7 +42,17 @@
         self.continueWithStock = function(finishProduct){
             self.showCreateForm(false);
             self.showUpdateStockView(true);
+
+            finishProduct.details.forEach(function(item){
+                item.included_in_output=ko.observable(item.included_in_output);
+                item.new_stock=ko.observable(item.new_stock);
+                item.stock_usage = ko.computed(function(){
+                    return item.old_stock - item.new_stock();
+                });
+            });
+
             self.finishProduct(finishProduct);
+
         };
 
 
@@ -104,15 +103,7 @@
         var formView = new FormView(form_settings);
         formView.init();
 
-        formView.continueEditing()
-
-//        GenericViews.getData("/api/products/?format=json&is_raw_material=True", function(response){
-//            var tempItems = [];
-//            response.forEach(function(data){
-//                tempItems.push(new ProductUsageModel().setData(data));
-//            });
-//            formView.productUsages(tempItems);
-//        });
+        formView.continueEditing();
 
 
     });
