@@ -6,7 +6,7 @@ from inventory.models.Stock import Stock
 
 
 class ProductUsageDetailSerializer(serializers.ModelSerializer):
-    id=serializers.IntegerField(read_only=True, label='Codigo')
+    id=serializers.IntegerField(label='Codigo')
     included_in_output = serializers.BooleanField(label='Incluir')
     unit_quantity = serializers.IntegerField(read_only=True)
     unit_of_measure_id = serializers.IntegerField(read_only=True)
@@ -31,7 +31,7 @@ class ProductUsageDetailSerializer(serializers.ModelSerializer):
 
 
 class ProductUsageSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True, label='Codigo')
+    id = serializers.IntegerField(read_only=True,label='Codigo')
     warehouse = serializers.PrimaryKeyRelatedField(queryset=Warehouse.objects.all(), label='Almacen')
     warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
     created_date = serializers.DateTimeField(read_only=True, label='Fecha de Creación')
@@ -49,7 +49,7 @@ class ProductUsageSerializer(serializers.ModelSerializer):
         details = Stock.objects.filter(product__is_raw_material=True, warehouse_id= product_usage.warehouse_id)
         for detail in details:
             ProductUsageDetail.objects.create(product_usage=product_usage,
-                                              included_in_output=True,
+                                              included_in_output=False,
                                               unit_quantity=detail.product.unit_quantity,
                                               unit_of_measure=detail.product.unit_of_measure,
                                               product=detail.product,
@@ -59,12 +59,13 @@ class ProductUsageSerializer(serializers.ModelSerializer):
 
 
     def updateDetails(self, product_usage, details_data):
-        #todo: instead merge the new one or delete it
-        for detail in product_usage.details.all():
-            detail.delete()
-
-        for detail in details_data:
-            ProductUsageDetail.objects.create(product_usage=product_usage, **detail)
+        for detail_data in details_data:
+            id = detail_data.pop('id')
+            detail = product_usage.details.get(pk=id)
+            detail.included_in_output = detail_data.pop('included_in_output')
+            detail.new_stock = detail_data.pop('new_stock')
+            detail.stock_usage = detail_data.pop('stock_usage')
+            detail.save()
 
         if product_usage.status == ProductUsage.FINISHED:
             ware_house = product_usage.warehouse
@@ -73,9 +74,10 @@ class ProductUsageSerializer(serializers.ModelSerializer):
                                                                note=note, transaction_type=Transaction.SALES_OUTPUT )
             inventory_transaction.save()
 
-            for detail in product_usage.details:
-                TransactionDetail.objects.create(transaction=inventory_transaction, product=detail.product,
-                                                 quantity=detail.stock_usage, price=detail.product.sell_price)
+            for detail in product_usage.details.all():
+                if detail.included_in_output:
+                    TransactionDetail.objects.create(transaction=inventory_transaction, product_id=detail.product_id,
+                                                     quantity=detail.stock_usage, price=detail.product.sell_price, total=detail.stock_usage*detail.product.sell_price)
 
 
 
@@ -96,3 +98,5 @@ class ProductUsageSerializer(serializers.ModelSerializer):
 
         product_usage.status = ProductUsage.FINISHED
         self.updateDetails(product_usage, details_data)
+        product_usage.save()
+        return product_usage

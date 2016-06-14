@@ -79,13 +79,13 @@
 
                 <div class="clearfix form-actions center">
                     <div class="col-md-offset-2 col-md-8">
-                        <button type="button" class="btn btn-info submit-button" type="button"  data-bind="">
+                        <button type="button" class="btn btn-info submit-button" type="button"  data-bind="click:$root.finishEditingProductUsage">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                             Finalizar
                         </button>
 
                         &nbsp; &nbsp; &nbsp;
-                        <button class="btn cancel-button" type="button"  data-bind="click: cancel">
+                        <button class="btn cancel-button" type="button"  data-bind="click: $root.cancel">
                             <i class="ace-icon fa fa-undo bigger-110"></i>
                             Cancelar
                         </button>

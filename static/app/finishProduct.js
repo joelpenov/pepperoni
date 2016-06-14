@@ -57,8 +57,30 @@
 
 
         self.createProductUsageEntry = function () {
-           var request =  GenericViews.saveData(self,settings.form.serializeJSON());
-           request.success(self.continueWithStock)
+            self.isEditMode = false;
+            self.currentItemId = 0;
+            var request =  GenericViews.saveData(self,settings.form.serializeJSON());
+            request.success(self.continueWithStock)
+        };
+
+        self.finishEditingProductUsage = function(){
+            var finishProduct = self.finishProduct();
+            self.isEditMode = true;
+            self.currentItemId = finishProduct.id;
+            var data = {
+                id: finishProduct.id,
+                warehouse: finishProduct.warehouse,
+                details: finishProduct.details.map(function(item){
+                    return {
+                        id:item.id,
+                        included_in_output:item.included_in_output(),
+                        new_stock:item.new_stock(),
+                        stock_usage:item.stock_usage()
+                    };
+                })
+            };
+            var request =  GenericViews.saveData(self,data);
+            request.success(self.continueWithStock)
         };
 
         self.resetErrors = function(){
