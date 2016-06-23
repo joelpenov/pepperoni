@@ -5,6 +5,7 @@ from inventory.views import FinishProduct
 from inventory.views import Transaction
 from inventory.views import Product
 from inventory.views import Stock
+from inventory.views import UnitOfMeasure
 
 
 def registerApiUrls(router):
@@ -15,6 +16,7 @@ def registerApiUrls(router):
 	router.register(r'products', Product.ProductList)
 	router.register(r'stocks', Stock.WerehouseStockList)
 	router.register(r'finishproduct', FinishProduct.FinishProductList)
+	router.register(r'unitofmeasures', UnitOfMeasure.UnitOfMeasureList)
 
 urlpatterns=[
 		url(r'^warehouse/', Warehouse.warehouse),
@@ -24,4 +26,5 @@ urlpatterns=[
 		url(r'^stock/', Stock.stock),
 		url(r'^transfers/', Transaction.inventoryTransfer),
 		url(r'^finishproducts/', FinishProduct.finishProduct),
+		url(r'^unitofmeasures/', UnitOfMeasure.unitOfMeasure),
 	]
