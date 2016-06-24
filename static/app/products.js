@@ -14,7 +14,7 @@ var PEPPERONI = PEPPERONI || {};
             formId: "form_view",
             form: $('#form_view'),
             dataTableView: dataTableView,
-            includeFields: ['id','description','unit_quantity','unit_of_measure','sell_price','show_in_menu', 'is_raw_material']
+            includeFields: {'id':{},'description':{},'unit_quantity':{defaultValue:1},'unit_of_measure':{},'sell_price':{},'show_in_menu':{}, 'is_raw_material':{}}
         };
 
         var formView = new GenericViews.FormView(form_settings);

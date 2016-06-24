@@ -35,7 +35,7 @@ var PEPPERONI = PEPPERONI || {};
                 field.value(false);
             }
             else{
-                field.value(null);
+                field.value(field.defaultValue);
             }
         });
     };
@@ -46,12 +46,29 @@ var PEPPERONI = PEPPERONI || {};
             field.value(response[field.name]);
         });
     };
+    function isArray(value){
+       return Object.prototype.toString.call( value ) === '[object Array]';
+    }
+    function getConfig(includeFields, property){
+        var config = {isIncluded:false};
+        if(isArray(includeFields)===true && (includeFields.length==0 || includeFields.indexOf(property) > -1 )){
+            config.isIncluded=true;
+        }else if(isArray(includeFields)===false && includeFields.hasOwnProperty(property)){
+            config.isIncluded=true;
+            config.defaultValue = includeFields[property].defaultValue;
+        }
+        return config;
+
+    }
     GenericViews.mapActionToFields=function(includeFields,actionFields){
         var fields = [];
         for (var property in actionFields) {
-            if (actionFields.hasOwnProperty(property) && (includeFields.length==0 || includeFields.indexOf(property) > -1 )) {
+            var config = getConfig(includeFields, property);
+            console.log(config);
+            if (config.isIncluded===true) {
                 var tempfield = actionFields[property];
                 var field = {};
+                field.defaultValue = config.defaultValue;
                 field.label=tempfield.label;
                 field.read_only= tempfield.read_only;
                 field.require= tempfield.required;
@@ -81,7 +98,10 @@ var PEPPERONI = PEPPERONI || {};
 
                 if(field.type==="date"){
                     field.value(new Date().toISOString().split('T')[0]);
+                }else{
+                    field.value(field.defaultValue);
                 }
+
             }
         }
         return fields;
