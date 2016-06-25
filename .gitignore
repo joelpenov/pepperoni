@@ -19,3 +19,4 @@ pepperonienv/
 *.orig
 mysql.cnf
 invoices/*.pdf
+wfastcgi.exe

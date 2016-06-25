@@ -1,0 +1,69 @@
+
+
+Requirements: 
+1. 	- python-3.4.4.amd64
+	- Add python to virtual variables
+
+2. 	- Visual C++ Redistributable Packages for Visual Studio 2013
+	- https://www.microsoft.com/en-us/download/details.aspx?id=40784
+	- vcredist_x64
+
+3. 	- Visual C++ Redistributable Packages for Visual Studio 2013
+	- https://www.microsoft.com/en-us/download/details.aspx?id=40784
+	- vcredist_x86
+
+4. - Generate ssh key: ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+5. 	- Clone repository
+
+6. 	- Install pip: py get-pip.py
+	- Set pip as system variable (Python34\Scripts)
+
+7. 	- Install virtual evn
+	- pip install virtualenv
+
+8. - Activate virtualenv
+	 <environmentname>\scripts\activate
+
+9. - Run database SQL script.
+
+10. IIS configuration, install fastcgi for python 3.4, using .net web plataform
+
+- Seguir los pasos en este video tutorial
+https://www.youtube.com/watch?v=H5PG95KLT4U
+
+- Add to the settings files
+import django
+django.setup()
+
+settings
+
+name: DJANGO_SETTINGS_MODULE
+value: pepperoni.settings
+
+*******2*******
+name: PYTHONPATH
+value: C:\pepperoni
+
+*******3*******
+name: WSGI_HANDLER
+value: django.core.handlers.wsgi.WSGIHandler()
+
+
+Tools: 
+
+1. - Sublime Text
+	 https://www.sublimetext.com/
+
+2. 	- Team Viewer
+	https://www.teamviewer.com/es/download/current-version/?pid=google.tv.teamviewer_brand_sl1.s.sa&gclid=COSljeafv80CFQkfhgodazsBvA
+
+3.	- Dropbox
+	 https://www.dropbox.com/downloading
+
+
+
+Credentials:
+	TeamViewer, Dropbox, etc
+		juancrunchy@gmail.com
+	
