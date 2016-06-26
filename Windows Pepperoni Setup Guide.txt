@@ -53,7 +53,7 @@ value: C:\pepperoni
 name: WSGI_HANDLER
 value: django.core.handlers.wsgi.WSGIHandler()
 
-
+Print resources\: http://timgolden.me.uk/python/win32_how_do_i/print.html
 Tools: 
 
 1. - Sublime Text
