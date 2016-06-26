@@ -22,6 +22,10 @@ Requirements:
 7. 	- Install virtual evn
 	- pip install virtualenv
 
+7.1 -Install FastCGI: pip install wfastcgi
+	https://pypi.python.org/pypi/wfastcgi
+
+		
 8. - Activate virtualenv
 	 <environmentname>\scripts\activate
 
