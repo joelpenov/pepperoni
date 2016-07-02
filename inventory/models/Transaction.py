@@ -30,8 +30,8 @@ class TransactionDetail(models.Model):
     unit_quantity = models.FloatField(default=1)
     unit_of_measure = models.ForeignKey(UnitOfMeasure, related_name="product_transaction_units", blank=True, null=True)
     quantity = models.FloatField()
-    price = models.FloatField()
-    total = models.FloatField()
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+    total = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
 
     def updateStock(self):
         transaction = self.transaction
@@ -42,7 +42,9 @@ class TransactionDetail(models.Model):
 
         stock_quantity = self.unit_quantity * self.quantity
         if (transaction.transaction_type == Transaction.INPUT):
-            stock.quantity = stock.quantity + stock_quantity
+            old_quantity = stock.quantity
+            stock.quantity = old_quantity + stock_quantity
+            stock.cost = ((old_quantity * stock.cost) + (stock_quantity * transaction.price))/stock.quantity
 
         else:
             stock.quantity = stock.quantity - stock_quantity

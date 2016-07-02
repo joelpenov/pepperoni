@@ -10,6 +10,7 @@ class StockSerializer(serializers.ModelSerializer):
     warehouse_description = serializers.SerializerMethodField('get_warehousedescription')
     product_description = serializers.SerializerMethodField('get_productdescription')
     quantity = serializers.FloatField(label='Cantidad')
+    cost = serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, label='cost')
 
     def get_warehousedescription(self, obj):
         return obj.warehouse.name
@@ -19,4 +20,4 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
-        fields = ('id', 'warehouse_id','product_id','warehouse_description','product_description', 'quantity')
+        fields = ('id', 'warehouse_id','product_id','warehouse_description','product_description', 'quantity', 'cost')

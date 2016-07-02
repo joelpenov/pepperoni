@@ -33,18 +33,15 @@ class Order(models.Model):
     customer_phone = models.CharField(max_length=15, blank=True)
     update_customer_entry = models.BooleanField(default=False)
 
-    total = models.FloatField()
-    cash = models.FloatField()
-    customer_change = models.FloatField()
-    printed = models.FloatField(default=False)
-
-# class Meta:
-# unique_together = (('slug','category'),)
+    total = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+    cash = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+    customer_change = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+    printed = models.BooleanField(default=False)
 
 
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order, related_name='details')
     product = models.ForeignKey(Product, related_name='sale_order_details')
     quantity = models.FloatField()
-    price = models.FloatField()
-    total = models.FloatField()
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+    total = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)

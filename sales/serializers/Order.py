@@ -13,8 +13,8 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     product_id= serializers.IntegerField(label='Producto')
     product_description = serializers.SerializerMethodField('get_productdescription')
     quantity= serializers.FloatField(label='Cantidad')
-    price= serializers.FloatField(label='Precio')
-    total= serializers.FloatField(label='Total')
+    price= serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, label='Precio')
+    total= serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, label='Total')
 
     def get_productdescription(self, obj):
         return obj.product.description
@@ -67,9 +67,9 @@ class OrderSerializer(serializers.ModelSerializer):
     customer_phone = serializers.CharField(label='Teléfono',required=False, allow_blank=True, max_length=12, validators=[CustomValidation.MobileRegexValidator] )
     update_customer_entry= serializers.NullBooleanField(label='Afectar cliente en futuras ordenes', required=False)
 
-    total = serializers.FloatField(label='Total')
-    cash = serializers.FloatField(label='Efectivo')
-    customer_change = serializers.FloatField(label='Cambio')
+    total = serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, label='Total')
+    cash = serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, label='Efectivo')
+    customer_change = serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, label='Cambio')
 
     action = serializers.ChoiceField(choices=['save', 'finish', 'cancel'],write_only=True, required=True)
 
