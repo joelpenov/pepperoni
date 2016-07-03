@@ -151,7 +151,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': 'crunchy/pepperoni.log',
+            'filename': 'pepperoni/pepperoni.log',
         },
     },
     'loggers': {
@@ -162,6 +162,6 @@ LOGGING = {
         },
     },
 }
-}
+
 
 django.setup()
