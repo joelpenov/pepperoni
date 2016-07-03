@@ -2,6 +2,27 @@ var PEPPERONI = PEPPERONI || {};
 
 (function(){
 
+    function MoneyModel(){
+        var self = this;
+        self.count = ko.observable(0);
+        self.value = ko.observable(0);
+        self.total = ko.computed(function(){
+            return PEPPERONI.formatAsMoney(self.count() * self.value(),0);
+        });
+
+        self.setData = function(data){
+            self.count(data.count);
+            self.value(data.value);
+            return self;
+        };
+        self.getData = function(){
+            return {
+                count: self.count(),
+                value: self.value()
+            };
+        };
+    }
+
     function ShiftListView(){
         var self = this;
         self.showShiftList=ko.observable(true);
@@ -50,6 +71,7 @@ var PEPPERONI = PEPPERONI || {};
 
         self.totalRegister=ko.observable();
         self.startBalance=ko.observable();
+        self.moneyDetails= ko.observableArray();
 
         self.filterBy=function(matches){
             var total = 0;
@@ -131,6 +153,10 @@ var PEPPERONI = PEPPERONI || {};
             self.showFinishSwiftView(false);
         };
 
+        self.openMoneyDetailModal = function(){
+            $('#moneyModal').modal('show');
+        };
+
         self.init=function(){
             ko.applyBindings(self,document.getElementById('finish-shift-view'));
         };
@@ -176,6 +202,12 @@ var PEPPERONI = PEPPERONI || {};
             var id = $(this).data("item-id");
             GenericViews.getData("/api/cashiershifts/"+id+"?format=json", function(response){
                 shiftView.cashierShift(response);
+                var tempMoneyDetail = [];
+                response.cashier_shift_money.forEach(function(data){
+                   tempMoneyDetail.push(new MoneyModel().setData(data));
+                });
+                shiftView.moneyDetails(tempMoneyDetail);
+
                 GenericViews.getData("/api/orders/?format=json&cashier_shift="+response.id, function(response){
                     response.forEach(function(order){
                         order.showDetails = ko.observable(false);
