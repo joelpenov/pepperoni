@@ -4,6 +4,8 @@ from inventory.models.Transaction import Transaction, TransactionDetail
 from inventory.models.Warehouse import Warehouse
 from inventory.models.Stock import Stock
 
+from decimal import Decimal
+
 
 class ProductUsageDetailSerializer(serializers.ModelSerializer):
     id=serializers.IntegerField(label='Codigo')
@@ -80,7 +82,7 @@ class ProductUsageSerializer(serializers.ModelSerializer):
             for detail in product_usage.details.all():
                 if detail.included_in_output:
                     TransactionDetail.objects.create(transaction=inventory_transaction, product_id=detail.product_id,
-                                                     quantity=detail.stock_usage, price=detail.cost, total=detail.stock_usage*detail.product.sell_price)
+                                                     quantity=detail.stock_usage, price=detail.cost, total=Decimal(detail.stock_usage) * Decimal(detail.cost))
 
 
 
