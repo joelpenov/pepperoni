@@ -54,7 +54,7 @@ def sales_report_service(request):
     in_clouse = (" and p.id in ("+ ','.join(id_list) +") ") if valid_list else ""
 
     query = query % (start_date, end_date, in_clouse)
-    print("Query: " + query + "\n\n\n\n ")    
+    
     results = sql_select(query)
     
 
@@ -91,8 +91,7 @@ def sql_select(sql):
         field = 0
         while True:            
             try:
-                dict[cursor.description[field][0]] = results[i][field]
-                
+                dict[cursor.description[field][0]] = results[i][field]                
                 field = field +1
             except IndexError as e:
                 break

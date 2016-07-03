@@ -4,7 +4,6 @@ import os, sys
 #import win32api
 #import win32print
 
-def print_pdf(filepath):	 
 
 def print_pdf(filepath):
 	print(filepath)
