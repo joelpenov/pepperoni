@@ -1,4 +1,5 @@
 from django.db import models
+import decimal
 from inventory.models.Warehouse import Warehouse
 from inventory.models.Stock import Stock
 from inventory.models.Product import Product
@@ -44,7 +45,9 @@ class TransactionDetail(models.Model):
         if (transaction.transaction_type == Transaction.INPUT):
             old_quantity = stock.quantity
             stock.quantity = old_quantity + stock_quantity
-            stock.cost = ((old_quantity * stock.cost) + (stock_quantity * transaction.price))/stock.quantity
+            old_stock_cost = decimal.Decimal(stock.cost) * decimal.Decimal(old_quantity)
+            new_stock_cost = decimal.Decimal(self.price) * decimal.Decimal(stock_quantity)
+            stock.cost = (old_stock_cost + new_stock_cost)/decimal.Decimal(stock.quantity)
 
         else:
             stock.quantity = stock.quantity - stock_quantity

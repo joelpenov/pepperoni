@@ -26,6 +26,7 @@ class ProductUsageDetail(models.Model):
     included_in_output = models.BooleanField()
     unit_quantity = models.FloatField(default=1)
     unit_of_measure = models.ForeignKey(UnitOfMeasure, related_name="product_usage_units")
+    cost = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
     product = models.ForeignKey(Product, related_name="product_usages")
     old_stock = models.FloatField()
     new_stock = models.FloatField()

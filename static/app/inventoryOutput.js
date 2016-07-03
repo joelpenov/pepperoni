@@ -129,7 +129,7 @@ var PEPPERONI = PEPPERONI || {};
             self.addAllDetails = function(details){
                 details.forEach(function(item){
                     self.addDetail(
-                                    item.id, 
+                                    item.product_id,
                                     item.product_description,
                                     item.quantity,
                                     item.price,

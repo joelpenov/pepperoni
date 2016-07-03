@@ -57,6 +57,7 @@
                                 <th>Ultima Existencia</th>
                                 <th>Nueva Existencia</th>
                                 <th>Cantidad Usada</th>
+                                <th>Costo Unitario</th>
                             </tr>
                             </thead>
                             <tbody data-bind="foreach:details">
@@ -69,6 +70,7 @@
                                 <td class="align-right" data-bind="text:old_stock"></td>
                                 <td class="align-right"><input type="number"  data-bind="value:new_stock" /></td>
                                 <td class="align-right" data-bind="text:stock_usage"></td>
+                                <td class="align-right" data-bind="text:cost"></td>
                             </tr>
                             </tbody>
                         </table>

@@ -14,6 +14,7 @@ class ProductUsageDetailSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField(read_only=True, label='Producto')
     product_description = serializers.SerializerMethodField('get_productdescription')
     old_stock = serializers.FloatField(read_only=True, label='Ultima Existencia')
+    cost = serializers.DecimalField(max_digits=20, decimal_places=2, default=0.00, read_only=True, label='Costo')
     new_stock = serializers.FloatField(label='Existencia actual')
     stock_usage = serializers.FloatField(label='Usada')
 
@@ -27,7 +28,7 @@ class ProductUsageDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductUsageDetail
         fields = ('id','included_in_output','unit_quantity', 'unit_of_measure_id','unit_of_measure_description',
-                  'product_id', 'product_description','old_stock', 'new_stock','stock_usage')
+                  'product_id', 'product_description','old_stock', 'new_stock','stock_usage', 'cost')
 
 
 class ProductUsageSerializer(serializers.ModelSerializer):
@@ -55,6 +56,7 @@ class ProductUsageSerializer(serializers.ModelSerializer):
                                               unit_of_measure=detail.product.unit_of_measure,
                                               product=detail.product,
                                               old_stock=detail.quantity,
+                                              cost=detail.cost,
                                               new_stock =0,
                                               stock_usage =0)
 
@@ -78,7 +80,7 @@ class ProductUsageSerializer(serializers.ModelSerializer):
             for detail in product_usage.details.all():
                 if detail.included_in_output:
                     TransactionDetail.objects.create(transaction=inventory_transaction, product_id=detail.product_id,
-                                                     quantity=detail.stock_usage, price=detail.product.sell_price, total=detail.stock_usage*detail.product.sell_price)
+                                                     quantity=detail.stock_usage, price=detail.cost, total=detail.stock_usage*detail.product.sell_price)
 
 
 
