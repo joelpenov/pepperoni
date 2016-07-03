@@ -14,27 +14,27 @@
     </div>
 <section id="sales-report-content">
         <div class="row">
-            <div class="col-xs-2">
+            <div class="col-md-2 col-lg-2">
                 <label>Desde</label>
                 <div class="input-group input-group-sm">
-                    <input type="text" id="start-datepicker" class="form-control" />
+                    <input type="text" data-bind="value: startDate" id="start-datepicker" class="form-control" />
                     <span class="input-group-addon">
                         <i class="ace-icon fa fa-calendar"></i>
                     </span>
                 </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2  col-lg-2">
                 <label>Hasta</label>
                 <div class="input-group input-group-sm">
-                    <input type="text" id="end-datepicker" class="form-control" />
+                    <input type="text" data-bind="value: endDate" id="end-datepicker" class="form-control" />
                     <span class="input-group-addon">
                         <i class="ace-icon fa fa-calendar"></i>
                     </span>
                 </div>
             </div>
-            <div class="col-md-8">
-            <label>Productos</label>
-                
+            <div class="col-md-8  col-lg-8">
+                <label>Productos </label>
+                <small class="pull-right"> Escribar parte del nombre de producto a agregar</small>
                  <select id="product-selection" data-bind="options: productList, 
                                                            optionsText: 'description', 
                                                            optionsValue: 'id',
@@ -44,7 +44,25 @@
     </div>
 
     <div class="row">
-
+        <div class="col-md-2 pull-right">
+            <button class="btn btn-primary" data-bind="click: runReport">Ver reporte</button>
+        </div>
+    </div>
+    <div class="row pullDown" data-bind="visible: showReportTable" style="display: none">    
+        <div id="table-container" class="col-xs-12">
+            <table id="sales-report-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th name="product">Producto</th>
+                    <th name="price">Precio</th>
+                    <th name="quantity">Cantidad</th>
+                    <th name="sales">Ventas</th>
+                    <th name="difference">Balance</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </section>
 {% endblock %}
