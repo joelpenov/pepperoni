@@ -34,6 +34,13 @@ class TransactionDetail(models.Model):
     price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
     total = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
 
+    def updateAvgCost(self, stock, new_quantity):
+        old_quantity = stock.quantity
+        stock.quantity = old_quantity + new_quantity
+        old_stock_cost = decimal.Decimal(stock.cost) * decimal.Decimal(old_quantity)
+        new_stock_cost = decimal.Decimal(self.price) * decimal.Decimal(new_quantity)
+        stock.cost = (old_stock_cost + new_stock_cost) / decimal.Decimal(stock.quantity)
+
     def updateStock(self):
         transaction = self.transaction
         stock = Stock.objects.filter(product_id=self.product_id).filter(warehouse_id=transaction.warehouse_id).first()
@@ -43,11 +50,7 @@ class TransactionDetail(models.Model):
 
         stock_quantity = self.unit_quantity * self.quantity
         if (transaction.transaction_type == Transaction.INPUT):
-            old_quantity = stock.quantity
-            stock.quantity = old_quantity + stock_quantity
-            old_stock_cost = decimal.Decimal(stock.cost) * decimal.Decimal(old_quantity)
-            new_stock_cost = decimal.Decimal(self.price) * decimal.Decimal(stock_quantity)
-            stock.cost = (old_stock_cost + new_stock_cost)/decimal.Decimal(stock.quantity)
+            self.updateAvgCost(stock, stock_quantity)
 
         else:
             stock.quantity = stock.quantity - stock_quantity
@@ -58,7 +61,7 @@ class TransactionDetail(models.Model):
             if (to_stock == None):
                 to_stock = Stock.objects.create(product_id=self.product_id,
                                                 warehouse_id=transaction.transfer_to_warehouse_id, quantity=0)
-            to_stock.quantity = to_stock.quantity + stock_quantity  # sumar al otro
+            self.updateAvgCost(to_stock, stock_quantity)
             to_stock.save()
 
         stock.save()
