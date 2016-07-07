@@ -13,6 +13,7 @@ tests/.coverage
 build/
 tests/report/
 db.sqlite3
+pepperoni/pepperoni.log
 crunchyenv/
 pepperonienv/
 .idea/
@@ -20,6 +21,7 @@ pepperonienv/
 mysql.cnf
 invoices/*.pdf
 wfastcgi.exe
+wfastcgi.py
 *_BACKUP_*
 *_BASE_*
 *_LOCAL_*
