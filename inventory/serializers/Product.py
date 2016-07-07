@@ -7,7 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     id=serializers.IntegerField(read_only=True, label='Codigo')
     description = serializers.CharField(label='Descripcion')
     sell_price=serializers.FloatField(label='Precio de venta')
-    unit_quantity=serializers.FloatField(label='Cantidad')
+    unit_quantity=serializers.FloatField(label='Proporción')
     show_in_menu=serializers.BooleanField(label='Mostrar en Menu')
     is_raw_material=serializers.BooleanField(label='Es Materia Prima')
     unit_of_measure = serializers.PrimaryKeyRelatedField(queryset=UnitOfMeasure.objects.all(), label='Unidad de Medida')

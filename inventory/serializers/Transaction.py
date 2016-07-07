@@ -17,8 +17,6 @@ class TransactionDetailSerializer(serializers.ModelSerializer):
         return obj.product.description
 
     def get_unit_of_measuredescription(self, obj):
-        if obj.unit_of_measure==None:
-            return ''
         return obj.unit_of_measure.abbreviation
 
     class Meta:

@@ -37,9 +37,12 @@ class TransactionDetail(models.Model):
     def updateAvgCost(self, stock, new_quantity):
         old_quantity = stock.quantity
         stock.quantity = old_quantity + new_quantity
+
         old_stock_cost = decimal.Decimal(stock.cost) * decimal.Decimal(old_quantity)
         new_stock_cost = decimal.Decimal(self.price) * decimal.Decimal(new_quantity)
         stock.cost = (old_stock_cost + new_stock_cost) / decimal.Decimal(stock.quantity)
+
+
 
     def updateStock(self):
         transaction = self.transaction

@@ -75,14 +75,21 @@ class ProductUsageSerializer(serializers.ModelSerializer):
         if product_usage.status == ProductUsage.FINISHED:
             ware_house = product_usage.warehouse
             note = 'Productos Terminados: '+str(product_usage.id)
-            inventory_transaction = Transaction.objects.create(warehouse=ware_house,transaction_date= product_usage.created_date,
-                                                               note=note, transaction_type=Transaction.SALES_OUTPUT )
+            inventory_transaction = Transaction.objects.create(warehouse=ware_house,
+                                                               transaction_date= product_usage.created_date,
+                                                               note=note,
+                                                               transaction_type=Transaction.OUTPUT)
             inventory_transaction.save()
 
             for detail in product_usage.details.all():
                 if detail.included_in_output:
-                    TransactionDetail.objects.create(transaction=inventory_transaction, product_id=detail.product_id,
-                                                     quantity=detail.stock_usage, price=detail.cost, total=Decimal(detail.stock_usage) * Decimal(detail.cost))
+                    TransactionDetail.objects.create(transaction=inventory_transaction,
+                                                     product_id=detail.product_id,
+                                                     quantity=detail.stock_usage,
+                                                     unit_quantity= detail.product.unit_quantity,
+                                                     unit_of_measure= detail.product.unit_of_measure,
+                                                     price=detail.cost,
+                                                     total=Decimal(detail.stock_usage) * Decimal(detail.cost))
 
 
 
