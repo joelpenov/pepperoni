@@ -1,0 +1,129 @@
+{% extends "menu-layout.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<div id="product-usages-view">
+    <div class="page-header">
+        <h1>
+            Registrar Existencia Materia Prima
+            <button class="btn cancel-button" type="button" data-bind="click: addNewEntry,visible:showEntries">
+                <i class="ace-icon bigger-110"></i>
+                Registro Nuevo
+            </button>
+        </h1>
+    </div>
+    <div id="register-current-stock">
+
+        <div class="row"  data-bind="visible:showCreateForm" >
+            <form id="form_view" class="form-horizontal">
+                {% csrf_token %}
+                <div  data-bind="foreach: fields">
+                    <!-- ko template: {name: fieldTemplate, data:$data, afterRender: $root.afterRender} -->
+                    <!-- /ko -->
+                </div>
+                <div class="clearfix form-actions center">
+                    <div class="col-md-offset-2 col-md-8">
+                        <button type="button" class="btn btn-info submit-button" type="button"  data-bind="click: createProductUsageEntry">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            Continuar
+                        </button>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <button class="btn cancel-button" type="button"  data-bind="click: cancelAddNewEntry">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="update-stock-view"  data-bind="visible:showUpdateStockView">
+            <div data-bind="with:finishProduct">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Almancen: <span data-bind="text:warehouse_description"></span></label>
+
+                    </div>
+                </div>
+                <div class="row" >
+                    <div id="table-container" class="col-xs-12">
+                        <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Incluir</th>
+                                <th>Codigo</th>
+                                <th>Item</th>
+                                <th>Unidad</th>
+                                <th>Ultima Existencia</th>
+                                <th>Nueva Existencia</th>
+                                <th>Cantidad Usada</th>
+                                <th>Costo Unitario</th>
+                            </tr>
+                            </thead>
+                            <tbody data-bind="foreach:details">
+
+                            <tr>
+                                <td><input type="checkbox" data-bind="checked:included_in_output" /></td>
+                                <td data-bind="text:product_id"></td>
+                                <td data-bind="text:product_description"></td>
+                                <td data-bind="text:unit_of_measure_description"></td>
+                                <td class="align-right" data-bind="text:old_stock"></td>
+                                <td class="align-right"><input type="number"  data-bind="value:new_stock, enable: included_in_output" /></td>
+                                <td class="align-right" data-bind="text:stock_usage"></td>
+                                <td class="align-right" data-bind="text:cost"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="clearfix form-actions center">
+                    <div class="col-md-offset-2 col-md-8">
+                        <button type="button" class="btn btn-info submit-button" type="button"  data-bind="click:$root.finishEditingProductUsage">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            Finalizar
+                        </button>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <button class="btn cancel-button" type="button"  data-bind="click: $root.cancelEditionProductUsage">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="calc-finish-product"  data-bind="visible:showEntries">
+        <div class="row" >
+            <div class="col-xs-12">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Incluir</th>
+                        <th>Codigo</th>
+                        <th>Almacen</th>
+                        <th>Fecha</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach:productUsages">
+
+                    <tr>
+                        <td><input type="checkbox" data-bind="checked:included" /></td>
+                        <td data-bind="text:id"></td>
+                        <td data-bind="text:warehouse_description"></td>
+                        <td data-bind="text:PEPPERONI.longDateFormat(created_date)"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static "app/finishProduct.js" %}"></script>
+{% endblock javascript %}

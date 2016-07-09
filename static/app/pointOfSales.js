@@ -408,7 +408,6 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.finish = function(){
-            debugger;
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
             request.success(function(response){                
@@ -724,7 +723,7 @@ var PEPPERONI = PEPPERONI || {};
             var filterOrders= [];
             self.orders().forEach(function(order){
                 if(matches(order)) {
-                    total += order.total;
+                    total += parseFloat(order.total);
                     filterOrders.push(order);
                 }
             });
