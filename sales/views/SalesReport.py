@@ -30,8 +30,8 @@ def sales_report_service(request):
     a_month_ago = 30
     last_month_date = date.today() - timedelta(days = a_month_ago)
     
-    start_date = start_date if (start_date and validate_date(start_date)) else last_month_date
-    end_date = end_date if (end_date and validate_date(end_date)) else date.today()    
+    start_date = start_date if (start_date and is_valid_date(start_date)) else last_month_date
+    end_date = end_date if (end_date and is_valid_date(end_date)) else date.today()    
 
     query = """
             select 
@@ -39,22 +39,20 @@ def sales_report_service(request):
             sum(od.quantity) quantity, 
             p.sell_price price,  
             sum(od.total) sales,
-            (sum(od.total) - (p.sell_price * sum(od.quantity))) difference
+            (sum(od.total) - sum(p.sell_price * od.quantity)) difference
             from sales_orderdetail od  
             inner join sales_order o on o.id = od.order_id  
             inner join inventory_product p on p.id = od.product_id  
             where o.created_date 
             between '%s' and '%s' %s
-            group by p.id
+            group by p.id, p.sell_price 
             order by o.created_date desc, od.total
         """
     
-
     valid_list = product_ids_are_valid(id_list)
     in_clouse = (" and p.id in ("+ ','.join(id_list) +") ") if valid_list else ""
 
     query = query % (start_date, end_date, in_clouse)
-    
     results = sql_select(query)
     
 
@@ -72,7 +70,7 @@ def product_ids_are_valid(product_ids):
             return False            
     return True
 
-def validate_date(date_text):
+def is_valid_date(date_text):
     try:
         if date_text != datetime.strptime(date_text, "%Y-%m-%d").strftime('%Y-%m-%d'):
             raise ValueError
