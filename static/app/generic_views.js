@@ -64,7 +64,6 @@ var PEPPERONI = PEPPERONI || {};
         var fields = [];
         for (var property in actionFields) {
             var config = getConfig(includeFields, property);
-            console.log(config);
             if (config.isIncluded===true) {
                 var tempfield = actionFields[property];
                 var field = {};
@@ -113,7 +112,6 @@ var PEPPERONI = PEPPERONI || {};
             type: "options",
             data: {},
             success: function (response) {
-                console.log(response);
                 callback(GenericViews.mapActionToFields(settings.includeFields,response.actions.POST ), response);
             },
             error: function (jXHR, textStatus, errorThrown) {

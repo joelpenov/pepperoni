@@ -723,7 +723,7 @@ var PEPPERONI = PEPPERONI || {};
             var filterOrders= [];
             self.orders().forEach(function(order){
                 if(matches(order)) {
-                    total += order.total;
+                    total += parseFloat(order.total);
                     filterOrders.push(order);
                 }
             });
@@ -751,6 +751,8 @@ var PEPPERONI = PEPPERONI || {};
             var voidOrderFilter = self.filterBy(function(order){return order.status ==='VOID'});
             self.voidOrders(voidOrderFilter.orders);
             self.totalVoid(voidOrderFilter.total);
+
+            debugger;
         });
 
         self.updateLayout = function(){
