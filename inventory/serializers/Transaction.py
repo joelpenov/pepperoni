@@ -4,8 +4,6 @@ from inventory.models.Transaction import Transaction, TransactionDetail
 from inventory.models.Product import Product
 
 
-
-
 class TransactionDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True, label='Código')
     product_id= serializers.IntegerField(label='Producto')

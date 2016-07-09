@@ -21,5 +21,6 @@ urlpatterns=[
 		url(r'cashiershifts', CashierShift.cashiershifts),
 		url(r'cashiershifts', CashierShift.cashiershifts),
 		url(r'salesarea', SalesArea.salesarea),
-		url(r'printinvoice', Order.print_invoice)
+		url(r'printinvoice', Order.print_invoice),
+		url(r'printshiftstock', CashierShift.print_shift_stock)
 	]
