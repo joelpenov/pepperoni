@@ -4,6 +4,8 @@ from sales.views import CashRegister
 from sales.views import CashierShift
 from sales.views import Order
 from sales.views import SalesArea
+from sales.views import SalesReport
+
 
 def registerApiUrls(router):
 	router.register(r'customers', Customer.CustomerList)
