@@ -18,3 +18,5 @@ class WerehouseStockList(AtomicMixin, viewsets.ModelViewSet):
 	permission_classes =((permissions.IsAuthenticated),)
 	queryset = Stock.objects.all()
 	serializer_class = StockSerializer
+	filter_backends = (filters.DjangoFilterBackend,)
+	filter_fields = ('warehouse_id', 'product_id',)

@@ -21,7 +21,7 @@ def sql_select(sql):
         field = 0
         while True:
             try:
-                dict[cursor.description[field][0]] = results[i][field]
+                dict[cursor.description[field][0]] = str(results[i][field])
                 field = field +1
             except IndexError as e:
                 break

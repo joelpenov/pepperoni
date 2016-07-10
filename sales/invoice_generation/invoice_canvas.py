@@ -5,6 +5,7 @@ import os
 import calendar
 from datetime import datetime
 import time
+from functools import partial
 
 from sales.invoice_generation.smart_text_cut import SmartCutter
 from sales.invoice_generation.data_formatter import DataFormatter
@@ -30,7 +31,7 @@ class PdfGenerator(object):
 			canvas.setDash()
 	
 
-	def draw_header(self, canvas):	
+	def draw_header(self, canvas):		
 		canvas.setFont(self.FONT_NAME, self.FONT_SIZE + 3)
 		canvas.drawString((self.MARGIN_LEFT + 2.7) * cm, self.TOP_MARGIN * cm, 'Crunchy Pizza')
 		canvas.drawString((self.MARGIN_LEFT + 3.1) * cm, (self.TOP_MARGIN - 0.5) * cm, "¡Es mejor!")
@@ -122,8 +123,7 @@ class PdfGenerator(object):
 		depth = self.TOP_MARGIN - 4.5
 
 		quantity_margin = self.MARGIN_LEFT + 0.2
-		description_margin = self.MARGIN_LEFT + 1
-		
+		description_margin = self.MARGIN_LEFT + 1		
 
 		canvas.drawString((quantity_margin - 0.2) * cm, depth * cm, 'Cant')
 		canvas.drawString(description_margin * cm, depth * cm, 'Descripción')
@@ -172,43 +172,91 @@ class PdfGenerator(object):
 		canvas.rotate(50)		
 		canvas.drawCentredString(0, 150, message)
 
+	def build_canvas(self,file_name, PAGE_HEIGHT):
+		canvas = Canvas(file_name, pagesize=(8 * cm, PAGE_HEIGHT * cm))
+		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
+		canvas.setTitle("Pepperonni System - " + str(calendar.timegm(time.gmtime())))
+		return canvas
 
-	def draw_pdf(self, invoice, details):
 
-		file_name = os.path.join(root_directory,"..","invoices",str(calendar.timegm(time.gmtime()))+'_'+str(invoice.number)+'_'+'_invoice.pdf')
+	def perform_canvas_step(self, action, canvas):
+		canvas.saveState()
+		return_value = action()
+		canvas.restoreState()
+
+		return return_value
+
+	def draw_invoice_pdf(self, invoice, details):
+
+		file_name = os.path.join(root_directory,"..","generatedPdfs","invoices",str(calendar.timegm(time.gmtime()))+'_invoice.pdf')
 
 		PAGE_HEIGHT	= self.get_document_height(invoice,details)
 		self.TOP_MARGIN = PAGE_HEIGHT - 1
 
-		canvas = Canvas(file_name, pagesize=(8 * cm, PAGE_HEIGHT * cm))
-		canvas.setFont(self.FONT_NAME, self.FONT_SIZE)
-		canvas.setTitle("Pepperonni System")
+		canvas = self.build_canvas(file_name, PAGE_HEIGHT)
 
 		if invoice.printed:
-			canvas.saveState()
-			self.add_water_mark(canvas, "NO HACER")
-			canvas.restoreState()
+			self.perform_canvas_step(partial(self.add_water_mark, canvas, "NO HACER"), canvas)
 
-		canvas.saveState()
-		self.draw_header(canvas)
-		canvas.restoreState()    
 
-		canvas.saveState()
-		self.draw_business_info(canvas, invoice)
-		canvas.restoreState()
-
-		canvas.saveState()
-		current_depth = self.draw_invoice_detail(canvas, invoice, details)
-		canvas.restoreState()
-
-		canvas.saveState()
-		self.draw_customer_info(canvas, invoice, current_depth)
-		canvas.restoreState()
-
-		textobject = canvas.beginText(self.MARGIN_LEFT * cm, -2.5 * cm)
+		self.perform_canvas_step(partial(self.draw_header, canvas), canvas)		
+		self.perform_canvas_step(partial(self.draw_business_info, canvas, invoice), canvas)
+		current_depth= self.perform_canvas_step(partial(self.draw_invoice_detail, canvas, invoice, details), canvas)		
+		self.perform_canvas_step(partial(self.draw_customer_info, canvas, invoice, current_depth), canvas)
 
 		canvas.translate(0, 29.7 * cm)	
 		canvas.showPage()
 		canvas.save()
 
 		return file_name
+
+
+	def draw_stock_detail(self, canvas, details):
+
+		if len(details) == 0:
+			canvas.drawString((self.MARGIN_LEFT + 2.2) * cm, (self.TOP_MARGIN + 0.5) * cm, "No hay productos para mostrar")
+			return
+
+		canvas.drawString((self.MARGIN_LEFT + 2.2) * cm, (self.TOP_MARGIN -2) * cm, "Reporte de '" + details[0].warehouse.name+"'")
+
+		depth = self.TOP_MARGIN - 2.5
+		quantity_margin = self.MARGIN_LEFT + 0.2
+		description_margin = self.MARGIN_LEFT + 1		
+
+		canvas.drawString((quantity_margin - 0.2) * cm, depth * cm, 'Producto')
+		canvas.drawString((self.MARGIN_LEFT + 6) * cm, depth * cm, 'Cantidad')
+
+		self.draw_line(canvas, (self.TOP_MARGIN - 4.6), dashed=True)
+
+		detail_depth = self.TOP_MARGIN - 3
+		for line in details:
+			canvas.drawString((quantity_margin)* cm, detail_depth * cm, line.product.description)
+			canvas.drawString((quantity_margin + 6)* cm, detail_depth * cm, str(line.quantity))
+			detail_depth -= 0.4
+
+		detail_depth = detail_depth + 0.3			
+				
+		return detail_depth - 3
+
+
+	def draw_cashier_shift_stock_report(self, details):
+		file_name = os.path.join(root_directory,"..","generatedPdfs","cashiershifts",str(calendar.timegm(time.gmtime()))+'_'+'_cashiershifts.pdf')
+		
+		PAGE_HEIGHT = (len(details) * 0.5) + 5
+		self.TOP_MARGIN = PAGE_HEIGHT - 1
+
+		canvas = self.build_canvas(file_name, PAGE_HEIGHT)
+
+		self.perform_canvas_step(partial(self.draw_header, canvas), canvas)	
+
+		self.draw_stock_detail(canvas, details)
+
+		canvas.translate(0, 29.7 * cm)	
+		canvas.showPage()
+		canvas.save()
+
+		return file_name
+
+
+
+

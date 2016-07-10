@@ -408,7 +408,6 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.finish = function(){
-            debugger;
             if(!self.isAValidAmountToFinish()) return;
             var request =self.order.save('finish');
             request.success(function(response){                
@@ -794,6 +793,23 @@ var PEPPERONI = PEPPERONI || {};
 
         self.cancel = function(){
             self.showFinishSwiftView(false);
+        };
+
+
+        self.printCurrentStock = function(){
+            
+             var cashierShiftId = self.cashierShift().cash_register;
+             
+             if(!cashierShiftId || isNaN(cashierShiftId)) {
+                GenericViews.showNotification("Ha ocurrido un error. Favor de refrescar esta pagina.");
+                return false;
+             }
+
+             GenericViews.getData("/sales/printshiftstock?cashregisterid=" + cashierShiftId, function(response){
+                if(response.success_printing)
+                    GenericViews.showNotification("Imprimiendo...", 'success');
+                    setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
+            });
         };
 
         self.finishShift = function(){

@@ -20,9 +20,11 @@ pepperonienv/
 *.orig
 mysql.cnf
 invoices/*.pdf
+generatedPdfs/*
 wfastcgi.exe
 wfastcgi.py
 *_BACKUP_*
 *_BASE_*
 *_LOCAL_*
 *_REMOTE_*
+*.log
