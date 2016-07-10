@@ -192,7 +192,7 @@ var PEPPERONI = PEPPERONI || {};
             return '<div class="action-buttons"> <a class="view blue" data-item-id="' + data + '"><i class="ace-icon fa fa-eye bigger-130" ></i></a> </div>';
         },
         'boolean': function ( data, type, row ) {
-            return data === true? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': ''
+            return PEPPERONI.getCheckIconEntry(data);
         },
         'check-switch': function ( data, type, row ) {
             var checked =  data === true? 'checked="checked"' : '';

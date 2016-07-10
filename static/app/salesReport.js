@@ -1,20 +1,17 @@
+var PEPPERONI = PEPPERONI || {};
+
 (function(){
 
 	var dataTable;
 	function SalesReportViewModel(){
 		var self = this;
 
-		self.getCurrentDate = function(){
-			return moment().format('DD/MM/YYYY');
-		}
-
-
-		self.startDate = ko.observable(self.getCurrentDate());
-		self.endDate = ko.observable(self.getCurrentDate());
+		self.startDate = ko.observable(PEPPERONI.getCurrentDate());
+		self.endDate = ko.observable(PEPPERONI.getCurrentDate());
 		self.showReportTable = ko.observable(false);
 
 		self.productList = ko.observableArray([]);
-		self.productIdsList = ko.observableArray([]);
+		self.productIdsSelected = ko.observableArray([]);
 
 		self.formatDateAsISO = function(date){
 			var separator = "-";
@@ -29,7 +26,9 @@
 			self.showReportTable(false);
 			var data =self.getReportCriteria();
 			var baseUrl = "/sales/salesreportservice";
-			var query = "?StartDate=" + data.StartDate + "&EndDate=" + data.EndDate + "&Products=" + data.ProductIds ;
+			var query = "?StartDate=" + data.StartDate +
+                        "&EndDate=" + data.EndDate +
+                        "&Products=" + data.ProductIds ;
 			if(!dataTable) dataTable = self.getDataTable("");
 			dataTable.refreshDataTable(baseUrl + query);
 			self.showReportTable(true);
@@ -49,7 +48,7 @@
 			var data = {
 				StartDate: self.formatDateAsISO(self.startDate()),
 				EndDate: self.formatDateAsISO(self.endDate()),
-				ProductIds: self.productIdsList().join()
+				ProductIds: self.productIdsSelected().join()
 			};
 
 			return data;
@@ -58,15 +57,14 @@
 
 	};
 
-
 	function initializeMultiselec(salesReportViewModel){
 		$('#product-selection').tokenize({
 			newElements: false,
 			onAddToken: function(value){
-				salesReportViewModel.productIdsList.push(value);
+				salesReportViewModel.productIdsSelected.push(value);
 			},
 			onRemoveToken: function(value){				
-				salesReportViewModel.productIdsList.remove(value);
+				salesReportViewModel.productIdsSelected.remove(value);
 			}
 		});
 	};
@@ -99,7 +97,5 @@
         ko.applyBindings(salesReportViewModel, document.getElementById('sales-report-content'));
         
         loadProducts(salesReportViewModel);
-
-        
 	});
 })();

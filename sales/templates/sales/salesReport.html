@@ -14,7 +14,7 @@
     </div>
 <section id="sales-report-content">
         <div class="row">
-            <div class="col-md-2 col-lg-2">
+            <div class="col-md-2 col-lg-2 col-lg-offset-4 col-md-offset-4">
                 <label>Desde</label>
                 <div class="input-group input-group-sm">
                     <input type="text" data-bind="value: startDate" id="start-datepicker" class="form-control" />
@@ -32,15 +32,35 @@
                     </span>
                 </div>
             </div>
-            <div class="col-md-8  col-lg-8">
-                <label>Productos </label>
-                <small class="pull-right"> Escribar parte del nombre de producto a agregar</small>
-                 <select id="product-selection" data-bind="options: productList, 
-                                                           optionsText: 'description', 
-                                                           optionsValue: 'id',
-                                                           optionsCaption: ''"></select>
- 
-            </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12  col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#products-box" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">
+                        <i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
+
+                        <i class="ace-icon fa fa-cutlery bigger-130"></i>
+                        Filtrar por productos
+                    </a>
+                </div>
+                <div class="panel-collapse collapse" id="products-box">
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <label>Productos </label>
+                            <small class="pull-right"> Escriba parte del nombre del producto a agregar</small>
+                             <select id="product-selection" data-bind="options: productList,
+                                                                       optionsText: 'description',
+                                                                       optionsValue: 'id',
+                                                                       optionsCaption: ''"></select>
+
+                        </div>
+                    </div>
+                </div>
+            </div0>
+           </div>
+        </div>
     </div>
 
     <div class="row">
