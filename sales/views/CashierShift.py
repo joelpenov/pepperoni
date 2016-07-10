@@ -15,7 +15,7 @@ from sales.invoice_generation.pdfprinter import print_pdf
 @login_required()
 @permission_required('add_warehouse')
 def cashiershifts(request):
-    return render(request,"sales/cashierShift.html")
+    return render(request, "sales/cashierShift.html")
 
 
 @login_required
@@ -28,19 +28,17 @@ def print_shift_stock(request):
     cash_register_id = int(cash_register_id)
     pdfgenerator = PdfGenerator()
 
-    warehouse_id=CashRegister.objects.get(pk=cash_register_id).warehouse.id
-    details =Stock.objects.filter(warehouse__id=warehouse_id, product__print_on_cashier_shift=True)
+    warehouse_id = CashRegister.objects.get(pk=cash_register_id).warehouse.id
+    details = Stock.objects.filter(warehouse__id=warehouse_id, product__print_on_cashier_shift=True)
 
-    file_path = pdfgenerator.draw_cashier_shift_stock_report(details)
-    
-    print_pdf(file_path)
+    pdfgenerator.draw_cashier_shift_stock_report(details)
 
     return JsonResponse({'success_printing': True})
 
 
 class CashierShiftList(AtomicMixin, viewsets.ModelViewSet):
-    permission_classes =((permissions.IsAuthenticated),)
+    permission_classes = ((permissions.IsAuthenticated),)
     queryset = CashierShift.objects.all()
     serializer_class = CashierShiftSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('user','status',)
+    filter_fields = ('user', 'status',)
