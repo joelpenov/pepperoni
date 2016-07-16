@@ -15,7 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
     print_on_cashier_shift = serializers.BooleanField(label='Imprimir en reporte')
 
     def get_unit_of_measuredescription(self, obj):
-        return obj.unit_of_measure.description
+        return obj.unit_of_measure.abbreviation
 
     class Meta:
         model = Product

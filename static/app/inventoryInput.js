@@ -35,7 +35,7 @@ var PEPPERONI = PEPPERONI || {};
                 }
 
                 GenericViews.getDataById("/api/products/", self.productId(),function (response) {
-                    self.productDescription(response.description)
+                    self.productDescription(response.description+" ("+response.unit_of_measure_description+")")
                 });
             });
 
@@ -129,7 +129,7 @@ var PEPPERONI = PEPPERONI || {};
                 details.forEach(function(item){
                     self.addDetail(
                                     item.product_id,
-                                    item.product_description,
+                                    item.product_description + " ("+item.unit_of_measure_description+")",
                                     item.quantity,
                                     item.price,
                                     item.total);
