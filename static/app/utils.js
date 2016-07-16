@@ -86,7 +86,15 @@ var PEPPERONI = PEPPERONI || {};
 
     PEPPERONI.longDateFormat = function(date){
         moment.locale('es');
-        return moment(date).format("DD/MM/YYYY h:mm a");
+        return date ? moment(date).format("DD/MM/YYYY h:mm a") : "";
+    };
+
+    PEPPERONI.getCurrentDate = function(){
+        return moment().format('DD/MM/YYYY');
+    };
+
+    PEPPERONI.getCheckIconEntry = function(condition){
+        return condition === true ? '<div class="action-buttons"><a class="edit green"><i class="fa fa-check bigger-130"></i></a></div>': '';
     };
 
 })();

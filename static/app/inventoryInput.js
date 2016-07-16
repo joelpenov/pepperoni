@@ -35,7 +35,7 @@ var PEPPERONI = PEPPERONI || {};
                 }
 
                 GenericViews.getDataById("/api/products/", self.productId(),function (response) {
-                    self.productDescription(response.description)
+                    self.productDescription(response.description+" ("+response.unit_of_measure_description+")")
                 });
             });
 
@@ -54,7 +54,7 @@ var PEPPERONI = PEPPERONI || {};
 
                 if(self.productIdHasError() || self.quantityHasError() || self.priceHasError()) return;
 
-                self.addDetail(self.productId(), self.productDescription(), self.quantity(), self.price(), self.quantity() * self.price());
+                self.addDetail(self.productId(), self.productDescription(), self.quantity(), self.price(), (self.quantity() * self.price()).toFixed(2));
                 self.cleanDetails();
             };
 
@@ -128,8 +128,8 @@ var PEPPERONI = PEPPERONI || {};
             self.addAllDetails = function(details){
                 details.forEach(function(item){
                     self.addDetail(
-                                    item.id, 
-                                    item.product_description,
+                                    item.product_id,
+                                    item.product_description + " ("+item.unit_of_measure_description+")",
                                     item.quantity,
                                     item.price,
                                     item.total);

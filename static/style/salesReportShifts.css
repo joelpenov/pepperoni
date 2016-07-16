@@ -1,0 +1,14 @@
+.tokenize-sample, .Tokenize{
+	width: 100%;
+}
+
+.ui-datepicker{
+	width: inherit;
+}
+
+.pullDown{
+	margin-top: 20px;
+}
+.panel-default{
+     border-color: transparent;
+}

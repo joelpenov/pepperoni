@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, filters
 from sales.models.CashRegister import CashRegister
 from sales.serializers.CashRegister import CashRegisterSerializer
 from main.mixin import AtomicMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 
 @login_required()
