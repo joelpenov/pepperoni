@@ -171,7 +171,7 @@ var PEPPERONI = PEPPERONI || {};
         self.details.subscribe(function () {
             var total = 0;
             self.details().forEach(function(item){
-                total+=item.total;
+                total+= parseFloat(item.total);
             });
             self.total(total);
         });
@@ -227,7 +227,6 @@ var PEPPERONI = PEPPERONI || {};
             self.to_pickup(data.to_pickup);
             self.delivered(data.delivered);
             self.salesarea(data.sales_area);
-
             self.total(data.total);
             self.paymentAmount(data.cash);
             self.status(data.status);
