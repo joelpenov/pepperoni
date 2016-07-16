@@ -722,8 +722,8 @@ var PEPPERONI = PEPPERONI || {};
             var filterOrders= [];
             self.orders().forEach(function(order){
                 if(matches(order)) {
-                    total += order.total;
-                    filterOrders.push(order);
+                   total += parseFloat(order.total);
+                   filterOrders.push(order);
                 }
             });
             return {
