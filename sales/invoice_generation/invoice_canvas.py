@@ -14,7 +14,7 @@ root_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class PdfGenerator(object):
 
 	def __init__(self):
-		self.MARGIN_LEFT = 0
+		self.MARGIN_LEFT = 0.5
 		self.TOP_MARGIN = 0
 		self.FONT_SIZE = 8
 		self.FONT_NAME = 'Helvetica'
