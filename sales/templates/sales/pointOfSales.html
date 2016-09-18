@@ -214,7 +214,7 @@
                                     <div class="order-input col-sm-2">
                                         <label for="input_product_quantity"> Cantidad </label>
                                         <div class="form-group"  data-bind="css:{'has-error':order.detailModel.quantityHasError}">
-                                            <input id="input_product_quantity" type="number"  data-bind="value: order.detailModel.quantity" class="align-right" >
+                                            <input id="input_product_quantity" type="number"  data-bind="value: order.detailModel.quantity, valueUpdate: 'input'" class="align-right" >
                                         </div>
                                     </div>
                                     <div class="order-input col-sm-2" >

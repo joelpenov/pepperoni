@@ -9,7 +9,7 @@ var PEPPERONI = PEPPERONI || {};
         self.priceHasError = ko.observable(false);
         self.productId = ko.observable();
         self.productDescription = ko.observable();
-        self.quantity = ko.observable().extend({numeric:2});
+        self.quantity = ko.observable();
         self.price = ko.observable().extend({numeric:2});
 
         self.productId.subscribe(function () {
@@ -929,15 +929,31 @@ var PEPPERONI = PEPPERONI || {};
                 viewModel.order.addNewProduct();
             }
         });
-    }
+    };
+
+    function initializeFocusNextInputOnEnter(viewModel){
+        var moneyInputs = ".money-details input[type=number]";
+        $(moneyInputs).keydown(function (e) {
+             var enterCodeKey = 13;
+             if (e.which === enterCodeKey) {
+                 var index = $(moneyInputs).index(this) + 1;
+                 if(index === $(moneyInputs).length) {
+                    viewModel.updateTotalRegister();
+                    return;
+                 }
+                 $(moneyInputs).eq(index).focus();
+             }
+         });
+    };
 
 
     $(document).ready(function(){
+        var finishShiftViewModel = initializeFinishShiftView();
         var posSettings = {
             customerSearchTable: initializeCustomerSearch(),
             productSearchTable: initializeProductSearch(),
             orderSearchTable: initializeOrderSearch(),
-            finishShiftView: initializeFinishShiftView(),
+            finishShiftView: finishShiftViewModel,
             cashierShiftFormView: initializeCashierShiftFormView()
         };
 
@@ -997,7 +1013,7 @@ var PEPPERONI = PEPPERONI || {};
 
         initializeSelectProductQuantityOnClick(pointOfSaleView);
         initializeSingleSelectCheckboxes();
-
+        initializeFocusNextInputOnEnter(finishShiftViewModel);
 
     });
 })();
