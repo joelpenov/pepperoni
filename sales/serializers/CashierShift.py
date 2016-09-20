@@ -65,7 +65,7 @@ class CashierShiftSerializer(serializers.ModelSerializer):
             total += money.count * money.value
 
         if(total!=instance.close_balance):
-            raise serializers.ValidationError("El total en caja: "+instance.close_balance+", y el detalle por billetes: "+total+", no cuadra.")
+            raise serializers.ValidationError("El total en caja: "+str(instance.close_balance)+", y el detalle por billetes: "+str(total)+", no cuadra.")
 
         instance.save()
         return instance

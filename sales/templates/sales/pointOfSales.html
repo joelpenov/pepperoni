@@ -712,7 +712,24 @@
                                     <div class="form-group">
                                         <input type="button" class="btn btn-default" data-bind="click:openUpdateTotalRegisterModal" value="Total en caja">
                                         <input type="button" class="btn btn-default" data-bind="click:finishShift" value="Terminar Turno">
-                                        <input type="button" class="btn btn-default " data-bind="click:printCurrentStock" value="Imprimir inventario "> 
+                                        <div class="btn-group">
+                                                <button data-toggle="dropdown" class="btn dropdown-toggle">
+                                                    Imprimir
+                                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                                </button>
+
+                                                <ul class="dropdown-menu dropdown-default">
+                                                    <li>
+                                                        <a href="#" data-bind="click:printCurrentStock">Inventario</a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="#" data-bind="click:printFinishShiftMoneyDetail">Cierre</a>
+                                                    </li>
+
+                                                </ul>
+                                            </div><!-- /.btn-group -->
+
                                         <input type="button" class="btn btn-grey" data-bind="click:cancel" value="Cancelar">
                                     </div>
                                 </div>

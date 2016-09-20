@@ -797,21 +797,41 @@ var PEPPERONI = PEPPERONI || {};
 
         self.printCurrentStock = function(){
             
-             var cashierShiftId = self.cashierShift().cash_register;
+             var cashRegisterId = self.cashierShift().cash_register;
              
-             if(!cashierShiftId || isNaN(cashierShiftId)) {
+             if(!cashRegisterId || isNaN(cashRegisterId)) {
                 GenericViews.showNotification("Ha ocurrido un error. Favor de refrescar esta pagina.");
                 return false;
              }
 
-             GenericViews.getData("/sales/printshiftstock?cashregisterid=" + cashierShiftId, function(response){
+             GenericViews.getData("/sales/printshiftstock?cashregisterid=" + cashRegisterId, function(response){
                 if(response.success_printing)
                     GenericViews.showNotification("Imprimiendo...", 'success');
                     setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
             });
         };
 
-        self.finishShift = function(){
+         self.printFinishShiftMoneyDetail = function(){
+             var cashierShiftId = self.cashierShift().id;
+             
+             if(!cashierShiftId || isNaN(cashierShiftId)) {
+                GenericViews.showNotification("Ha ocurrido un error. Favor de refrescar esta pagina.");
+                return false;
+             }
+
+             var finishShiftCallback = function(){
+                GenericViews.getData("/sales/finishshiftmoneydetail?cashiershiftid=" + cashierShiftId, function(response){
+                if(response.success_printing)
+                    GenericViews.showNotification("Imprimiendo...", 'success');
+                    setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
+                });
+             };
+
+              self.finishShift(finishShiftCallback);
+        };
+
+        self.finishShift = function(callback){
+
             var cashierShift = self.cashierShift();
             cashierShift.close_balance = self.totalRegister();
             cashierShift.cashier_shift_money = [];
@@ -826,6 +846,7 @@ var PEPPERONI = PEPPERONI || {};
                 contentType: "application/json",
                 data: JSON.stringify(cashierShift),
                 success: function (response) {
+                    if(typeof(callback) === 'function') callback();
                     location.reload()
                 },
                 error: function (jXHR, textStatus, errorThrown) {

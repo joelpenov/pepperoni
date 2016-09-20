@@ -157,6 +157,18 @@ var PEPPERONI = PEPPERONI || {};
             $('#moneyModal').modal('show');
         };
 
+        self.printCashierShift = function(){
+            var cashierShiftId = self.cashierShift().id;
+            if(cashierShiftId === undefined || cashierShiftId === undefined) return;
+
+            GenericViews.getData("/sales/finishshiftmoneydetail?cashiershiftid=" + cashierShiftId, function(response){
+            if(response.success_printing)
+                GenericViews.showNotification("Imprimiendo...", 'success');
+                setTimeout(function(){$('.alert.alert-success').remove();}, 1000);
+            });
+        
+        };
+
         self.init=function(){
             ko.applyBindings(self,document.getElementById('finish-shift-view'));
         };

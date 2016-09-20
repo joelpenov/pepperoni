@@ -30,5 +30,6 @@ urlpatterns=[
         url(r'salesreport', SalesReport.sales_report),
         url(r'shiftsreportsales', CashierUser.report_shifts),
         url(r'reportbyshiftsservice', SalesReport.shifts_report_service),
-        url(r'printshiftstock', CashierShift.print_shift_stock)
+        url(r'printshiftstock', CashierShift.print_shift_stock),
+        url(r'finishshiftmoneydetail', CashierShift.finish_shift_money_detail)
     ]
