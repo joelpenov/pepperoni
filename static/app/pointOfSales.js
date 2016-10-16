@@ -405,9 +405,11 @@ var PEPPERONI = PEPPERONI || {};
             }
             return true;
         };
-
+        var processingOrder = false;
         self.finish = function(){
+            if(processingOrder===true) return;
             if(!self.isAValidAmountToFinish()) return;
+            processingOrder=true;
             var request =self.order.save('finish');
             request.success(function(response){                
                 self.printAfterFinish(response.id);
@@ -420,6 +422,10 @@ var PEPPERONI = PEPPERONI || {};
                 self.order.reset();
                 self.refreshActiveOrders();
                  $('#input_product_quantity').select();
+                  processingOrder=false;
+            });
+            request.error(function(){
+                processingOrder=false;
             });
         };
 
