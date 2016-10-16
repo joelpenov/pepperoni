@@ -1,7 +1,7 @@
 var PEPPERONI = PEPPERONI || {};
 
 (function(){
-
+    var processingOrder = false;
     function OrderDetailModel (){
         var self = this;
         self.productIdHasError = ko.observable(false);
@@ -254,6 +254,8 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.save=function(action, onSuccess, onError){
+            if(processingOrder===true) return;
+            processingOrder=true;
             var data = self.getData();
             data.action = action;
             var method = "post";
@@ -271,10 +273,12 @@ var PEPPERONI = PEPPERONI || {};
                 data: JSON.stringify(data),
                 success: function (response) {
                     if(onSuccess) onSuccess(response);
+                    processingOrder=false;
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     console.log('errors',jXHR.responseJSON, textStatus, errorThrown);
                     GenericViews.showNotification(jXHR.responseJSON);
+                    processingOrder=false;
                 }
             });
         };
@@ -339,6 +343,7 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.save = function(callback){
+            if(processingOrder==true) return;
             var request = self.order.save('save');
             request.success(function(response){
                 if(typeof callback === 'function')callback(response.id);
@@ -348,6 +353,8 @@ var PEPPERONI = PEPPERONI || {};
         };
 
         self.cancel = function(){
+            if(processingOrder==true) return;
+
             if(self.order.isNew()){
                 self.order.reset();
                  $('#cancelOrderModal').modal('toggle');
@@ -405,11 +412,10 @@ var PEPPERONI = PEPPERONI || {};
             }
             return true;
         };
-        var processingOrder = false;
+
         self.finish = function(){
             if(processingOrder===true) return;
             if(!self.isAValidAmountToFinish()) return;
-            processingOrder=true;
             var request =self.order.save('finish');
             request.success(function(response){                
                 self.printAfterFinish(response.id);
@@ -422,10 +428,6 @@ var PEPPERONI = PEPPERONI || {};
                 self.order.reset();
                 self.refreshActiveOrders();
                  $('#input_product_quantity').select();
-                  processingOrder=false;
-            });
-            request.error(function(){
-                processingOrder=false;
             });
         };
 
